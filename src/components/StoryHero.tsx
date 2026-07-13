@@ -1,5 +1,7 @@
-import { motion } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'motion/react';
+import { ChevronDown, UtensilsCrossed } from 'lucide-react';
+import gatheringImg from '../assets/images/gathering.png';
 
 interface StoryHeroProps {
   onLearnMore: () => void;
@@ -8,126 +10,164 @@ interface StoryHeroProps {
 }
 
 export default function StoryHero({ onLearnMore, onExploreMenu, onOrderNow }: StoryHeroProps) {
+  const containerRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  // Parallax effects
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+
   return (
-    <section id="home" className="relative min-h-screen pt-28 pb-20 overflow-hidden bg-cream-50">
+    <section 
+      id="home" 
+      ref={containerRef}
+      className="relative min-h-[100svh] overflow-hidden bg-[#FCFCFA] flex flex-col items-center justify-start pt-32"
+    >
       
-      {/* Decorative background sketch (simulated) */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03] flex items-center justify-center">
-        <svg viewBox="0 0 800 600" className="w-full h-full object-cover">
-           <path d="M100 500 Q 400 450 700 500 M200 400 L 200 200 L 300 100 L 400 200 L 400 400 M 350 200 L 350 150 M 200 400 Q 400 300 700 400" fill="none" stroke="currentColor" strokeWidth="2" />
-        </svg>
-      </div>
+      {/* Central Circular Background */}
+      <motion.div 
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[65%] w-[320px] h-[320px] sm:w-[450px] sm:h-[450px] md:w-[550px] md:h-[550px] rounded-full z-0 bg-[#F2F3F2]"
+      />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
-          {/* Left Column: Text & CTA */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="pt-10"
+      {/* Text Lockup */}
+      <motion.div 
+        style={{ y: textY }}
+        className="relative z-30 flex flex-col items-center text-center px-4 w-full max-w-5xl mt-8 sm:mt-12"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="font-serif text-[#1A1A1A] text-lg md:text-2xl font-bold tracking-wide mb-6"
+        >
+          Welcome to
+        </motion.div>
+        
+        <div className="relative flex flex-col items-center">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="font-serif text-[4rem] sm:text-[6rem] md:text-[7.5rem] font-bold text-[#D4AF37] tracking-tight leading-none z-10"
+            style={{ textShadow: '1px 1px 0px rgba(255,255,255,1)' }}
           >
-            <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-jade-950 leading-tight mb-6">
-              Welcome Home to <br/>
-              Authentic <span className="font-script text-gold-500 text-6xl sm:text-7xl lg:text-8xl inline-block -rotate-2 ml-2 -mt-4">Malaysian</span><br/>
-              Flavours!
-            </h1>
-            
-            <p className="font-sans text-jade-900/70 text-sm sm:text-base leading-relaxed max-w-md mb-8">
-              We're a family from the vibrant streets of Subang Jaya, sharing the beloved 
-              flavours of our childhood. At our table, you'll find the warmth of mom's 
-              dim sum, the brightness of fresh ingredients, and the satisfying crunch of 
-              golden spring rolls — all served with the spirit of home. Every dish is a 
-              tribute to our humble roots, handcrafted with care each day.
-            </p>
-
-            <button 
-              onClick={onLearnMore}
-              className="inline-flex items-center px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jade-950 font-display font-bold text-xs tracking-widest uppercase rounded shadow-lg transition-transform hover:-translate-y-1"
-            >
-              Learn More
-            </button>
+            Authentic
+          </motion.h1>
+          
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
+            animate={{ opacity: 1, scale: 1, rotate: -3 }}
+            transition={{ duration: 0.8, delay: 0.6, type: "spring", bounce: 0.4 }}
+            className="font-script text-[5rem] sm:text-[8rem] md:text-[11rem] text-[#1A1A1A] leading-none absolute top-[25%] sm:top-[28%] z-20 w-[120%]"
+            style={{ transform: 'rotate(-3deg)' }}
+          >
+            Malaysian
           </motion.div>
-
-          {/* Right Column: Collage */}
-          <div className="relative mt-12 lg:mt-0 lg:h-[600px] flex items-center justify-center">
-            
-            {/* Top Image (Stamp) */}
-            <motion.div 
-              initial={{ opacity: 0, y: -20, rotate: -5 }}
-              animate={{ opacity: 1, y: 0, rotate: -8 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="absolute top-0 left-0 sm:left-10 w-48 sm:w-64 aspect-[4/5] bg-white p-3 shadow-2xl z-20 stamp-mask"
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&q=80&w=600" 
-                alt="Steaming Dim Sum" 
-                className="w-full h-full object-cover rounded-sm"
-              />
-            </motion.div>
-
-            {/* Bottom Image (Stamp) */}
-            <motion.div 
-              initial={{ opacity: 0, x: 20, rotate: 10 }}
-              animate={{ opacity: 1, x: 0, rotate: 5 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="absolute bottom-10 right-0 sm:right-10 w-56 sm:w-72 aspect-square bg-white p-3 shadow-xl z-30 stamp-mask"
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&q=80&w=600" 
-                alt="Making Dumplings" 
-                className="w-full h-full object-cover rounded-sm"
-              />
-            </motion.div>
-
-            {/* Right Side Text Block */}
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="absolute top-1/3 -right-4 sm:-right-10 text-right z-40 hidden sm:block"
-            >
-              <div className="font-script text-gold-500 text-5xl rotate-2">Dim Sum</div>
-              <div className="font-serif font-bold text-3xl text-jade-950 leading-none mb-4">Made<br/>fresh <span className="font-script text-gold-500 text-4xl">Daily</span></div>
-              <p className="font-sans text-[10px] text-jade-900/60 max-w-[150px] ml-auto leading-relaxed mb-4">
-                For Mr. WAKi, every meal is a shared memory. Taste the authentic dishes we grew up loving — prepared daily with fresh ingredients and care.
-              </p>
-              
-              <div className="flex justify-end space-x-2">
-                <button 
-                  onClick={onExploreMenu}
-                  className="px-4 py-2 bg-jade-950 text-gold-400 font-display font-bold text-[10px] tracking-wider rounded"
-                >
-                  EXPLORE OUR MENU
-                </button>
-                <button 
-                  onClick={onOrderNow}
-                  className="px-4 py-2 bg-gold-500 text-jade-950 font-display font-bold text-[10px] tracking-wider rounded"
-                >
-                  ORDER NOW
-                </button>
-              </div>
-            </motion.div>
-
-            {/* Mobile Text Block (Visible only on small screens) */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="absolute -bottom-16 w-full text-center z-40 sm:hidden"
-            >
-              <div className="font-script text-gold-500 text-4xl">Dim Sum</div>
-              <div className="font-serif font-bold text-2xl text-jade-950 leading-none mb-3">Made fresh <span className="font-script text-gold-500 text-3xl">Daily</span></div>
-              <div className="flex justify-center space-x-2">
-                <button onClick={onExploreMenu} className="px-3 py-1.5 bg-jade-950 text-gold-400 font-display font-bold text-[10px] tracking-wider rounded">MENU</button>
-                <button onClick={onOrderNow} className="px-3 py-1.5 bg-gold-500 text-jade-950 font-display font-bold text-[10px] tracking-wider rounded">ORDER</button>
-              </div>
-            </motion.div>
-
-          </div>
+          
+          <motion.h1 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="font-serif text-[4rem] sm:text-[6rem] md:text-[7.5rem] font-bold text-[#D4AF37] tracking-tight leading-none mt-8 sm:mt-12 md:mt-16 z-10"
+            style={{ textShadow: '1px 1px 0px rgba(255,255,255,1)' }}
+          >
+            Flavours
+          </motion.h1>
         </div>
-      </div>
+
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 1 }}
+          className="mt-12 sm:mt-16 z-20 flex items-center justify-center space-x-3 sm:space-x-6 w-full px-4"
+        >
+          {/* Left Line */}
+          <div className="h-[1.5px] bg-jade-900/20 w-10 sm:w-16 md:w-24" />
+          
+          {/* Slogan Text */}
+          <p className="font-sans text-[#2A3C35] text-xs sm:text-sm md:text-base font-extrabold tracking-[0.25em] sm:tracking-[0.35em] uppercase flex items-center whitespace-nowrap">
+            <span>HANDMADE</span>
+            <span className="w-2 h-2 rounded-full bg-[#D4AF37] mx-3 sm:mx-4 inline-block" />
+            <span>HALAL</span>
+            <span className="w-2 h-2 rounded-full bg-[#D4AF37] mx-3 sm:mx-4 inline-block" />
+            <span>FRESHLY STEAM</span>
+          </p>
+          
+          {/* Right Line */}
+          <div className="h-[1.5px] bg-jade-900/20 w-10 sm:w-16 md:w-24" />
+        </motion.div>
+        
+        {/* Call to Actions (Not strictly in the text area in original sketch, but we keep them accessible) */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
+          className="mt-8 flex items-center justify-center space-x-4 z-40"
+        >
+          <button 
+            onClick={onOrderNow}
+            className="px-6 py-3 bg-[#1A1A1A] hover:bg-black text-white font-display font-bold text-xs tracking-widest uppercase transition-all duration-300 rounded shadow-md"
+          >
+            Reserve Table
+          </button>
+          
+          <button 
+            onClick={onExploreMenu}
+            className="group flex items-center px-6 py-3 bg-transparent border border-[#1A1A1A]/20 hover:border-[#D4AF37] text-[#1A1A1A] font-display font-bold text-xs tracking-widest uppercase transition-colors rounded"
+          >
+            <UtensilsCrossed className="w-4 h-4 mr-2 text-[#D4AF37] group-hover:scale-110 transition-transform" />
+            <span className="group-hover:text-[#D4AF37] transition-colors">See Menu</span>
+          </button>
+        </motion.div>
+      </motion.div>
+
+      {/* Illustrated Dining Group */}
+      <motion.div 
+        style={{ y: imageY }}
+        className="relative w-full max-w-4xl mt-auto z-10 flex justify-center px-4 pt-10"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
+          className="w-full relative"
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-[#FCFCFA] via-transparent to-transparent z-10 h-24" />
+          
+          <img 
+            src={gatheringImg} 
+            alt="Family enjoying Dim Sum" 
+            className="w-full h-[25vh] sm:h-[35vh] md:h-[45vh] object-cover object-top mask-image-top"
+            style={{
+              WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 100%)',
+              maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 100%)'
+            }}
+          />
+        </motion.div>
+      </motion.div>
+
+      {/* Scroll Indicator */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center"
+      >
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+        >
+          <ChevronDown className="w-5 h-5 text-jade-900/40" />
+        </motion.div>
+      </motion.div>
+
     </section>
   );
 }
+
