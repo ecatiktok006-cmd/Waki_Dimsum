@@ -127,7 +127,12 @@ export default function AboutTimeline() {
     <section id="about" className="pt-16 pb-24 bg-[#Fdfbf7] relative overflow-hidden" ref={containerRef}>
       
       {/* Background decor */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#f5f1e8] via-[#Fdfbf7] to-[#Fdfbf7] opacity-50 z-0 pointer-events-none" />
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* Dot pattern */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(#061F1A 2px, transparent 2px)', backgroundSize: '32px 32px' }} />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#Fdfbf7]/60 to-[#Fdfbf7] opacity-90" />
+      </div>
 
       {/* Header Section */}
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pointer-events-none flex flex-col items-center text-center">
@@ -167,16 +172,30 @@ export default function AboutTimeline() {
         <div className="relative h-[800px] flex gap-24 items-center px-40 w-max mx-auto">
           
           {/* Wavy SVG */}
-          <svg className="absolute top-0 left-0 h-full pointer-events-none z-0 text-[#1a3826]" 
+          <svg className="absolute top-0 left-0 h-full pointer-events-none z-0" 
                style={{ width: totalWidth }}
                viewBox={`0 0 ${totalWidth} 800`} 
                preserveAspectRatio="none">
+            {/* Shadow path */}
+            <path d={pathD} fill="none" stroke="rgba(0,0,0,0.03)" strokeWidth="8" transform="translate(0, 6)" />
+            
             {/* Main Path */}
             <motion.path 
               d={pathD}
               fill="none" 
-              stroke="currentColor" 
+              stroke="#1C6658" 
+              strokeWidth="2"
+              strokeDasharray="6 6"
+              className="opacity-30"
+            />
+            
+            {/* Highlight Path */}
+            <motion.path 
+              d={pathD}
+              fill="none" 
+              stroke="#C5A059" 
               strokeWidth="3"
+              strokeLinecap="round"
               initial={{ pathLength: 0 }}
               whileInView={{ pathLength: 1 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -189,7 +208,7 @@ export default function AboutTimeline() {
             const node = TIMELINE_NODES[index];
             const isRotatedRight = index % 2 === 0;
             return (
-              <div key={event.year} className="relative w-72 h-full shrink-0 flex justify-center z-10">
+              <div key={event.year} className="relative w-[300px] h-full shrink-0 flex justify-center z-10">
                 
                 {/* Node Circle */}
                 <motion.div 
@@ -197,60 +216,74 @@ export default function AboutTimeline() {
                   whileInView={{ scale: 1, opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2, duration: 0.5 }}
-                  className="absolute w-8 h-8 rounded-full bg-[#Fdfbf7] border-[3px] border-[#1a3826] ring-4 ring-[#1a3826]/10 shadow-[0_0_15px_rgba(210,84,0,0.3)] z-20 transform -translate-x-1/2 -translate-y-1/2 left-1/2 flex items-center justify-center" 
+                  className="absolute w-8 h-8 rounded-full bg-[#Fdfbf7] border-[3px] border-[#C5A059] shadow-[0_0_20px_rgba(197,160,89,0.3)] z-20 transform -translate-x-1/2 -translate-y-1/2 left-1/2 flex items-center justify-center" 
                   style={{ top: node.y }}
                 >
-                  <div className="w-2.5 h-2.5 bg-[#d35400] rounded-full" />
+                  <div className="w-2.5 h-2.5 bg-[#061F1A] rounded-full" />
+                  
+                  {/* Pulsing ring */}
+                  <motion.div 
+                    className="absolute inset-0 rounded-full border-2 border-[#C5A059]"
+                    animate={{ scale: [1, 1.8], opacity: [0.6, 0] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeOut" }}
+                  />
                 </motion.div>
 
                 {/* Year Text */}
                 <motion.div 
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
+                  initial={{ opacity: 0, y: node.cardPos === 'bottom' ? -10 : 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.4 }}
-                  className={`absolute font-serif text-5xl text-[#1a3826] font-bold ${node.cardPos === 'bottom' ? '-translate-y-full mb-6' : 'translate-y-full mt-6'} transform -translate-x-1/2 left-1/2 whitespace-nowrap z-10`}
+                  className={`absolute flex flex-col items-center ${node.cardPos === 'bottom' ? '-translate-y-full mb-6' : 'translate-y-full mt-6'} transform -translate-x-1/2 left-1/2 whitespace-nowrap z-10`}
                   style={{ top: node.y }}
                 >
-                  {event.year}
+                  <span className="font-script text-[#C5A059] text-2xl -mb-3 rotate-[-5deg] ml-12 opacity-90">Est.</span>
+                  <span className="font-serif text-6xl text-[#061F1A] font-black tracking-tight drop-shadow-sm">
+                    {event.year}
+                  </span>
                 </motion.div>
 
                 {/* Polaroid Card */}
                 <motion.div
-                  initial={{ opacity: 0.4, scale: 0.9, rotate: isRotatedRight ? -4 : 4 }}
-                  whileInView={{ opacity: 1, scale: 1, rotate: isRotatedRight ? 2 : -2 }}
-                  viewport={{ margin: "0px -35% 0px -35%", once: false }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className={`absolute w-[280px] bg-[#Fdfbf7] p-4 pb-8 rounded-sm shadow-[0_8px_20px_rgb(0,0,0,0.08)] border border-jade-900/5 z-10 transform -translate-x-1/2 left-1/2 transition-all hover:z-30 hover:scale-[1.02] hover:shadow-[0_15px_40px_rgb(0,0,0,0.12)] cursor-default`}
-                  style={node.cardPos === 'bottom' ? { top: node.y + 60 } : { bottom: 800 - node.y + 60 }}
+                  initial={{ opacity: 0, scale: 0.9, y: 20, rotate: isRotatedRight ? -6 : 6 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0, rotate: isRotatedRight ? 2 : -2 }}
+                  viewport={{ margin: "0px -25% 0px -25%", once: false }}
+                  transition={{ duration: 0.7, type: "spring", bounce: 0.3 }}
+                  className={`absolute w-[300px] bg-white p-4 pb-10 shadow-[0_15px_35px_rgb(0,0,0,0.08),_0_3px_10px_rgb(0,0,0,0.04)] border border-[#ECE6D9] z-10 transform -translate-x-1/2 left-1/2 transition-all hover:z-30 hover:scale-105 hover:shadow-[0_25px_50px_rgb(0,0,0,0.12)] cursor-default`}
+                  style={node.cardPos === 'bottom' ? { top: node.y + 70 } : { bottom: 800 - node.y + 70 }}
                 >
-                  {/* Tape */}
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-[#e6dfcf] opacity-90 rotate-[-4deg] shadow-sm z-20" />
+                  {/* Tape 1 */}
+                  <div className="absolute -top-3 left-1/4 w-12 h-6 bg-white/70 backdrop-blur-md rotate-[-10deg] shadow-sm z-20 border border-white/80 rounded-sm" />
+                  {/* Tape 2 */}
+                  <div className="absolute -top-4 right-1/4 w-14 h-6 bg-white/70 backdrop-blur-md rotate-[8deg] shadow-sm z-20 border border-white/80 rounded-sm" />
                   
-                  <motion.img 
-                    src={event.image} 
-                    alt={event.title} 
-                    initial={{ filter: 'grayscale(100%) brightness(0.85)' }}
-                    whileInView={{ filter: 'grayscale(0%) brightness(1)' }}
-                    viewport={{ margin: "0px -35% 0px -35%", once: false }}
-                    transition={{ duration: 0.8 }}
-                    className="w-full h-[180px] object-cover mb-5 rounded-[2px]" 
-                  />
+                  <div className="relative overflow-hidden mb-5 bg-[#F9F6F0] p-1.5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] border border-[#ECE6D9]/50">
+                    <motion.img 
+                      src={event.image} 
+                      alt={event.title} 
+                      initial={{ filter: 'grayscale(50%) sepia(20%) brightness(0.95)' }}
+                      whileInView={{ filter: 'grayscale(0%) sepia(0%) brightness(1)' }}
+                      viewport={{ once: false }}
+                      transition={{ duration: 1 }}
+                      className="w-full h-[200px] object-cover mix-blend-multiply" 
+                    />
+                  </div>
                   
-                  <h4 className="font-serif text-[1.35rem] font-bold text-[#1a3826] mb-3 leading-snug">
+                  <h4 className="font-script text-[2.25rem] font-bold text-[#061F1A] mb-1.5 leading-none rotate-[-2deg] text-center px-2">
                     {event.title}
                   </h4>
-                  <p className="font-sans text-xs text-[#1a3826]/80 leading-relaxed font-medium">
+                  <p className="font-sans text-[13px] text-[#061F1A]/75 leading-relaxed font-medium text-center px-4">
                     {event.description}
                   </p>
                   
                   {event.promises && (
-                    <div className="mt-4 pt-4 border-t border-[#1a3826]/10">
-                      <ul className="space-y-1.5">
+                    <div className="mt-5 pt-4 border-t border-dashed border-[#C5A059]/30 mx-2">
+                      <ul className="space-y-2">
                         {event.promises.map((promise, idx) => (
-                          <li key={idx} className="flex items-start space-x-2">
-                            <Check className="w-3.5 h-3.5 text-[#d35400] shrink-0 mt-0.5 stroke-[3]" />
-                            <span className="font-sans text-xs text-[#1a3826] font-medium leading-tight">
+                          <li key={idx} className="flex items-center space-x-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#C5A059] shrink-0" />
+                            <span className="font-sans text-[11px] text-[#061F1A]/80 font-bold tracking-widest uppercase">
                               {promise}
                             </span>
                           </li>

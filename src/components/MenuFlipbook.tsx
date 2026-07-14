@@ -66,10 +66,10 @@ const SteamAnimation = () => (
 // A custom page component required by react-pageflip to use ref
 const Page = React.forwardRef<HTMLDivElement, { title?: string; subtitle?: string; description?: string; children: React.ReactNode; number: number; noPadding?: boolean; bgClass?: string }>((props, ref) => {
   return (
-    <div className={`${props.bgClass || 'bg-[#eadeb5]'} h-full w-full shadow-[inset_0_0_20px_rgba(0,0,0,0.1)] border-l border-r border-[#c2b294] relative overflow-hidden`} ref={ref}>
+    <div className={`${props.bgClass || 'bg-[#f8f5eb]'} h-full w-full shadow-[inset_0_0_20px_rgba(0,0,0,0.05)] border-l border-r border-[#e2d5c3] relative overflow-hidden`} ref={ref}>
       {/* Background Texture */}
       <div 
-        className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-multiply"
+        className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-multiply"
         style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }}
       />
       
@@ -77,37 +77,37 @@ const Page = React.forwardRef<HTMLDivElement, { title?: string; subtitle?: strin
         {/* Double border like in the reference */}
         {!props.noPadding && (
           <>
-            <div className="absolute top-3 left-3 right-3 bottom-3 border border-[#2a382b]/20 pointer-events-none z-0" />
-            <div className="absolute top-2 left-2 right-2 bottom-2 border border-[#2a382b]/10 pointer-events-none z-0" />
+            <div className="absolute top-3 left-3 right-3 bottom-3 border border-[#1a362a]/10 pointer-events-none z-0" />
+            <div className="absolute top-2 left-2 right-2 bottom-2 border border-[#1a362a]/5 pointer-events-none z-0" />
             
             {/* Corner decorations */}
-            <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-[#2a382b] z-0" />
-            <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-[#2a382b] z-0" />
-            <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-[#2a382b] z-0" />
-            <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-[#2a382b] z-0" />
+            <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-[#8a2a2b]/60 z-0" />
+            <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-[#8a2a2b]/60 z-0" />
+            <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-[#8a2a2b]/60 z-0" />
+            <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-[#8a2a2b]/60 z-0" />
           </>
         )}
         
         <div className="relative z-10 h-full flex flex-col">
           {props.title && (
             <div className="mb-4">
-              <h2 className="font-serif text-[2.5rem] md:text-[3.25rem] font-black text-[#2a382b] uppercase tracking-wide leading-[0.9]" style={{ transform: 'scaleY(1.15)', transformOrigin: 'left' }}>
+              <h2 className="font-serif text-[2.5rem] md:text-[3.25rem] font-black text-[#1a362a] uppercase tracking-wider leading-[0.9]" style={{ transform: 'scaleY(1.1)', transformOrigin: 'left' }}>
                 {props.title}
               </h2>
               {props.subtitle && (
-                <p className="font-serif italic text-[#a48559] text-sm md:text-base mt-2">{props.subtitle}</p>
+                <p className="font-serif italic text-[#8a2a2b] text-sm md:text-base mt-2">{props.subtitle}</p>
               )}
               
               {(props.title || props.subtitle) && (
                 <div className="flex items-center my-3 w-1/3">
-                   <div className="flex-1 h-px bg-[#a48559]/30" />
-                   <span className="mx-2 text-[10px] text-[#a48559]">❖</span>
-                   <div className="flex-1 h-px bg-[#a48559]/30" />
+                   <div className="flex-1 h-px bg-[#8a2a2b]/20" />
+                   <span className="mx-2 text-[10px] text-[#8a2a2b]">❖</span>
+                   <div className="flex-1 h-px bg-[#8a2a2b]/20" />
                 </div>
               )}
               
               {props.description && (
-                 <p className="font-serif text-[#2a382b]/90 text-xs md:text-sm max-w-[250px] leading-relaxed">{props.description}</p>
+                 <p className="font-sans text-[#2c3e38]/80 text-xs md:text-sm max-w-[250px] leading-relaxed">{props.description}</p>
               )}
             </div>
           )}
@@ -117,10 +117,10 @@ const Page = React.forwardRef<HTMLDivElement, { title?: string; subtitle?: strin
           </div>
           
           {!props.noPadding && (
-            <div className="mt-auto pt-4 flex justify-between items-center font-serif text-[10px] uppercase tracking-widest font-bold text-[#a48559]">
-              <span className="flex-1 border-t border-[#a48559]/30 mr-2" />
+            <div className="mt-auto pt-4 flex justify-between items-center font-serif text-[10px] uppercase tracking-widest font-bold text-[#8a2a2b]">
+              <span className="flex-1 border-t border-[#8a2a2b]/20 mr-2" />
               <span>{props.number}</span>
-              <span className="flex-1 border-t border-[#a48559]/30 ml-2" />
+              <span className="flex-1 border-t border-[#8a2a2b]/20 ml-2" />
             </div>
           )}
         </div>
@@ -132,48 +132,50 @@ const Page = React.forwardRef<HTMLDivElement, { title?: string; subtitle?: strin
 const CoverPageContent = () => (
   <div className="relative z-10 flex flex-col h-full w-full">
     {/* Top Bar */}
-    <div className="flex justify-between items-center text-jade-950/80 font-sans text-[10px] tracking-widest uppercase mb-2 shrink-0">
+    <div className="flex justify-between items-center text-[#1a362a]/80 font-sans text-[10px] tracking-widest uppercase mb-2 shrink-0">
       <span>Kuala Lumpur, Malaysia</span>
       <span>Est. 2024</span>
     </div>
-    <div className="border-t border-b border-jade-950 h-1 mb-6 shrink-0"></div>
+    <div className="border-t border-b border-[#1a362a] h-1 mb-6 shrink-0"></div>
 
     {/* THE MENU */}
-    <h1 className="font-serif text-[4rem] md:text-[4.5rem] font-black text-jade-950 text-center leading-none mb-6 shrink-0" style={{ transform: 'scaleY(1.15)' }}>
+    <h1 className="font-serif text-[4rem] md:text-[4.5rem] font-black text-[#1a362a] text-center leading-none mb-6 shrink-0" style={{ transform: 'scaleY(1.1)' }}>
       THE MENU
     </h1>
 
     {/* Info Bar */}
-    <div className="border-t border-b border-dashed border-jade-950/40 py-4 mb-4 flex items-center justify-between shrink-0">
-      <p className="font-sans text-[10px] uppercase tracking-widest text-jade-950 text-left w-1/3 leading-tight">
+    <div className="border-t border-b border-dashed border-[#8a2a2b]/40 py-4 mb-4 flex items-center justify-between shrink-0">
+      <p className="font-sans text-[9px] md:text-[10px] uppercase tracking-widest text-[#1a362a] text-left w-1/3 leading-tight">
         Handmade Halal<br/>Dim Sum,
       </p>
       <div className="flex-1 flex justify-center w-1/3">
-        <img src={logoImg} alt="WAKi Dim Sum" className="h-10 md:h-12 object-contain" />
+        <div className="w-10 h-10 md:w-12 md:h-12 bg-[#1a362a] rounded-full p-1 border border-[#8a2a2b]/30 flex items-center justify-center">
+           <img src={logoImg} alt="WAKi Dim Sum" className="w-full h-full object-contain brightness-200" />
+        </div>
       </div>
-      <p className="font-sans text-[10px] uppercase tracking-widest text-jade-950 text-right w-1/3 leading-tight">
+      <p className="font-sans text-[9px] md:text-[10px] uppercase tracking-widest text-[#1a362a] text-right w-1/3 leading-tight">
         Served<br/>Fresh Daily
       </p>
     </div>
 
     {/* Ribbon Text */}
     <div className="text-center mb-4 shrink-0 flex items-center justify-center space-x-2">
-       <span className="text-jade-950 text-[10px]">⚲</span>
-       <p className="font-serif italic text-jade-950 text-sm md:text-base">Handmade Halal Dim Sum, Served Fresh Daily</p>
-       <span className="text-jade-950 text-[10px]">⚲</span>
+       <span className="text-[#8a2a2b] text-[10px]">❖</span>
+       <p className="font-serif italic text-[#1a362a] text-sm md:text-base">Modern Nostalgia on Every Plate</p>
+       <span className="text-[#8a2a2b] text-[10px]">❖</span>
     </div>
 
     {/* Main Photo */}
-    <div className="flex-1 min-h-0 mb-4 overflow-hidden bg-jade-900 mx-[-1rem] md:mx-[-1.5rem] border-y border-jade-950">
-      <img src={menuFrontPageImg} alt="Menu Cover" className="w-full h-full object-cover" />
+    <div className="flex-1 min-h-0 mb-4 overflow-hidden bg-[#1a362a] mx-[-1rem] md:mx-[-1.5rem] border-y border-[#1a362a]">
+      <img src={menuFrontPageImg} alt="Menu Cover" className="w-full h-full object-cover opacity-90" />
     </div>
 
     {/* Bottom Bar */}
-    <div className="border-t border-b border-jade-950 h-1 mt-auto mb-2 shrink-0"></div>
-    <div className="flex justify-between items-center text-jade-950 font-sans text-[10px] tracking-widest uppercase shrink-0 pb-1">
-      <span className="w-1/4 text-left leading-tight">Freshly<br/>Made</span>
-      <span className="flex-1 text-center font-semibold">— Premium Halal Dim Sum —</span>
-      <span className="w-1/4 text-right leading-tight">Made With<br/>Care</span>
+    <div className="border-t border-b border-[#1a362a] h-1 mt-auto mb-2 shrink-0"></div>
+    <div className="flex justify-between items-center text-[#1a362a] font-sans text-[9px] md:text-[10px] tracking-widest uppercase shrink-0 pb-1">
+      <span className="w-1/4 text-left leading-tight text-[#8a2a2b]">Freshly<br/>Made</span>
+      <span className="flex-1 text-center font-bold tracking-[0.2em]">— Premium Halal Dim Sum —</span>
+      <span className="w-1/4 text-right leading-tight text-[#8a2a2b]">Made With<br/>Care</span>
     </div>
   </div>
 );
@@ -190,7 +192,8 @@ export default function MenuFlipbook() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-jade-950"
+            className="font-serif text-4xl sm:text-5xl lg:text-6xl font-black mb-6 text-[#1a362a] uppercase tracking-widest"
+            style={{ transform: 'scaleY(1.1)' }}
           >
             The Menu
           </motion.h2>
@@ -198,22 +201,22 @@ export default function MenuFlipbook() {
             initial={{ opacity: 0, scale: 0 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="w-16 h-1 bg-gold-500 mx-auto rounded" 
+            className="w-16 h-1 bg-[#8a2a2b] mx-auto rounded" 
           />
-          <p className="mt-6 text-jade-900/70 font-sans max-w-2xl mx-auto text-lg">
-            Flip through our digital menu book.
+          <p className="mt-6 text-[#2c3e38]/80 font-sans max-w-2xl mx-auto text-sm tracking-wider uppercase">
+            Flip through our digital menu book
           </p>
         </div>
 
         <div className="flex justify-center items-center drop-shadow-2xl hidden md:flex">
           <FlipBook
-            width={450}
-            height={650}
-            size="fixed"
+            width={550}
+            height={750}
+            size="stretch"
             minWidth={315}
-            maxWidth={500}
+            maxWidth={700}
             minHeight={400}
-            maxHeight={700}
+            maxHeight={900}
             maxShadowOpacity={0.5}
             showCover={true}
             mobileScrollSupport={true}
@@ -221,9 +224,9 @@ export default function MenuFlipbook() {
             ref={flipBookRef}
           >
             {/* Cover Page */}
-            <div className="bg-[#f4ebd0] h-full w-full flex flex-col p-4 md:p-6 border-r-[12px] border-jade-950 shadow-[inset_0_0_20px_rgba(0,0,0,0.1)] rounded-l relative overflow-hidden">
+            <div className="bg-[#f8f5eb] h-full w-full flex flex-col p-4 md:p-6 border-r-[12px] border-[#1a362a] shadow-[inset_-2px_0_15px_rgba(0,0,0,0.1)] rounded-l relative overflow-hidden">
               <div 
-                className="absolute inset-0 opacity-10 pointer-events-none"
+                className="absolute inset-0 opacity-[0.08] pointer-events-none"
                 style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover', mixBlendMode: 'multiply' }}
               />
               <CoverPageContent />
@@ -231,48 +234,48 @@ export default function MenuFlipbook() {
 
             {/* Inner Cover (Most Loved) */}
             <Page number={1} noPadding={true}>
-              <div className="h-full w-full relative bg-[#eadeb5] overflow-hidden">
-                <img src={mostLovedImg} alt="Most Loved at Waki" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="h-full w-full relative bg-[#f8f5eb] overflow-hidden">
+                <img src={mostLovedImg} alt="Most Loved at Waki" className="absolute inset-0 w-full h-full object-cover opacity-90" />
                 
                 {/* Text Overlay */}
                 <div className="relative z-10 pt-10 px-6 flex flex-col items-center text-center">
-                   <h2 className="font-serif text-[2.5rem] md:text-[3.5rem] font-black text-[#2a382b] uppercase tracking-wide leading-[0.9] mt-2 mb-2" style={{ transform: 'scaleY(1.15)' }}>
+                   <h2 className="font-serif text-[2.5rem] md:text-[3.5rem] font-black text-[#f8f5eb] uppercase tracking-wide leading-[0.9] mt-2 mb-2 drop-shadow-md" style={{ transform: 'scaleY(1.1)' }}>
                      MOST LOVED<br />AT WAKI
                    </h2>
                    
                    <div className="flex items-center space-x-2 my-3">
-                     <span className="text-[#a48559] text-xs">⚲</span>
-                     <p className="font-serif italic text-[#2a382b] text-base md:text-xl">The Favorites Everyone Comes Back For</p>
-                     <span className="text-[#a48559] text-xs">⚲</span>
+                     <span className="text-[#8a2a2b] text-xs">❖</span>
+                     <p className="font-serif italic text-[#f8f5eb] text-base md:text-xl drop-shadow">The Favorites Everyone Comes Back For</p>
+                     <span className="text-[#8a2a2b] text-xs">❖</span>
                    </div>
 
-                   <div className="text-[#a48559] mb-4">❖</div>
+                   <div className="text-[#8a2a2b] mb-4">❖</div>
                    
-                   <p className="font-serif text-[#2a382b]/90 text-xs md:text-sm max-w-sm leading-relaxed px-4">
+                   <p className="font-sans text-[#f8f5eb]/90 text-xs md:text-sm max-w-sm leading-relaxed px-4 drop-shadow">
                      Our signature handmade dim sum and comfort dishes loved by families, office crowds, and regulars every day.
                    </p>
                 </div>
 
                 {/* Legend */}
-                <div className="absolute top-6 right-6 border border-[#2a382b]/30 p-2.5 bg-[#eadeb5]/80 backdrop-blur-sm rounded-sm text-left">
+                <div className="absolute top-6 right-6 border border-[#f8f5eb]/30 p-2.5 bg-[#1a362a]/80 backdrop-blur-sm rounded-sm text-left">
                   <div className="flex items-center mb-1.5">
                     <span className="mr-2 text-xl leading-none">🥇</span>
-                    <span className="font-serif text-[9px] uppercase tracking-[0.15em] text-[#2a382b] font-bold">Most Ordered</span>
+                    <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-[#f8f5eb] font-bold">Most Ordered</span>
                   </div>
                   <div className="flex items-center mb-1.5">
-                    <span className="mr-2 text-[#2a382b] font-serif font-black italic text-lg leading-none">//</span>
-                    <span className="font-serif text-[9px] uppercase tracking-[0.15em] text-[#2a382b] font-bold">Chef Recommend</span>
+                    <span className="mr-2 text-[#8a2a2b] font-serif font-black italic text-lg leading-none">//</span>
+                    <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-[#f8f5eb] font-bold">Chef Recommend</span>
                   </div>
                   <div className="flex items-center">
                     <span className="mr-2 text-xl leading-none">🔥</span>
-                    <span className="font-serif text-[9px] uppercase tracking-[0.15em] text-[#2a382b] font-bold">Crispy Favorite</span>
+                    <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-[#f8f5eb] font-bold">Crispy Favorite</span>
                   </div>
                 </div>
 
                 {/* Bottom text */}
                 <div className="absolute bottom-6 left-0 w-full text-center px-6">
-                  <div className="inline-block border border-[#2a382b]/30 px-6 py-1.5 bg-[#eadeb5]/60 backdrop-blur-sm">
-                    <p className="font-serif text-[#2a382b] text-xs md:text-sm tracking-wide">Handmade with care. Steamed fresh. Shared with love.</p>
+                  <div className="inline-block border border-[#1a362a]/30 px-6 py-1.5 bg-[#f8f5eb]/90 backdrop-blur-sm">
+                    <p className="font-sans text-[#1a362a] text-xs md:text-sm tracking-wide font-medium">Handmade with care. Steamed fresh. Shared with love.</p>
                   </div>
                 </div>
               </div>
@@ -282,13 +285,13 @@ export default function MenuFlipbook() {
             {MENU_CATEGORIES.map((cat, index) => {
               const isKopitiam = cat.id === 'cat-8';
               const isHomeEdition = cat.id === 'cat-12';
-              const bgClass = isHomeEdition ? 'bg-[#f0ebd8]' : 'bg-[#eadeb5]';
+              const bgClass = isHomeEdition ? 'bg-[#f0f4f8]' : 'bg-[#f8f5eb]';
               
               return (
               <Page key={cat.id} title={cat.name} subtitle={cat.subtitle} description={cat.description} number={index + 2} bgClass={bgClass}>
                 
                 {catHeroImages[cat.id] && (
-                  <div className="w-full h-40 mb-6 border border-[#2a382b]/30 p-1 bg-[#eadeb5]/50 shrink-0 relative">
+                  <div className="w-full h-40 mb-6 border border-[#1a362a]/20 p-1 bg-[#f8f5eb] shrink-0 relative">
                     <div className="w-full h-full relative overflow-hidden">
                       <img src={catHeroImages[cat.id]} className="w-full h-full object-cover" alt={cat.name} />
                       {(cat.id === 'cat-2' || cat.id === 'cat-3') && <SteamAnimation />}
@@ -298,15 +301,15 @@ export default function MenuFlipbook() {
                 
                 {isHomeEdition && (
                   <div className="flex items-center justify-center mb-6">
-                    <span className="text-[#2a382b] text-sm">❄️</span>
-                    <span className="font-serif uppercase tracking-[0.2em] text-[#2a382b] text-[10px] font-bold mx-3 border-b border-[#2a382b]">Frozen Fresh</span>
-                    <span className="text-[#2a382b] text-sm">❄️</span>
+                    <span className="text-[#1a362a] text-sm">❄️</span>
+                    <span className="font-sans uppercase tracking-[0.2em] text-[#1a362a] text-[10px] font-bold mx-3 border-b border-[#1a362a]">Frozen Fresh</span>
+                    <span className="text-[#1a362a] text-sm">❄️</span>
                   </div>
                 )}
 
                 {isKopitiam ? (
                   <div className="flex flex-col space-y-3">
-                    <div className="flex justify-between border-b-2 border-[#2a382b] pb-1 mb-2 font-serif text-[10px] font-bold uppercase tracking-widest text-[#2a382b]">
+                    <div className="flex justify-between border-b-2 border-[#1a362a] pb-1 mb-2 font-sans text-[10px] font-bold uppercase tracking-widest text-[#1a362a]">
                       <div className="w-1/3">Drink</div>
                       <div className="w-1/3 text-center">☕ Hot</div>
                       <div className="w-1/3 text-right">🧊 Cold</div>
@@ -316,14 +319,14 @@ export default function MenuFlipbook() {
                       const coldVariant = dish.variants?.find(v => v.type === 'Cold');
                       
                       return (
-                        <div key={dish.id} className="flex justify-between items-center group cursor-default p-2 -mx-2 rounded-lg transition-all duration-300 hover:scale-[1.03] hover:bg-white/40 hover:shadow-[0_4px_12px_-4px_rgba(42,56,43,0.12)] border border-transparent hover:border-[#a48559]/20">
-                          <div className="w-1/3 font-serif font-bold text-[#2a382b] text-[11px] uppercase leading-tight">{dish.name}</div>
+                        <div key={dish.id} className="flex justify-between items-center group cursor-default hover:bg-[#8a2a2b]/5 p-1 -mx-1 rounded transition-colors">
+                          <div className="w-1/3 font-sans font-bold text-[#1a362a] text-[11px] uppercase leading-tight">{dish.name}</div>
                           
                           <div className="w-1/3 text-center flex flex-col items-center">
                             {hotVariant ? (
                               <>
-                                <span className="font-mono text-[9px] text-[#2a382b]/70">{hotVariant.code}</span>
-                                <span className="font-serif text-[11px] font-bold text-[#2a382b]">RM {hotVariant.price.toFixed(2)}</span>
+                                <span className="font-mono text-[9px] text-[#2c3e38]/70">{hotVariant.code}</span>
+                                <span className="font-sans text-[11px] font-bold text-[#8a2a2b]">RM {hotVariant.price.toFixed(2)}</span>
                               </>
                             ) : (
                               <span className="text-transparent">-</span>
@@ -333,8 +336,8 @@ export default function MenuFlipbook() {
                           <div className="w-1/3 text-right flex flex-col items-end">
                             {coldVariant ? (
                               <>
-                                <span className="font-mono text-[9px] text-[#2a382b]/70">{coldVariant.code}</span>
-                                <span className="font-serif text-[11px] font-bold text-[#2a382b]">RM {coldVariant.price.toFixed(2)}</span>
+                                <span className="font-mono text-[9px] text-[#2c3e38]/70">{coldVariant.code}</span>
+                                <span className="font-sans text-[11px] font-bold text-[#8a2a2b]">RM {coldVariant.price.toFixed(2)}</span>
                               </>
                             ) : (
                               <span className="text-transparent">-</span>
@@ -345,70 +348,61 @@ export default function MenuFlipbook() {
                     })}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+                  <div className="grid grid-cols-2 gap-x-8 gap-y-0">
                     {cat.dishes.map((dish) => (
-                      <div key={dish.id} className="flex flex-col group relative p-3 -mx-3 -my-2 rounded-xl transition-all duration-300 hover:scale-[1.03] hover:bg-white/50 hover:shadow-[0_8px_20px_-6px_rgba(42,56,43,0.15)] border border-transparent hover:border-[#a48559]/20 cursor-default">
+                      <div key={dish.id} className="flex flex-col group relative border-b border-[#1a362a]/10 py-3 last:border-0 [&:nth-last-child(2):nth-child(odd)]:border-0">
+                        <div className="absolute -inset-x-3 inset-y-0 bg-[#8a2a2b]/0 group-hover:bg-[#8a2a2b]/[0.03] rounded-lg transition-colors duration-300 pointer-events-none" />
                         
-                        <div className="relative z-10 flex flex-col h-full">
-                          {dish.code && (
-                            <div className="flex items-center mb-1">
-                              <span className="font-serif text-[#2a382b] font-bold text-xs bg-[#a48559]/20 px-1.5 py-0.5 rounded-sm shadow-sm group-hover:bg-[#a48559]/30 transition-colors">{dish.code}</span>
+                          <div className="relative z-10 flex flex-col h-full justify-center">
+                            <div className="flex items-start justify-between mb-1 gap-2">
+                              <div className="flex items-center flex-wrap gap-1.5">
+                                {dish.code && (
+                                  <span className="font-sans text-[#1a362a] font-bold text-[9px] tracking-wider bg-[#1a362a]/10 px-1 py-0.5 rounded-sm shadow-sm transition-colors">{dish.code}</span>
+                                )}
+                                <h4 className="font-serif font-bold text-[#1a362a] text-[13px] leading-snug uppercase transition-colors">{dish.name}</h4>
+                              </div>
+                              
+                              <div className="shrink-0 flex items-baseline">
+                                 {dish.price !== undefined ? (
+                                   <span className="font-sans text-[13px] font-bold text-[#8a2a2b] group-hover:scale-105 transition-transform origin-right whitespace-nowrap"><span className="text-[9px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{dish.price.toFixed(2)}</span>
+                                 ) : dish.variants ? null : (
+                                   <span className="font-sans text-[13px] font-bold text-[#8a2a2b] whitespace-nowrap"><span className="text-[9px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>TBA</span>
+                                 )}
+                              </div>
                             </div>
-                          )}
-                          
-                          <h4 className="font-serif font-bold text-[#2a382b] text-[12px] leading-tight uppercase mb-1 group-hover:text-[#182319] transition-colors">{dish.name}</h4>
-                          
-                          {dish.description && (
-                             <p className="font-serif italic text-[#2a382b]/70 text-[9px] leading-snug mb-1">{dish.description}</p>
-                          )}
-                          
-                          <div className="flex items-end mt-auto pt-1">
-                             <span className="font-serif text-[9px] font-bold text-[#2a382b] uppercase tracking-wider mr-1 pb-0.5">RM</span>
-                             {dish.price !== undefined ? (
-                               <>
-                                 <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[5px]" />
-                                 <span className="font-serif text-[13px] font-bold text-[#2a382b] group-hover:scale-105 transition-transform origin-bottom-right">{dish.price.toFixed(2)}</span>
-                               </>
-                             ) : dish.variants ? (
-                               <div className="w-full" />
-                             ) : (
-                               <>
-                                 <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[5px]" />
-                                 <span className="font-serif text-[13px] font-bold text-[#2a382b]">TBA</span>
-                               </>
-                             )}
+                            
+                            {dish.description && (
+                               <p className="font-sans text-[#2c3e38]/70 text-[10px] leading-snug mb-2">{dish.description}</p>
+                            )}
+                            
+                            {dish.variants && (
+                              <div className="flex flex-col space-y-1 mt-1">
+                                 {dish.variants.map((v, i) => (
+                                    <div key={i} className="flex justify-between items-center text-xs">
+                                       <span className="font-sans text-[#2c3e38]/80 text-[10px]">{v.type} <span className="font-mono text-[8px] opacity-60">({v.code})</span></span>
+                                       <span className="font-sans font-bold text-[#8a2a2b] text-[11px] transition-colors"><span className="text-[8px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{v.price.toFixed(2)}</span>
+                                    </div>
+                                 ))}
+                              </div>
+                            )}
                           </div>
-                          
-                          {dish.variants && (
-                            <div className="flex flex-col space-y-1 mt-2">
-                               {dish.variants.map((v, i) => (
-                                  <div key={i} className="flex items-end text-xs">
-                                     <span className="font-serif text-[#2a382b]/80 uppercase text-[9px] pb-0.5">{v.type} <span className="font-mono text-[8px] opacity-60">({v.code})</span></span>
-                                     <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[3px]" />
-                                     <span className="font-serif font-bold text-[#2a382b] text-xs group-hover:text-[#182319] transition-colors">{v.price.toFixed(2)}</span>
-                                  </div>
-                               ))}
-                            </div>
-                          )}
-                        </div>
                       </div>
                     ))}
                   </div>
                 )}
                 
                 {cat.addOns && (
-                  <div className="mt-4 pt-4 border-t border-double border-[#a48559]/30">
-                    <div className="flex items-center justify-center mb-3">
-                      <span className="text-[#a48559] text-[10px] mx-2">❖</span>
-                      <h4 className="font-serif font-bold text-[#2a382b] text-[11px] tracking-widest uppercase text-center">Add On</h4>
-                      <span className="text-[#a48559] text-[10px] mx-2">❖</span>
+                  <div className="mt-6 pt-4 border-t border-double border-[#8a2a2b]/20">
+                    <div className="flex items-center justify-center mb-4">
+                      <span className="text-[#8a2a2b] text-[10px] mx-2">❖</span>
+                      <h4 className="font-serif font-bold text-[#1a362a] text-[12px] tracking-widest uppercase text-center">Add On</h4>
+                      <span className="text-[#8a2a2b] text-[10px] mx-2">❖</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-3">
                       {cat.addOns.map((addon, i) => (
-                         <div key={i} className="flex justify-between items-end text-xs group cursor-default">
-                            <span className="font-serif uppercase text-[#2a382b] text-[10px] font-bold pb-0.5 group-hover:text-[#182319] transition-colors">• {addon.name}</span>
-                            <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[3px]" />
-                            <span className="font-serif font-bold text-[#2a382b] text-[11px] group-hover:scale-105 transition-transform origin-bottom-right">RM {addon.price.toFixed(2)}</span>
+                         <div key={i} className="flex justify-between items-center text-xs group cursor-default">
+                            <span className="font-sans uppercase text-[#2c3e38] text-[10px] font-medium transition-colors">• {addon.name}</span>
+                            <span className="font-sans font-bold text-[#8a2a2b] text-[11px] group-hover:scale-105 transition-transform origin-right"><span className="text-[8px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{addon.price.toFixed(2)}</span>
                          </div>
                       ))}
                     </div>
@@ -418,13 +412,26 @@ export default function MenuFlipbook() {
             );})}
 
             {/* Back Cover */}
-            <div className="bg-[#f4ebd0] h-full w-full flex flex-col items-center justify-center p-8 border-l-[12px] border-jade-950 shadow-[inset_0_0_20px_rgba(0,0,0,0.1)] rounded-r">
-              <img src={logoImg} alt="WAKi Dim Sum" className="w-24 h-24 mb-6 object-contain opacity-50 drop-shadow-md" />
-              <div className="text-center text-jade-900/80 font-sans text-sm space-y-2 mt-8 font-bold">
-                <p>2, Jalan USJ 1/1C</p>
-                <p>Regalia Business Centre</p>
-                <p>Subang Jaya, Selangor</p>
-                <p className="mt-4 font-mono">016-663 4376</p>
+            <div className="bg-[#1a362a] h-full w-full flex flex-col items-center justify-center p-8 border-l-[12px] border-[#0e1d17] shadow-[inset_10px_0_20px_rgba(0,0,0,0.4)] rounded-r relative overflow-hidden">
+              <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-overlay" style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }} />
+              
+              <div className="absolute top-4 left-6 right-4 bottom-4 border-2 border-[#8a2a2b]/40 pointer-events-none z-0" />
+              <div className="absolute top-6 left-8 right-6 bottom-6 border border-[#8a2a2b]/20 pointer-events-none z-0" />
+              
+              <div className="relative z-10 w-full flex flex-col items-center justify-center h-full text-center">
+                <div className="w-24 h-24 rounded-full border border-[#8a2a2b]/30 p-1 bg-[#1a362a] flex items-center justify-center overflow-hidden mb-8">
+                  <img src={logoImg} alt="Waki Dim Sum Logo" className="w-full h-full object-contain rounded-full opacity-80 mix-blend-screen brightness-150" />
+                </div>
+                
+                <h3 className="font-serif text-2xl font-black text-[#f8f5eb] uppercase tracking-[0.15em] mb-4">Thank You</h3>
+                <p className="font-serif italic text-[#8a2a2b] text-sm mb-8 max-w-[200px]">For dining with us and sharing in our tradition.</p>
+                
+                <div className="text-center text-[#f8f5eb]/80 font-sans text-sm space-y-2 font-medium tracking-wider">
+                  <p>2, Jalan USJ 1/1C</p>
+                  <p>Regalia Business Centre</p>
+                  <p>Subang Jaya, Selangor</p>
+                  <p className="mt-4 font-mono text-[#8a2a2b]">016-663 4376</p>
+                </div>
               </div>
             </div>
 
@@ -433,9 +440,9 @@ export default function MenuFlipbook() {
         
         {/* Mobile View fallback since Flipbook is tricky on very small screens */}
         <div className="md:hidden flex flex-col space-y-8 mt-8">
-           <div className="bg-[#f4ebd0] p-6 rounded-xl shadow-lg border border-[#d4b886] relative overflow-hidden">
+           <div className="bg-[#f8f5eb] p-6 rounded-xl shadow-lg border border-[#e2d5c3] relative overflow-hidden">
              <div 
-                className="absolute inset-0 opacity-10 pointer-events-none"
+                className="absolute inset-0 opacity-[0.08] pointer-events-none"
                 style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover', mixBlendMode: 'multiply' }}
               />
               <div className="relative z-10">
@@ -446,14 +453,14 @@ export default function MenuFlipbook() {
                 {MENU_CATEGORIES.map((cat, index) => {
                   const isKopitiam = cat.id === 'cat-8';
                   const isHomeEdition = cat.id === 'cat-12';
-                  const bgClass = isHomeEdition ? 'bg-[#f0ebd8]' : 'bg-[#eadeb5]';
+                  const bgClass = isHomeEdition ? 'bg-[#f0f4f8]' : 'bg-[#f8f5eb]';
 
                   return (
-                  <div key={cat.id} className={`mb-10 ${bgClass} p-4 rounded-xl border border-[#c2b294] shadow-sm relative overflow-hidden`}>
-                    <div className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-multiply" style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }} />
+                  <div key={cat.id} className={`mb-10 ${bgClass} p-5 rounded-xl border border-[#e2d5c3] shadow-sm relative overflow-hidden`}>
+                    <div className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-multiply" style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }} />
                     <div className="relative z-10">
                       {catHeroImages[cat.id] && (
-                        <div className="w-full h-32 mb-6 border border-[#2a382b]/30 p-1 bg-[#eadeb5]/50 shrink-0 relative">
+                        <div className="w-full h-32 mb-6 border border-[#1a362a]/20 p-1 bg-[#f8f5eb] shrink-0 relative">
                           <div className="w-full h-full relative overflow-hidden">
                             <img src={catHeroImages[cat.id]} className="w-full h-full object-cover" alt={cat.name} />
                             {(cat.id === 'cat-2' || cat.id === 'cat-3') && <SteamAnimation />}
@@ -461,22 +468,22 @@ export default function MenuFlipbook() {
                         </div>
                       )}
                       <div className="mb-6 text-center">
-                        <h3 className="font-serif text-2xl font-bold text-[#2a382b] border-b-2 border-[#a48559]/50 inline-block pb-1 uppercase">{cat.name}</h3>
-                        {cat.subtitle && <p className="font-serif italic text-[#a48559] text-sm mt-2">{cat.subtitle}</p>}
-                        {cat.description && <p className="font-serif text-[#2a382b]/90 text-xs mt-2 max-w-xs mx-auto">{cat.description}</p>}
+                        <h3 className="font-serif text-2xl font-black text-[#1a362a] border-b border-[#8a2a2b]/30 inline-block pb-2 uppercase tracking-wide">{cat.name}</h3>
+                        {cat.subtitle && <p className="font-serif italic text-[#8a2a2b] text-sm mt-3">{cat.subtitle}</p>}
+                        {cat.description && <p className="font-sans text-[#2c3e38]/80 text-xs mt-3 max-w-[280px] mx-auto leading-relaxed">{cat.description}</p>}
                       </div>
                       
                       {isHomeEdition && (
                         <div className="flex items-center justify-center mb-6">
-                          <span className="text-[#2a382b] text-sm">❄️</span>
-                          <span className="font-serif uppercase tracking-[0.2em] text-[#2a382b] text-[10px] font-bold mx-3 border-b border-[#2a382b]">Frozen Fresh</span>
-                          <span className="text-[#2a382b] text-sm">❄️</span>
+                          <span className="text-[#1a362a] text-sm">❄️</span>
+                          <span className="font-sans uppercase tracking-[0.2em] text-[#1a362a] text-[10px] font-bold mx-3 border-b border-[#1a362a]">Frozen Fresh</span>
+                          <span className="text-[#1a362a] text-sm">❄️</span>
                         </div>
                       )}
                       
                       {isKopitiam ? (
                         <div className="flex flex-col space-y-4">
-                          <div className="flex justify-between border-b-2 border-[#2a382b] pb-1 font-serif text-[10px] font-bold uppercase tracking-widest text-[#2a382b]">
+                          <div className="flex justify-between border-b-2 border-[#1a362a] pb-2 font-sans text-[10px] font-bold uppercase tracking-widest text-[#1a362a]">
                             <div className="w-1/3">Drink</div>
                             <div className="w-1/3 text-center">☕ Hot</div>
                             <div className="w-1/3 text-right">🧊 Cold</div>
@@ -485,21 +492,21 @@ export default function MenuFlipbook() {
                             const hotVariant = dish.variants?.find(v => v.type === 'Hot');
                             const coldVariant = dish.variants?.find(v => v.type === 'Cold');
                             return (
-                              <div key={dish.id} className="flex justify-between items-center group p-2 -mx-2 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:bg-white/40 hover:shadow-[0_4px_12px_-4px_rgba(42,56,43,0.12)] border border-transparent hover:border-[#a48559]/20">
-                                <div className="w-1/3 font-serif font-bold text-[#2a382b] text-[12px] uppercase leading-tight">{dish.name}</div>
+                              <div key={dish.id} className="flex justify-between items-center group">
+                                <div className="w-1/3 font-sans font-bold text-[#1a362a] text-[12px] uppercase leading-tight">{dish.name}</div>
                                 <div className="w-1/3 text-center flex flex-col items-center">
                                   {hotVariant ? (
                                     <>
-                                      <span className="font-mono text-[9px] text-[#2a382b]/70">{hotVariant.code}</span>
-                                      <span className="font-serif text-[12px] font-bold text-[#2a382b]">RM {hotVariant.price.toFixed(2)}</span>
+                                      <span className="font-mono text-[9px] text-[#2c3e38]/70">{hotVariant.code}</span>
+                                      <span className="font-sans text-[12px] font-bold text-[#8a2a2b]">RM {hotVariant.price.toFixed(2)}</span>
                                     </>
                                   ) : <span className="text-transparent">-</span>}
                                 </div>
                                 <div className="w-1/3 text-right flex flex-col items-end">
                                   {coldVariant ? (
                                     <>
-                                      <span className="font-mono text-[9px] text-[#2a382b]/70">{coldVariant.code}</span>
-                                      <span className="font-serif text-[12px] font-bold text-[#2a382b]">RM {coldVariant.price.toFixed(2)}</span>
+                                      <span className="font-mono text-[9px] text-[#2c3e38]/70">{coldVariant.code}</span>
+                                      <span className="font-sans text-[12px] font-bold text-[#8a2a2b]">RM {coldVariant.price.toFixed(2)}</span>
                                     </>
                                   ) : <span className="text-transparent">-</span>}
                                 </div>
@@ -508,44 +515,36 @@ export default function MenuFlipbook() {
                           })}
                         </div>
                       ) : (
-                        <div className="flex flex-col space-y-5 mt-4">
+                        <div className="flex flex-col mt-4">
                           {cat.dishes.map((dish) => (
-                            <div key={dish.id} className="flex flex-col group p-3 -mx-3 -my-2 rounded-xl transition-all duration-300 hover:scale-[1.02] hover:bg-white/50 hover:shadow-[0_8px_20px_-6px_rgba(42,56,43,0.15)] border border-transparent hover:border-[#a48559]/20 cursor-default">
-                              <div className="flex items-center mb-1">
-                                {dish.code && (
-                                  <span className="font-serif text-[#2a382b] font-bold text-xs bg-[#a48559]/20 px-1.5 py-0.5 rounded-sm mr-2">{dish.code}</span>
-                                )}
-                                <h4 className="font-serif font-bold text-[#2a382b] text-[14px] leading-tight uppercase">{dish.name}</h4>
+                            <div key={dish.id} className="flex flex-col border-b border-[#1a362a]/10 py-4 last:border-0">
+                              <div className="flex items-start justify-between mb-1 gap-3">
+                                <div className="flex items-center flex-wrap gap-2">
+                                  {dish.code && (
+                                    <span className="font-sans text-[#1a362a] font-bold text-[10px] tracking-wider bg-[#1a362a]/10 px-1.5 py-0.5 rounded-sm mr-1">{dish.code}</span>
+                                  )}
+                                  <h4 className="font-serif font-bold text-[#1a362a] text-[15px] leading-tight uppercase">{dish.name}</h4>
+                                </div>
+                                
+                                <div className="shrink-0 flex items-baseline pt-0.5">
+                                   {dish.price !== undefined ? (
+                                     <span className="font-sans text-[14px] font-bold text-[#8a2a2b] whitespace-nowrap"><span className="text-[10px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{dish.price.toFixed(2)}</span>
+                                   ) : dish.variants ? null : (
+                                     <span className="font-sans text-[14px] font-bold text-[#8a2a2b] whitespace-nowrap"><span className="text-[10px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>TBA</span>
+                                   )}
+                                </div>
                               </div>
                               
                               {dish.description && (
-                                 <p className="font-serif italic text-[#2a382b]/70 text-[11px] leading-snug mb-1">{dish.description}</p>
+                                 <p className="font-sans text-[#2c3e38]/70 text-[12px] leading-relaxed mb-2">{dish.description}</p>
                               )}
                               
-                              <div className="flex items-end mt-1">
-                                 <span className="font-serif text-[10px] font-bold text-[#2a382b] uppercase tracking-wider mr-1 pb-0.5">RM</span>
-                                 {dish.price !== undefined ? (
-                                   <>
-                                     <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[5px]" />
-                                     <span className="font-serif text-[14px] font-bold text-[#2a382b] group-hover:scale-[1.05] transition-transform origin-bottom-right">{dish.price.toFixed(2)}</span>
-                                   </>
-                                 ) : dish.variants ? (
-                                   <div className="w-full" />
-                                 ) : (
-                                   <>
-                                     <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[5px]" />
-                                     <span className="font-serif text-[14px] font-bold text-[#2a382b]">TBA</span>
-                                   </>
-                                 )}
-                              </div>
-                              
                               {dish.variants && (
-                                <div className="flex flex-col space-y-1 mt-2">
+                                <div className="flex flex-col space-y-1.5 mt-2 pl-2 border-l-2 border-[#1a362a]/10">
                                    {dish.variants.map((v, i) => (
-                                      <div key={i} className="flex items-end text-xs">
-                                         <span className="font-serif text-[#2a382b]/80 uppercase text-[10px] pb-0.5">{v.type} <span className="font-mono text-[8px] opacity-60">({v.code})</span></span>
-                                         <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[3px]" />
-                                         <span className="font-serif font-bold text-[#2a382b] text-[13px] group-hover:text-[#182319] transition-colors">{v.price.toFixed(2)}</span>
+                                      <div key={i} className="flex justify-between items-center text-xs">
+                                         <span className="font-sans text-[#2c3e38]/90 text-[11px]">{v.type} <span className="font-mono text-[9px] opacity-60">({v.code})</span></span>
+                                         <span className="font-sans font-bold text-[#8a2a2b] text-[13px]"><span className="text-[9px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{v.price.toFixed(2)}</span>
                                       </div>
                                    ))}
                                 </div>
@@ -556,14 +555,13 @@ export default function MenuFlipbook() {
                       )}
                       
                       {cat.addOns && (
-                        <div className="mt-5 pt-4 border-t border-double border-[#a48559]/30">
-                          <h4 className="font-serif font-bold text-[#2a382b] mb-3 text-center text-xs tracking-widest uppercase">Add On</h4>
-                          <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                        <div className="mt-6 pt-5 border-t border-double border-[#8a2a2b]/20">
+                          <h4 className="font-serif font-bold text-[#1a362a] mb-4 text-center text-sm tracking-widest uppercase">Add On</h4>
+                          <div className="grid grid-cols-1 gap-y-3">
                             {cat.addOns.map((addon, i) => (
-                               <div key={i} className="flex justify-between items-end text-xs group cursor-default">
-                                  <span className="font-serif uppercase text-[#2a382b] text-[10px] font-bold pb-0.5 group-hover:text-[#182319] transition-colors">• {addon.name}</span>
-                                  <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[3px]" />
-                                  <span className="font-serif font-bold text-[#2a382b] text-[11px] group-hover:scale-105 transition-transform origin-bottom-right">RM {addon.price.toFixed(2)}</span>
+                               <div key={i} className="flex justify-between items-center text-xs">
+                                  <span className="font-sans uppercase text-[#2c3e38] text-[11px] font-medium">• {addon.name}</span>
+                                  <span className="font-sans font-bold text-[#8a2a2b] text-[12px]"><span className="text-[9px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{addon.price.toFixed(2)}</span>
                                </div>
                             ))}
                           </div>
