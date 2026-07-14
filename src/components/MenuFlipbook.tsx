@@ -6,14 +6,67 @@ import logoImg from '../assets/images/logo.png';
 import bgImg from '../assets/images/bg.png';
 import menuFrontPageImg from '../assets/images/menu_front_page.png';
 import mostLovedImg from '../assets/images/mostloved.png';
+import harGowImg from '../assets/images/dish_har_gow_1783567535786.jpg';
+import siewMaiImg from '../assets/images/dish_siew_mai_1783567518247.jpg';
+import custardBunImg from '../assets/images/dish_custard_bun_1783567550286.jpg';
+import steamImg from '../assets/images/about_steam_1783567485399.jpg';
+import platterImg from '../assets/images/about_platter_1783567469486.jpg';
+import ingredientsImg from '../assets/images/about_ingredients_1783567499817.jpg';
+import heroDimSumImg from '../assets/images/hero_dim_sum_1783567454638.jpg';
+
+const catHeroImages: Record<string, string> = {
+  'cat-0': ingredientsImg,
+  'cat-1': platterImg,
+  'cat-2': siewMaiImg,
+  'cat-3': custardBunImg,
+  'cat-4': steamImg,
+  'cat-5': platterImg,
+  'cat-6': harGowImg,
+  'cat-7': heroDimSumImg,
+  'cat-11': heroDimSumImg,
+  'cat-12': steamImg,
+};
 
 // Need to suppress TypeScript errors for HTMLFlipBook because of missing types
 const FlipBook = HTMLFlipBook as any;
 
+const SteamAnimation = () => (
+  <svg 
+    className="absolute inset-0 w-full h-full pointer-events-none mix-blend-screen opacity-60 z-20"
+    viewBox="0 0 100 100" 
+    preserveAspectRatio="none"
+  >
+    <style>
+      {`
+        .steam-path {
+          fill: none;
+          stroke: #ffffff;
+          stroke-linecap: round;
+          filter: blur(5px);
+          animation: steam-rise 6s infinite ease-in;
+          transform-origin: bottom;
+        }
+        .s1 { stroke-width: 6; animation-duration: 7s; animation-delay: 0s; }
+        .s2 { stroke-width: 8; animation-duration: 5s; animation-delay: 1.5s; }
+        .s3 { stroke-width: 5; animation-duration: 8s; animation-delay: 3s; }
+        
+        @keyframes steam-rise {
+          0% { opacity: 0; transform: translateY(10%) scale(1); }
+          30% { opacity: 0.7; }
+          100% { opacity: 0; transform: translateY(-40%) scale(1.5); }
+        }
+      `}
+    </style>
+    <path className="steam-path s1" d="M 30,100 Q 20,70 35,40 T 30,0" />
+    <path className="steam-path s2" d="M 50,100 Q 65,75 45,40 T 55,0" />
+    <path className="steam-path s3" d="M 70,100 Q 55,75 75,40 T 65,0" />
+  </svg>
+);
+
 // A custom page component required by react-pageflip to use ref
-const Page = React.forwardRef<HTMLDivElement, { title?: string; subtitle?: string; description?: string; children: React.ReactNode; number: number; noPadding?: boolean }>((props, ref) => {
+const Page = React.forwardRef<HTMLDivElement, { title?: string; subtitle?: string; description?: string; children: React.ReactNode; number: number; noPadding?: boolean; bgClass?: string }>((props, ref) => {
   return (
-    <div className="bg-[#eadeb5] h-full w-full shadow-[inset_0_0_20px_rgba(0,0,0,0.1)] border-l border-r border-[#c2b294] relative overflow-hidden" ref={ref}>
+    <div className={`${props.bgClass || 'bg-[#eadeb5]'} h-full w-full shadow-[inset_0_0_20px_rgba(0,0,0,0.1)] border-l border-r border-[#c2b294] relative overflow-hidden`} ref={ref}>
       {/* Background Texture */}
       <div 
         className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-multiply"
@@ -226,54 +279,122 @@ export default function MenuFlipbook() {
             </Page>
 
             {/* Menu Pages dynamically from categories */}
-            {MENU_CATEGORIES.map((cat, index) => (
-              <Page key={cat.id} title={cat.name} subtitle={cat.subtitle} description={cat.description} number={index + 2}>
-                <div className="grid grid-cols-2 gap-4">
-                  {cat.dishes.map((dish) => (
-                    <div key={dish.id} className="flex flex-col mb-4">
-                      {dish.code && (
-                        <div className="flex items-center mb-1">
-                          <span className="font-serif text-[#2a382b] font-bold text-sm bg-[#a48559]/20 px-1.5 py-0.5 rounded-sm">{dish.code}</span>
-                        </div>
-                      )}
-                      
-                      <h4 className="font-serif font-bold text-[#2a382b] text-[13px] leading-tight uppercase mb-1">{dish.name}</h4>
-                      
-                      {dish.description && (
-                         <p className="font-serif italic text-[#2a382b]/70 text-[10px] leading-snug mb-1">{dish.description}</p>
-                      )}
-                      
-                      <div className="flex items-end mt-auto pt-1">
-                         <span className="font-serif text-[9px] font-bold text-[#2a382b] uppercase tracking-wider mr-1 pb-0.5">RM</span>
-                         {dish.price !== undefined ? (
-                           <>
-                             <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[5px]" />
-                             <span className="font-serif text-[13px] font-bold text-[#2a382b]">{dish.price.toFixed(2)}</span>
-                           </>
-                         ) : dish.variants ? (
-                           <div className="w-full" />
-                         ) : (
-                           <>
-                             <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[5px]" />
-                             <span className="font-serif text-[13px] font-bold text-[#2a382b]">TBA</span>
-                           </>
-                         )}
-                      </div>
-                      
-                      {dish.variants && (
-                        <div className="flex flex-col space-y-1 mt-2">
-                           {dish.variants.map((v, i) => (
-                              <div key={i} className="flex items-end text-xs">
-                                 <span className="font-serif text-[#2a382b]/80 uppercase text-[10px] pb-0.5">{v.type} <span className="font-mono text-[8px] opacity-60">({v.code})</span></span>
-                                 <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[3px]" />
-                                 <span className="font-serif font-bold text-[#2a382b] text-xs">{v.price.toFixed(2)}</span>
-                              </div>
-                           ))}
-                        </div>
-                      )}
+            {MENU_CATEGORIES.map((cat, index) => {
+              const isKopitiam = cat.id === 'cat-8';
+              const isHomeEdition = cat.id === 'cat-12';
+              const bgClass = isHomeEdition ? 'bg-[#f0ebd8]' : 'bg-[#eadeb5]';
+              
+              return (
+              <Page key={cat.id} title={cat.name} subtitle={cat.subtitle} description={cat.description} number={index + 2} bgClass={bgClass}>
+                
+                {catHeroImages[cat.id] && (
+                  <div className="w-full h-40 mb-6 border border-[#2a382b]/30 p-1 bg-[#eadeb5]/50 shrink-0 relative">
+                    <div className="w-full h-full relative overflow-hidden">
+                      <img src={catHeroImages[cat.id]} className="w-full h-full object-cover" alt={cat.name} />
+                      {(cat.id === 'cat-2' || cat.id === 'cat-3') && <SteamAnimation />}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                )}
+                
+                {isHomeEdition && (
+                  <div className="flex items-center justify-center mb-6">
+                    <span className="text-[#2a382b] text-sm">❄️</span>
+                    <span className="font-serif uppercase tracking-[0.2em] text-[#2a382b] text-[10px] font-bold mx-3 border-b border-[#2a382b]">Frozen Fresh</span>
+                    <span className="text-[#2a382b] text-sm">❄️</span>
+                  </div>
+                )}
+
+                {isKopitiam ? (
+                  <div className="flex flex-col space-y-3">
+                    <div className="flex justify-between border-b-2 border-[#2a382b] pb-1 mb-2 font-serif text-[10px] font-bold uppercase tracking-widest text-[#2a382b]">
+                      <div className="w-1/3">Drink</div>
+                      <div className="w-1/3 text-center">☕ Hot</div>
+                      <div className="w-1/3 text-right">🧊 Cold</div>
+                    </div>
+                    {cat.dishes.map((dish) => {
+                      const hotVariant = dish.variants?.find(v => v.type === 'Hot');
+                      const coldVariant = dish.variants?.find(v => v.type === 'Cold');
+                      
+                      return (
+                        <div key={dish.id} className="flex justify-between items-center group cursor-default p-2 -mx-2 rounded-lg transition-all duration-300 hover:scale-[1.03] hover:bg-white/40 hover:shadow-[0_4px_12px_-4px_rgba(42,56,43,0.12)] border border-transparent hover:border-[#a48559]/20">
+                          <div className="w-1/3 font-serif font-bold text-[#2a382b] text-[11px] uppercase leading-tight">{dish.name}</div>
+                          
+                          <div className="w-1/3 text-center flex flex-col items-center">
+                            {hotVariant ? (
+                              <>
+                                <span className="font-mono text-[9px] text-[#2a382b]/70">{hotVariant.code}</span>
+                                <span className="font-serif text-[11px] font-bold text-[#2a382b]">RM {hotVariant.price.toFixed(2)}</span>
+                              </>
+                            ) : (
+                              <span className="text-transparent">-</span>
+                            )}
+                          </div>
+                          
+                          <div className="w-1/3 text-right flex flex-col items-end">
+                            {coldVariant ? (
+                              <>
+                                <span className="font-mono text-[9px] text-[#2a382b]/70">{coldVariant.code}</span>
+                                <span className="font-serif text-[11px] font-bold text-[#2a382b]">RM {coldVariant.price.toFixed(2)}</span>
+                              </>
+                            ) : (
+                              <span className="text-transparent">-</span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+                    {cat.dishes.map((dish) => (
+                      <div key={dish.id} className="flex flex-col group relative p-3 -mx-3 -my-2 rounded-xl transition-all duration-300 hover:scale-[1.03] hover:bg-white/50 hover:shadow-[0_8px_20px_-6px_rgba(42,56,43,0.15)] border border-transparent hover:border-[#a48559]/20 cursor-default">
+                        
+                        <div className="relative z-10 flex flex-col h-full">
+                          {dish.code && (
+                            <div className="flex items-center mb-1">
+                              <span className="font-serif text-[#2a382b] font-bold text-xs bg-[#a48559]/20 px-1.5 py-0.5 rounded-sm shadow-sm group-hover:bg-[#a48559]/30 transition-colors">{dish.code}</span>
+                            </div>
+                          )}
+                          
+                          <h4 className="font-serif font-bold text-[#2a382b] text-[12px] leading-tight uppercase mb-1 group-hover:text-[#182319] transition-colors">{dish.name}</h4>
+                          
+                          {dish.description && (
+                             <p className="font-serif italic text-[#2a382b]/70 text-[9px] leading-snug mb-1">{dish.description}</p>
+                          )}
+                          
+                          <div className="flex items-end mt-auto pt-1">
+                             <span className="font-serif text-[9px] font-bold text-[#2a382b] uppercase tracking-wider mr-1 pb-0.5">RM</span>
+                             {dish.price !== undefined ? (
+                               <>
+                                 <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[5px]" />
+                                 <span className="font-serif text-[13px] font-bold text-[#2a382b] group-hover:scale-105 transition-transform origin-bottom-right">{dish.price.toFixed(2)}</span>
+                               </>
+                             ) : dish.variants ? (
+                               <div className="w-full" />
+                             ) : (
+                               <>
+                                 <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[5px]" />
+                                 <span className="font-serif text-[13px] font-bold text-[#2a382b]">TBA</span>
+                               </>
+                             )}
+                          </div>
+                          
+                          {dish.variants && (
+                            <div className="flex flex-col space-y-1 mt-2">
+                               {dish.variants.map((v, i) => (
+                                  <div key={i} className="flex items-end text-xs">
+                                     <span className="font-serif text-[#2a382b]/80 uppercase text-[9px] pb-0.5">{v.type} <span className="font-mono text-[8px] opacity-60">({v.code})</span></span>
+                                     <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[3px]" />
+                                     <span className="font-serif font-bold text-[#2a382b] text-xs group-hover:text-[#182319] transition-colors">{v.price.toFixed(2)}</span>
+                                  </div>
+                               ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 
                 {cat.addOns && (
                   <div className="mt-4 pt-4 border-t border-double border-[#a48559]/30">
@@ -284,17 +405,17 @@ export default function MenuFlipbook() {
                     </div>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                       {cat.addOns.map((addon, i) => (
-                         <div key={i} className="flex justify-between items-end text-xs">
-                            <span className="font-serif uppercase text-[#2a382b] text-[10px] font-bold pb-0.5">• {addon.name}</span>
+                         <div key={i} className="flex justify-between items-end text-xs group cursor-default">
+                            <span className="font-serif uppercase text-[#2a382b] text-[10px] font-bold pb-0.5 group-hover:text-[#182319] transition-colors">• {addon.name}</span>
                             <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[3px]" />
-                            <span className="font-serif font-bold text-[#2a382b] text-xs">RM {addon.price.toFixed(2)}</span>
+                            <span className="font-serif font-bold text-[#2a382b] text-[11px] group-hover:scale-105 transition-transform origin-bottom-right">RM {addon.price.toFixed(2)}</span>
                          </div>
                       ))}
                     </div>
                   </div>
                 )}
               </Page>
-            ))}
+            );})}
 
             {/* Back Cover */}
             <div className="bg-[#f4ebd0] h-full w-full flex flex-col items-center justify-center p-8 border-l-[12px] border-jade-950 shadow-[inset_0_0_20px_rgba(0,0,0,0.1)] rounded-r">
@@ -322,57 +443,127 @@ export default function MenuFlipbook() {
                   <CoverPageContent />
                 </div>
                 
-                {MENU_CATEGORIES.map((cat, index) => (
-                  <div key={cat.id} className="mb-10 bg-white/40 p-4 rounded-xl border border-white/20 shadow-sm backdrop-blur-sm">
-                    <div className="mb-6 text-center">
-                      <h3 className="font-serif text-2xl font-bold text-jade-950 border-b-2 border-gold-400 inline-block pb-1">{cat.name}</h3>
-                      {cat.subtitle && <p className="font-serif text-jade-900/80 italic text-sm mt-2">{cat.subtitle}</p>}
-                      {cat.description && <p className="font-sans text-xs text-jade-900/70 mt-2 max-w-xs mx-auto">{cat.description}</p>}
-                    </div>
-                    
-                    <div className="flex flex-col space-y-4 mt-4">
-                      {cat.dishes.map((dish) => (
-                        <div key={dish.id} className="flex flex-col border-b border-jade-900/10 pb-3 last:border-0">
-                          <div className="flex items-start justify-between">
-                            <div className="flex items-start">
-                              {dish.code && (
-                                <span className="bg-jade-900 text-cream-50 font-mono text-[10px] font-bold px-1.5 py-0.5 rounded mr-2 shrink-0 mt-0.5">{dish.code}</span>
-                              )}
-                              <h4 className="font-serif font-bold text-jade-950 text-sm leading-tight">{dish.name}</h4>
-                            </div>
-                            {dish.price !== undefined && (
-                              <span className="font-mono text-gold-700 font-bold whitespace-nowrap ml-2 text-sm">RM {dish.price.toFixed(2)}</span>
-                            )}
-                            {dish.price === undefined && !dish.variants && (
-                              <span className="font-mono text-gold-700 font-bold whitespace-nowrap ml-2 text-sm">TBA</span>
-                            )}
+                {MENU_CATEGORIES.map((cat, index) => {
+                  const isKopitiam = cat.id === 'cat-8';
+                  const isHomeEdition = cat.id === 'cat-12';
+                  const bgClass = isHomeEdition ? 'bg-[#f0ebd8]' : 'bg-[#eadeb5]';
+
+                  return (
+                  <div key={cat.id} className={`mb-10 ${bgClass} p-4 rounded-xl border border-[#c2b294] shadow-sm relative overflow-hidden`}>
+                    <div className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-multiply" style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }} />
+                    <div className="relative z-10">
+                      {catHeroImages[cat.id] && (
+                        <div className="w-full h-32 mb-6 border border-[#2a382b]/30 p-1 bg-[#eadeb5]/50 shrink-0 relative">
+                          <div className="w-full h-full relative overflow-hidden">
+                            <img src={catHeroImages[cat.id]} className="w-full h-full object-cover" alt={cat.name} />
+                            {(cat.id === 'cat-2' || cat.id === 'cat-3') && <SteamAnimation />}
                           </div>
-                          
-                          {dish.description && (
-                             <p className="font-sans text-xs text-jade-900/60 mt-1 leading-snug ml-9">{dish.description}</p>
-                          )}
-                          
-                          {dish.variants && (
-                            <div className="flex flex-col space-y-1 mt-2 ml-9">
-                               {dish.variants.map((v, i) => (
-                                  <div key={i} className="flex justify-between items-center text-xs">
-                                     <span className="text-jade-900/70 font-sans">{v.type} ({v.code})</span>
-                                     <span className="font-mono text-jade-950 font-semibold">RM {v.price.toFixed(2)}</span>
-                                  </div>
-                               ))}
-                            </div>
-                          )}
                         </div>
-                      ))}
+                      )}
+                      <div className="mb-6 text-center">
+                        <h3 className="font-serif text-2xl font-bold text-[#2a382b] border-b-2 border-[#a48559]/50 inline-block pb-1 uppercase">{cat.name}</h3>
+                        {cat.subtitle && <p className="font-serif italic text-[#a48559] text-sm mt-2">{cat.subtitle}</p>}
+                        {cat.description && <p className="font-serif text-[#2a382b]/90 text-xs mt-2 max-w-xs mx-auto">{cat.description}</p>}
+                      </div>
+                      
+                      {isHomeEdition && (
+                        <div className="flex items-center justify-center mb-6">
+                          <span className="text-[#2a382b] text-sm">❄️</span>
+                          <span className="font-serif uppercase tracking-[0.2em] text-[#2a382b] text-[10px] font-bold mx-3 border-b border-[#2a382b]">Frozen Fresh</span>
+                          <span className="text-[#2a382b] text-sm">❄️</span>
+                        </div>
+                      )}
+                      
+                      {isKopitiam ? (
+                        <div className="flex flex-col space-y-4">
+                          <div className="flex justify-between border-b-2 border-[#2a382b] pb-1 font-serif text-[10px] font-bold uppercase tracking-widest text-[#2a382b]">
+                            <div className="w-1/3">Drink</div>
+                            <div className="w-1/3 text-center">☕ Hot</div>
+                            <div className="w-1/3 text-right">🧊 Cold</div>
+                          </div>
+                          {cat.dishes.map((dish) => {
+                            const hotVariant = dish.variants?.find(v => v.type === 'Hot');
+                            const coldVariant = dish.variants?.find(v => v.type === 'Cold');
+                            return (
+                              <div key={dish.id} className="flex justify-between items-center group p-2 -mx-2 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:bg-white/40 hover:shadow-[0_4px_12px_-4px_rgba(42,56,43,0.12)] border border-transparent hover:border-[#a48559]/20">
+                                <div className="w-1/3 font-serif font-bold text-[#2a382b] text-[12px] uppercase leading-tight">{dish.name}</div>
+                                <div className="w-1/3 text-center flex flex-col items-center">
+                                  {hotVariant ? (
+                                    <>
+                                      <span className="font-mono text-[9px] text-[#2a382b]/70">{hotVariant.code}</span>
+                                      <span className="font-serif text-[12px] font-bold text-[#2a382b]">RM {hotVariant.price.toFixed(2)}</span>
+                                    </>
+                                  ) : <span className="text-transparent">-</span>}
+                                </div>
+                                <div className="w-1/3 text-right flex flex-col items-end">
+                                  {coldVariant ? (
+                                    <>
+                                      <span className="font-mono text-[9px] text-[#2a382b]/70">{coldVariant.code}</span>
+                                      <span className="font-serif text-[12px] font-bold text-[#2a382b]">RM {coldVariant.price.toFixed(2)}</span>
+                                    </>
+                                  ) : <span className="text-transparent">-</span>}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="flex flex-col space-y-5 mt-4">
+                          {cat.dishes.map((dish) => (
+                            <div key={dish.id} className="flex flex-col group p-3 -mx-3 -my-2 rounded-xl transition-all duration-300 hover:scale-[1.02] hover:bg-white/50 hover:shadow-[0_8px_20px_-6px_rgba(42,56,43,0.15)] border border-transparent hover:border-[#a48559]/20 cursor-default">
+                              <div className="flex items-center mb-1">
+                                {dish.code && (
+                                  <span className="font-serif text-[#2a382b] font-bold text-xs bg-[#a48559]/20 px-1.5 py-0.5 rounded-sm mr-2">{dish.code}</span>
+                                )}
+                                <h4 className="font-serif font-bold text-[#2a382b] text-[14px] leading-tight uppercase">{dish.name}</h4>
+                              </div>
+                              
+                              {dish.description && (
+                                 <p className="font-serif italic text-[#2a382b]/70 text-[11px] leading-snug mb-1">{dish.description}</p>
+                              )}
+                              
+                              <div className="flex items-end mt-1">
+                                 <span className="font-serif text-[10px] font-bold text-[#2a382b] uppercase tracking-wider mr-1 pb-0.5">RM</span>
+                                 {dish.price !== undefined ? (
+                                   <>
+                                     <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[5px]" />
+                                     <span className="font-serif text-[14px] font-bold text-[#2a382b] group-hover:scale-[1.05] transition-transform origin-bottom-right">{dish.price.toFixed(2)}</span>
+                                   </>
+                                 ) : dish.variants ? (
+                                   <div className="w-full" />
+                                 ) : (
+                                   <>
+                                     <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[5px]" />
+                                     <span className="font-serif text-[14px] font-bold text-[#2a382b]">TBA</span>
+                                   </>
+                                 )}
+                              </div>
+                              
+                              {dish.variants && (
+                                <div className="flex flex-col space-y-1 mt-2">
+                                   {dish.variants.map((v, i) => (
+                                      <div key={i} className="flex items-end text-xs">
+                                         <span className="font-serif text-[#2a382b]/80 uppercase text-[10px] pb-0.5">{v.type} <span className="font-mono text-[8px] opacity-60">({v.code})</span></span>
+                                         <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[3px]" />
+                                         <span className="font-serif font-bold text-[#2a382b] text-[13px] group-hover:text-[#182319] transition-colors">{v.price.toFixed(2)}</span>
+                                      </div>
+                                   ))}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
                       
                       {cat.addOns && (
-                        <div className="mt-4 pt-4 border-t border-jade-900/20">
-                          <h4 className="font-serif font-bold text-jade-950 mb-3 text-center text-sm tracking-widest uppercase">Add On</h4>
-                          <div className="grid grid-cols-2 gap-2">
+                        <div className="mt-5 pt-4 border-t border-double border-[#a48559]/30">
+                          <h4 className="font-serif font-bold text-[#2a382b] mb-3 text-center text-xs tracking-widest uppercase">Add On</h4>
+                          <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                             {cat.addOns.map((addon, i) => (
-                               <div key={i} className="flex justify-between text-xs">
-                                  <span className="font-sans text-jade-900/80">• {addon.name}</span>
-                                  <span className="font-mono font-semibold text-jade-950">RM {addon.price.toFixed(2)}</span>
+                               <div key={i} className="flex justify-between items-end text-xs group cursor-default">
+                                  <span className="font-serif uppercase text-[#2a382b] text-[10px] font-bold pb-0.5 group-hover:text-[#182319] transition-colors">• {addon.name}</span>
+                                  <div className="flex-1 border-b border-dotted border-[#2a382b]/40 mx-1 mb-[3px]" />
+                                  <span className="font-serif font-bold text-[#2a382b] text-[11px] group-hover:scale-105 transition-transform origin-bottom-right">RM {addon.price.toFixed(2)}</span>
                                </div>
                             ))}
                           </div>
@@ -380,7 +571,7 @@ export default function MenuFlipbook() {
                       )}
                     </div>
                   </div>
-                ))}
+                );})}
               </div>
            </div>
         </div>

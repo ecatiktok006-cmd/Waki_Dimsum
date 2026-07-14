@@ -75,7 +75,7 @@ const TIMELINE_NODES = [
 export default function AboutTimeline() {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const isHoveredRef = useRef(false);
+  const isPausedRef = useRef(false);
 
   useEffect(() => {
     let animationFrameId: number;
@@ -85,7 +85,7 @@ export default function AboutTimeline() {
       const delta = time - lastTime;
       lastTime = time;
 
-      if (!isHoveredRef.current && scrollRef.current) {
+      if (!isPausedRef.current && scrollRef.current) {
         // Slow continuous scroll speed
         scrollRef.current.scrollLeft += delta * 0.04;
       }
@@ -160,12 +160,9 @@ export default function AboutTimeline() {
 
       {/* Horizontal Scroll Area for Timeline */}
       <div 
-        className="w-full overflow-x-auto overflow-y-visible no-scrollbar pb-32 -mt-16 sm:-mt-24"
+        className="w-full overflow-x-auto overflow-y-visible no-scrollbar pb-32 -mt-16 sm:-mt-24 cursor-pointer"
         ref={scrollRef}
-        onMouseEnter={() => { isHoveredRef.current = true; }}
-        onMouseLeave={() => { isHoveredRef.current = false; }}
-        onTouchStart={() => { isHoveredRef.current = true; }}
-        onTouchEnd={() => { isHoveredRef.current = false; }}
+        onClick={() => { isPausedRef.current = !isPausedRef.current; }}
       >
         <div className="relative h-[800px] flex gap-24 items-center px-40 w-max mx-auto">
           
