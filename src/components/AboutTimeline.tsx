@@ -68,8 +68,8 @@ const TIMELINE_NODES = [
   { year: 2022, y: 550, cardPos: 'top' as const },
   { year: 2023, y: 250, cardPos: 'bottom' as const },
   { year: 2024, y: 600, cardPos: 'top' as const },
-  { year: 2025, y: 200, cardPos: 'bottom' as const },
-  { year: 2026, y: 400, cardPos: 'bottom' as const },
+  { year: 2025, y: 300, cardPos: 'bottom' as const },
+  { year: 2026, y: 400, cardPos: 'end' as const },
 ];
 
 export default function AboutTimeline() {
@@ -97,29 +97,30 @@ export default function AboutTimeline() {
   }, []);
 
   // Dynamic SVG Path Calculation
-  const ITEM_WIDTH = 288; // w-72
+  const ITEM_WIDTH = 300; // w-[300px]
   const GAP = 96; // gap-24
   const STEP = ITEM_WIDTH + GAP;
-  const PADDING = 160; // px-40
+  const PADDING_LEFT = 160; // pl-40
+  const PADDING_RIGHT = 400; // pr-[400px] for the end card
 
-  const totalWidth = PADDING * 2 + ITEM_WIDTH * TIMELINE_EVENTS.length + GAP * (TIMELINE_EVENTS.length - 1);
+  const totalWidth = PADDING_LEFT + PADDING_RIGHT + ITEM_WIDTH * TIMELINE_EVENTS.length + GAP * (TIMELINE_EVENTS.length - 1);
 
   const pathParts = [];
   pathParts.push(`M 0 ${TIMELINE_NODES[0].y}`);
-  pathParts.push(`C ${PADDING/2} ${TIMELINE_NODES[0].y}, ${PADDING} ${TIMELINE_NODES[0].y}, ${PADDING + ITEM_WIDTH/2} ${TIMELINE_NODES[0].y}`);
+  pathParts.push(`C ${PADDING_LEFT/2} ${TIMELINE_NODES[0].y}, ${PADDING_LEFT} ${TIMELINE_NODES[0].y}, ${PADDING_LEFT + ITEM_WIDTH/2} ${TIMELINE_NODES[0].y}`);
 
   for (let i = 0; i < TIMELINE_NODES.length - 1; i++) {
-    const x0 = PADDING + ITEM_WIDTH/2 + i * STEP;
+    const x0 = PADDING_LEFT + ITEM_WIDTH/2 + i * STEP;
     const y0 = TIMELINE_NODES[i].y;
-    const x1 = PADDING + ITEM_WIDTH/2 + (i + 1) * STEP;
+    const x1 = PADDING_LEFT + ITEM_WIDTH/2 + (i + 1) * STEP;
     const y1 = TIMELINE_NODES[i+1].y;
     const cx = x0 + STEP/2;
     pathParts.push(`C ${cx} ${y0}, ${cx} ${y1}, ${x1} ${y1}`);
   }
 
-  const lastX = PADDING + ITEM_WIDTH/2 + (TIMELINE_NODES.length - 1) * STEP;
+  const lastX = PADDING_LEFT + ITEM_WIDTH/2 + (TIMELINE_NODES.length - 1) * STEP;
   const lastY = TIMELINE_NODES[TIMELINE_NODES.length - 1].y;
-  pathParts.push(`C ${lastX + PADDING/2} ${lastY}, ${totalWidth - PADDING/2} ${lastY}, ${totalWidth} ${lastY}`);
+  pathParts.push(`C ${lastX + PADDING_RIGHT/4} ${lastY}, ${lastX + PADDING_RIGHT/2} ${lastY}, ${totalWidth} ${lastY}`);
 
   const pathD = pathParts.join(' ');
 
@@ -169,7 +170,7 @@ export default function AboutTimeline() {
         ref={scrollRef}
         onClick={() => { isPausedRef.current = !isPausedRef.current; }}
       >
-        <div className="relative h-[800px] flex gap-24 items-center px-40 w-max mx-auto">
+        <div className="relative h-[800px] flex gap-24 items-center pl-40 pr-[400px] w-max mx-auto">
           
           {/* Wavy SVG */}
           <svg className="absolute top-0 left-0 h-full pointer-events-none z-0" 
@@ -231,11 +232,15 @@ export default function AboutTimeline() {
 
                 {/* Year Text */}
                 <motion.div 
-                  initial={{ opacity: 0, y: node.cardPos === 'bottom' ? -10 : 10 }}
+                  initial={{ opacity: 0, y: node.cardPos === 'bottom' || node.cardPos === 'end' ? -10 : 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.4 }}
-                  className={`absolute flex flex-col items-center ${node.cardPos === 'bottom' ? '-translate-y-full mb-6' : 'translate-y-full mt-6'} transform -translate-x-1/2 left-1/2 whitespace-nowrap z-10`}
+                  className={`absolute flex flex-col items-center ${
+                    node.cardPos === 'bottom' || node.cardPos === 'end' ? '-translate-y-full -mt-6 transform -translate-x-1/2 left-1/2' : 
+                    node.cardPos === 'top' ? 'mt-6 transform -translate-x-1/2 left-1/2' :
+                    '-translate-y-full -mt-6 transform -translate-x-1/2 left-1/2'
+                  } whitespace-nowrap z-10`}
                   style={{ top: node.y }}
                 >
                   <span className="font-script text-[#C5A059] text-2xl -mb-3 rotate-[-5deg] ml-12 opacity-90">Est.</span>
@@ -250,8 +255,14 @@ export default function AboutTimeline() {
                   whileInView={{ opacity: 1, scale: 1, y: 0, rotate: isRotatedRight ? 2 : -2 }}
                   viewport={{ margin: "0px -25% 0px -25%", once: false }}
                   transition={{ duration: 0.7, type: "spring", bounce: 0.3 }}
-                  className={`absolute w-[300px] bg-white p-4 pb-10 shadow-[0_15px_35px_rgb(0,0,0,0.08),_0_3px_10px_rgb(0,0,0,0.04)] border border-[#ECE6D9] z-10 transform -translate-x-1/2 left-1/2 transition-all hover:z-30 hover:scale-105 hover:shadow-[0_25px_50px_rgb(0,0,0,0.12)] cursor-default`}
-                  style={node.cardPos === 'bottom' ? { top: node.y + 70 } : { bottom: 800 - node.y + 70 }}
+                  className={`absolute w-[300px] bg-white p-4 pb-10 shadow-[0_15px_35px_rgb(0,0,0,0.08),_0_3px_10px_rgb(0,0,0,0.04)] border border-[#ECE6D9] z-10 transition-all hover:z-30 hover:scale-105 hover:shadow-[0_25px_50px_rgb(0,0,0,0.12)] cursor-default ${
+                    node.cardPos === 'end' ? 'left-full ml-12 transform -translate-y-1/2' : 'transform -translate-x-1/2 left-1/2'
+                  }`}
+                  style={
+                    node.cardPos === 'bottom' ? { top: node.y + 70 } : 
+                    node.cardPos === 'top' ? { bottom: 800 - node.y + 70 } :
+                    { top: node.y }
+                  }
                 >
                   {/* Tape 1 */}
                   <div className="absolute -top-3 left-1/4 w-12 h-6 bg-white/70 backdrop-blur-md rotate-[-10deg] shadow-sm z-20 border border-white/80 rounded-sm" />

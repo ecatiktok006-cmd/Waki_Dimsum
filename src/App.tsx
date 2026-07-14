@@ -6,7 +6,6 @@ import StoryHero from './components/StoryHero';
 import MenuFlipbook from './components/MenuFlipbook';
 import AboutTimeline from './components/AboutTimeline';
 import Gallery from './components/Gallery';
-import Occasions from './components/Occasions';
 import LocationAndFooter from './components/LocationAndFooter';
 import ReservationCTA from './components/ReservationCTA';
 
@@ -50,7 +49,6 @@ export default function App() {
           <MenuFlipbook />
         </div>
         <Gallery />
-        <Occasions />
         <ReservationCTA onReserveClick={() => scrollToSection('contact')} />
         <LocationAndFooter />
       </main>
