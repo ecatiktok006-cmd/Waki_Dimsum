@@ -3,8 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle, ArrowUp } from 'lucide-react';
 import Navbar from './components/Navbar';
 import StoryHero from './components/StoryHero';
-import WhatsCooking from './components/WhatsCooking';
-import MenuVirtualBook from './components/MenuVirtualBook';
+import MenuFlipbook from './components/MenuFlipbook';
 import AboutTimeline from './components/AboutTimeline';
 import Gallery from './components/Gallery';
 import CustomerReviews from './components/CustomerReviews';
@@ -49,9 +48,8 @@ export default function App() {
         />
         <AboutTimeline />
         <div id="whats-cooking">
-          <WhatsCooking />
+          <MenuFlipbook />
         </div>
-        <MenuVirtualBook />
         <Gallery />
         <CustomerReviews />
         <Occasions />

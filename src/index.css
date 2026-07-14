@@ -39,6 +39,14 @@
     -webkit-mask-size: 16px 16px;
     -webkit-mask-position: -8px -8px;
   }
+  
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer base {
