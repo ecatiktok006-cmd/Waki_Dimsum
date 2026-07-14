@@ -256,7 +256,7 @@ export default function AboutTimeline() {
                   viewport={{ margin: "0px -25% 0px -25%", once: false }}
                   transition={{ duration: 0.7, type: "spring", bounce: 0.3 }}
                   className={`absolute w-[300px] bg-white p-4 pb-10 shadow-[0_15px_35px_rgb(0,0,0,0.08),_0_3px_10px_rgb(0,0,0,0.04)] border border-[#ECE6D9] z-10 transition-all hover:z-30 hover:scale-105 hover:shadow-[0_25px_50px_rgb(0,0,0,0.12)] cursor-default ${
-                    node.cardPos === 'end' ? 'left-full ml-12 transform -translate-y-1/2' : 'transform -translate-x-1/2 left-1/2'
+                    node.cardPos === 'end' ? 'left-full ml-4 transform -translate-y-1/2' : 'transform -translate-x-1/2 left-1/2'
                   }`}
                   style={
                     node.cardPos === 'bottom' ? { top: node.y + 70 } : 
