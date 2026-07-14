@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { motion, useScroll } from 'motion/react';
+import { useRef, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { Check } from 'lucide-react';
 
 import aboutIngredients from '../assets/images/about_ingredients_1783567499817.jpg';
@@ -21,62 +21,110 @@ interface TimelineEvent {
 const TIMELINE_EVENTS: TimelineEvent[] = [
   {
     year: 2021,
-    title: "A Passion for Authentic Dim Sum",
-    description: "WAKi was founded with one simple mission: to serve authentic handmade dim sum that families and friends can enjoy together. Inspired by traditional recipes and Malaysian hospitality, every dish begins with care and craftsmanship.",
+    title: "A Passion for Dim Sum",
+    description: "Founded to serve authentic handmade dim sum. Every dish begins with care and craftsmanship.",
     image: aboutIngredients,
   },
   {
     year: 2022,
-    title: "First Kitchen Established",
-    description: "From our earliest days, we focused on making our dim sum by hand using fresh, quality ingredients. Rather than taking shortcuts, we believe every fold, every filling, and every steam basket should reflect our commitment to quality.",
+    title: "First Kitchen",
+    description: "Focused on hand-making dim sum with fresh ingredients. Every fold reflects our commitment.",
     image: aboutSteam,
   },
   {
     year: 2023,
-    title: "Welcoming More Families",
-    description: "Growing community support inspired WAKi to expand its dining experience while preserving the same handmade quality. We became a destination where families celebrate, friends reconnect, and memories are created.",
+    title: "Welcoming Families",
+    description: "Expanded our dining experience while preserving handmade quality. A destination to reconnect.",
     image: gatheringImg,
   },
   {
     year: 2024,
     title: "Perfecting Every Bite",
-    description: "Our kitchen and production expanded, but one thing never changed—every dumpling is still handcrafted with care and precision.",
+    description: "Our production expanded, but every dumpling is still handcrafted with precision.",
     image: aboutPlatter,
   },
   {
     year: 2025,
-    title: "A Fresh Brand Identity",
-    description: "WAKi introduced a refreshed visual identity while staying true to our original philosophy—bringing people together through authentic dim sum.",
+    title: "A Fresh Identity",
+    description: "Refreshed visual identity while staying true to our philosophy—bringing people together.",
     image: heroDimSum,
   },
   {
     year: 2026,
     title: "Growing Into the Future",
-    description: "Today, WAKi continues to innovate, serve, and create memorable dining experiences while honoring the craftsmanship that started it all.",
+    description: "Continuing to innovate and serve, honoring the craftsmanship that started it all.",
     image: gatheringImg,
     promises: [
       "Handmade with care",
-      "Fresh ingredients every day",
-      "Warm Malaysian hospitality",
-      "Delicious food worth sharing"
+      "Fresh ingredients",
+      "Warm hospitality",
+      "Delicious food"
     ]
   }
 ];
 
 const TIMELINE_NODES = [
-  { year: 2021, x: 150, y: 300, cardPos: 'bottom' as const },
-  { year: 2022, x: 400, y: 550, cardPos: 'top' as const },
-  { year: 2023, x: 650, y: 250, cardPos: 'bottom' as const },
-  { year: 2024, x: 900, y: 600, cardPos: 'top' as const },
-  { year: 2025, x: 1150, y: 200, cardPos: 'bottom' as const },
-  { year: 2026, x: 1400, y: 400, cardPos: 'bottom' as const },
+  { year: 2021, y: 300, cardPos: 'bottom' as const },
+  { year: 2022, y: 550, cardPos: 'top' as const },
+  { year: 2023, y: 250, cardPos: 'bottom' as const },
+  { year: 2024, y: 600, cardPos: 'top' as const },
+  { year: 2025, y: 200, cardPos: 'bottom' as const },
+  { year: 2026, y: 400, cardPos: 'bottom' as const },
 ];
 
 export default function AboutTimeline() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isHoveredRef = useRef(false);
+
+  useEffect(() => {
+    let animationFrameId: number;
+    let lastTime = performance.now();
+
+    const scroll = (time: number) => {
+      const delta = time - lastTime;
+      lastTime = time;
+
+      if (!isHoveredRef.current && scrollRef.current) {
+        // Slow continuous scroll speed
+        scrollRef.current.scrollLeft += delta * 0.04;
+      }
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
+  // Dynamic SVG Path Calculation
+  const ITEM_WIDTH = 288; // w-72
+  const GAP = 96; // gap-24
+  const STEP = ITEM_WIDTH + GAP;
+  const PADDING = 160; // px-40
+
+  const totalWidth = PADDING * 2 + ITEM_WIDTH * TIMELINE_EVENTS.length + GAP * (TIMELINE_EVENTS.length - 1);
+
+  const pathParts = [];
+  pathParts.push(`M 0 ${TIMELINE_NODES[0].y}`);
+  pathParts.push(`C ${PADDING/2} ${TIMELINE_NODES[0].y}, ${PADDING} ${TIMELINE_NODES[0].y}, ${PADDING + ITEM_WIDTH/2} ${TIMELINE_NODES[0].y}`);
+
+  for (let i = 0; i < TIMELINE_NODES.length - 1; i++) {
+    const x0 = PADDING + ITEM_WIDTH/2 + i * STEP;
+    const y0 = TIMELINE_NODES[i].y;
+    const x1 = PADDING + ITEM_WIDTH/2 + (i + 1) * STEP;
+    const y1 = TIMELINE_NODES[i+1].y;
+    const cx = x0 + STEP/2;
+    pathParts.push(`C ${cx} ${y0}, ${cx} ${y1}, ${x1} ${y1}`);
+  }
+
+  const lastX = PADDING + ITEM_WIDTH/2 + (TIMELINE_NODES.length - 1) * STEP;
+  const lastY = TIMELINE_NODES[TIMELINE_NODES.length - 1].y;
+  pathParts.push(`C ${lastX + PADDING/2} ${lastY}, ${totalWidth - PADDING/2} ${lastY}, ${totalWidth} ${lastY}`);
+
+  const pathD = pathParts.join(' ');
 
   return (
-    <section id="about" className="py-24 bg-[#Fdfbf7] relative overflow-hidden" ref={containerRef}>
+    <section id="about" className="pt-16 pb-24 bg-[#Fdfbf7] relative overflow-hidden" ref={containerRef}>
       
       {/* Background decor */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#f5f1e8] via-[#Fdfbf7] to-[#Fdfbf7] opacity-50 z-0 pointer-events-none" />
@@ -88,7 +136,7 @@ export default function AboutTimeline() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
           viewport={{ once: true }}
-          className="max-w-3xl mb-12 flex flex-col items-center"
+          className="max-w-3xl mb-4 flex flex-col items-center"
         >
           <span className="font-display text-jade-950/60 font-bold tracking-[0.3em] text-xs uppercase mb-4 block text-center">
             Our Journey
@@ -111,17 +159,27 @@ export default function AboutTimeline() {
       </div>
 
       {/* Horizontal Scroll Area for Timeline */}
-      <div className="w-full overflow-x-auto overflow-y-visible no-scrollbar pb-32 pt-10">
-        <div className="relative w-[1600px] h-[800px] mx-auto px-10">
+      <div 
+        className="w-full overflow-x-auto overflow-y-visible no-scrollbar pb-32 -mt-16 sm:-mt-24"
+        ref={scrollRef}
+        onMouseEnter={() => { isHoveredRef.current = true; }}
+        onMouseLeave={() => { isHoveredRef.current = false; }}
+        onTouchStart={() => { isHoveredRef.current = true; }}
+        onTouchEnd={() => { isHoveredRef.current = false; }}
+      >
+        <div className="relative h-[800px] flex gap-24 items-center px-40 w-max mx-auto">
           
           {/* Wavy SVG */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 text-[#1a3826]" viewBox="0 0 1600 800" preserveAspectRatio="none">
+          <svg className="absolute top-0 left-0 h-full pointer-events-none z-0 text-[#1a3826]" 
+               style={{ width: totalWidth }}
+               viewBox={`0 0 ${totalWidth} 800`} 
+               preserveAspectRatio="none">
             {/* Main Path */}
             <motion.path 
-              d="M 0 300 C 75 300, 75 300, 150 300 C 275 300, 275 550, 400 550 C 525 550, 525 250, 650 250 C 775 250, 775 600, 900 600 C 1025 600, 1025 200, 1150 200 C 1275 200, 1275 400, 1400 400 C 1500 400, 1600 400, 1600 400"
+              d={pathD}
               fill="none" 
               stroke="currentColor" 
-              strokeWidth="10"
+              strokeWidth="3"
               initial={{ pathLength: 0 }}
               whileInView={{ pathLength: 1 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -134,37 +192,40 @@ export default function AboutTimeline() {
             const node = TIMELINE_NODES[index];
             const isRotatedRight = index % 2 === 0;
             return (
-              <div key={event.year} className="absolute" style={{ left: node.x, top: node.y }}>
+              <div key={event.year} className="relative w-72 h-full shrink-0 flex justify-center z-10">
                 
                 {/* Node Circle */}
                 <motion.div 
                   initial={{ scale: 0, opacity: 0 }}
                   whileInView={{ scale: 1, opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.3, duration: 0.5 }}
-                  className="absolute w-12 h-12 rounded-full bg-[#1a3826] border-[8px] border-[#Fdfbf7] ring-[3px] ring-[#d35400] shadow-md z-20 transform -translate-x-1/2 -translate-y-1/2" 
-                />
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="absolute w-8 h-8 rounded-full bg-[#Fdfbf7] border-[3px] border-[#1a3826] ring-4 ring-[#1a3826]/10 shadow-[0_0_15px_rgba(210,84,0,0.3)] z-20 transform -translate-x-1/2 -translate-y-1/2 left-1/2 flex items-center justify-center" 
+                  style={{ top: node.y }}
+                >
+                  <div className="w-2.5 h-2.5 bg-[#d35400] rounded-full" />
+                </motion.div>
 
                 {/* Year Text */}
                 <motion.div 
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.3 + 0.2 }}
-                  className={`absolute font-serif text-5xl text-[#1a3826] font-bold ${node.cardPos === 'bottom' ? 'bottom-full mb-6' : 'top-full mt-6'} transform -translate-x-1/2 whitespace-nowrap z-10`}
+                  transition={{ delay: 0.4 }}
+                  className={`absolute font-serif text-5xl text-[#1a3826] font-bold ${node.cardPos === 'bottom' ? '-translate-y-full mb-6' : 'translate-y-full mt-6'} transform -translate-x-1/2 left-1/2 whitespace-nowrap z-10`}
+                  style={{ top: node.y }}
                 >
                   {event.year}
                 </motion.div>
 
                 {/* Polaroid Card */}
                 <motion.div
-                  initial={{ opacity: 0, y: node.cardPos === 'bottom' ? 20 : -20, rotate: -3 }}
-                  whileInView={{ opacity: 1, y: 0, rotate: isRotatedRight ? 2 : -2 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.3 + 0.4, duration: 0.6 }}
-                  className={`absolute w-[280px] bg-[#Fdfbf7] p-4 pb-8 rounded-sm shadow-[0_8px_20px_rgb(0,0,0,0.08)] border border-jade-900/5 z-10 transform -translate-x-1/2 ${
-                    node.cardPos === 'bottom' ? 'top-14' : 'bottom-14'
-                  } hover:rotate-0 hover:scale-105 hover:z-30 hover:shadow-[0_15px_40px_rgb(0,0,0,0.12)] transition-all duration-300 cursor-default`}
+                  initial={{ opacity: 0.4, scale: 0.9, rotate: isRotatedRight ? -4 : 4 }}
+                  whileInView={{ opacity: 1, scale: 1, rotate: isRotatedRight ? 2 : -2 }}
+                  viewport={{ margin: "0px -35% 0px -35%", once: false }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  className={`absolute w-[280px] bg-[#Fdfbf7] p-4 pb-8 rounded-sm shadow-[0_8px_20px_rgb(0,0,0,0.08)] border border-jade-900/5 z-10 transform -translate-x-1/2 left-1/2 transition-all hover:z-30 hover:scale-[1.02] hover:shadow-[0_15px_40px_rgb(0,0,0,0.12)] cursor-default`}
+                  style={node.cardPos === 'bottom' ? { top: node.y + 60 } : { bottom: 800 - node.y + 60 }}
                 >
                   {/* Tape */}
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-[#e6dfcf] opacity-90 rotate-[-4deg] shadow-sm z-20" />
@@ -172,10 +233,10 @@ export default function AboutTimeline() {
                   <motion.img 
                     src={event.image} 
                     alt={event.title} 
-                    initial={{ filter: 'grayscale(100%)' }}
-                    whileInView={{ filter: 'grayscale(0%)' }}
-                    viewport={{ margin: "0px -40% 0px -40%", once: false }}
-                    transition={{ duration: 1 }}
+                    initial={{ filter: 'grayscale(100%) brightness(0.85)' }}
+                    whileInView={{ filter: 'grayscale(0%) brightness(1)' }}
+                    viewport={{ margin: "0px -35% 0px -35%", once: false }}
+                    transition={{ duration: 0.8 }}
                     className="w-full h-[180px] object-cover mb-5 rounded-[2px]" 
                   />
                   
@@ -205,28 +266,6 @@ export default function AboutTimeline() {
             );
           })}
         </div>
-      </div>
-      
-      {/* Footer "Thank you" decorative text */}
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pb-12 flex justify-end pointer-events-none">
-         <motion.div 
-           initial={{ opacity: 0, y: 20 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           transition={{ delay: 2.0, duration: 0.8 }}
-           className="max-w-sm text-right"
-         >
-            <h3 className="font-serif text-5xl italic font-bold text-[#1a3826] mb-2">Thank you <span className="text-[#d35400] not-italic">♥</span></h3>
-            <p className="font-sans text-[#1a3826]/80 mb-4 font-medium">to our amazing customers for being part of our story.</p>
-            <div className="inline-flex items-center space-x-2">
-              <span className="font-serif text-3xl font-bold text-[#1a3826] italic pr-1">WAKi</span>
-              <span className="bg-red-800 text-white text-xs px-1.5 py-0.5 rounded-sm shadow-sm inline-flex flex-col items-center justify-center">
-                <span className="font-bold">点</span>
-                <span className="font-bold">心</span>
-              </span>
-              <span className="text-[10px] uppercase tracking-widest text-[#1a3826]/60 font-sans font-bold ml-1">Dim Sum</span>
-            </div>
-         </motion.div>
       </div>
     </section>
   );

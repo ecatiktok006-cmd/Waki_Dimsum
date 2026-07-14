@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { ChevronDown, UtensilsCrossed } from 'lucide-react';
 import gatheringImg from '../assets/images/gathering.png';
+import bgImg from '../assets/images/bg.png';
 
 interface StoryHeroProps {
   onLearnMore: () => void;
@@ -16,9 +17,10 @@ export default function StoryHero({ onLearnMore, onExploreMenu, onOrderNow }: St
     offset: ["start start", "end start"]
   });
 
-  // Parallax effects
+  // Parallax and scale effects
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
   const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+  const circleScale = useTransform(scrollYProgress, [0, 1], [1, 2.8]);
 
   return (
     <section 
@@ -26,13 +28,23 @@ export default function StoryHero({ onLearnMore, onExploreMenu, onOrderNow }: St
       ref={containerRef}
       className="relative min-h-[100svh] overflow-hidden bg-[#FCFCFA] flex flex-col items-center justify-start pt-32"
     >
+      {/* Background Image Layer */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30"
+        style={{ backgroundImage: `url(${bgImg})` }}
+      />
       
       {/* Central Circular Background */}
       <motion.div 
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
+        style={{ 
+          scale: circleScale,
+          x: "-50%",
+          y: "-65%"
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[65%] w-[320px] h-[320px] sm:w-[450px] sm:h-[450px] md:w-[550px] md:h-[550px] rounded-full z-0 bg-[#F2F3F2]"
+        className="absolute top-1/2 left-1/2 w-[320px] h-[320px] sm:w-[450px] sm:h-[450px] md:w-[550px] md:h-[550px] rounded-full z-0 bg-[#F2F3F2] origin-center"
       />
 
       {/* Text Lockup */}
@@ -138,16 +150,10 @@ export default function StoryHero({ onLearnMore, onExploreMenu, onOrderNow }: St
           transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
           className="w-full relative"
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-[#FCFCFA] via-transparent to-transparent z-10 h-24" />
-          
           <img 
             src={gatheringImg} 
             alt="Family enjoying Dim Sum" 
-            className="w-full h-[25vh] sm:h-[35vh] md:h-[45vh] object-cover object-top mask-image-top"
-            style={{
-              WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 100%)',
-              maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 100%)'
-            }}
+            className="w-full h-[25vh] sm:h-[35vh] md:h-[45vh] object-cover object-top"
           />
         </motion.div>
       </motion.div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import logoImg from '../assets/images/logo.png';
 
 interface NavbarProps {
   onScrollToSection: (id: string) => void;
@@ -36,18 +37,13 @@ export default function Navbar({ onScrollToSection }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           
-          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => onScrollToSection('home')}>
-            <div className="w-10 h-10 rounded-full border border-gold-400 bg-white flex items-center justify-center shadow-sm">
-              <span className="font-serif font-bold text-gold-500 text-sm tracking-wider">W</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-display font-bold text-jade-950 text-base tracking-widest leading-none">
-                WAKi
-              </span>
-              <span className="font-serif text-gold-500 text-xxs tracking-wider font-semibold">
-                MALAYSIAN DIM SUM
-              </span>
-            </div>
+          <div className="flex items-center cursor-pointer" onClick={() => onScrollToSection('home')}>
+            <img 
+              src={logoImg} 
+              alt="WAKi Logo" 
+              className="h-10 sm:h-12 w-auto object-contain hover:scale-105 transition-transform duration-300"
+              referrerPolicy="no-referrer"
+            />
           </div>
 
           <div className="hidden md:flex items-center space-x-8">
