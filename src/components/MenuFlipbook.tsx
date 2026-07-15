@@ -13,6 +13,8 @@ import steamImg from '../assets/images/about_steam_1783567485399.jpg';
 import platterImg from '../assets/images/about_platter_1783567469486.jpg';
 import ingredientsImg from '../assets/images/about_ingredients_1783567499817.jpg';
 import heroDimSumImg from '../assets/images/hero_dim_sum_1783567454638.jpg';
+import juiceImg from '../assets/images/juice_series_1784088829410.jpg';
+import dessertImg from '../assets/images/dessert_series_1784088847264.jpg';
 
 const catHeroImages: Record<string, string> = {
   'cat-0': ingredientsImg,
@@ -23,6 +25,8 @@ const catHeroImages: Record<string, string> = {
   'cat-5': platterImg,
   'cat-6': harGowImg,
   'cat-7': heroDimSumImg,
+  'cat-9': juiceImg,
+  'cat-10': dessertImg,
   'cat-11': heroDimSumImg,
   'cat-12': steamImg,
 };
@@ -62,6 +66,131 @@ const SteamAnimation = () => (
     <path className="steam-path s3" d="M 70,100 Q 55,75 75,40 T 65,0" />
   </svg>
 );
+
+const DEFAULT_EXPLANATIONS: Record<string, string> = {
+  // SILKY JOURNAL (cat-0)
+  "Signature Steamed Rice Noodle With Prawn Spring Roll": "Crispy prawn spring rolls wrapped in silky-smooth steamed rice noodles.",
+  "Steamed Rice Noodle With Prawn": "Succulent whole prawns nestled in delicate, freshly steamed rice noodle rolls.",
+  "Steamed Rice Noodle With Chicken": "Savory tender chicken chunks wrapped in warm, soft steamed rice noodles.",
+  "Steamed Rice Noodle": "Classic plain silky steamed rice noodles served with sweet-savory soy sauce.",
+
+  // GOLDEN CRISP (cat-1)
+  "Cheesy Prawn Roll": "Succulent prawns and melted gooey cheese fried inside crispy bean curd skin.",
+  "Prawn Spring Roll": "Crispy golden spring rolls bursting with fresh shrimp and garden vegetables.",
+  "Salad Prawn": "Golden-fried crispy prawns served with a sweet and creamy signature salad dressing.",
+  "Deep Fry Yam Pastry": "Flaky, honeycomb pastry filled with a savory, perfectly spiced taro mixture.",
+  "Fried Wanton": "Crisp golden-brown dumpling pockets filled with seasoned minced chicken.",
+  "Deep Fry Radish Cake": "Savory turnip cake cubes lightly fried for a crisp exterior and soft center.",
+  "Shanghai Dumpling": "Pan-fried crispy dumplings packed with succulent minced chicken and chives.",
+  "Bamboo Charcoal Yam Bun": "Eye-catching black charcoal buns loaded with smooth, rich sweet yam paste.",
+  "Spring Roll": "Crispy golden pastry shells generously stuffed with seasoned mixed vegetables.",
+  "Mango Prawn Dumpling": "Delectable fried pockets blending sweet tropical mango with juicy prawns.",
+  "Golden Sesame Ball": "Crispy fried sesame-coated glutinous balls with sweet, velvety red bean filling.",
+
+  // STEAMY EDITION (cat-2)
+  "Chicken & Shrimp Dumpling": "A delicious combination of minced chicken and plump shrimp steamed in siew mai skin.",
+  "Shrimp Dumpling": "Plump, sweet shrimp steamed inside a classic delicate translucent crystal skin.",
+  "Spicy Sauce Dumpling": "Juicy steamed dumplings drenched in an aromatic, spicy house-made chili oil.",
+
+  // THE BAO TIMES (cat-3)
+  "Golden Custard Bun": "Warm, fluffy steamed bun filled with smooth, sweet salted egg custard.",
+  "BBQ Chicken Bun": "Classic soft bun stuffed with tender, sweet, and savory barbecued chicken.",
+  "Shanghai Soup Dumpling": "Delicate wrappers holding a rich, savory broth and seasoned minced chicken.",
+  "Vegetarian Charcoal Red Bean Bun": "Unique charcoal-infused steamed buns with sweet, earthy red bean filling.",
+  "Vegetarian Yam Bun": "Soft, pillowy-white steamed buns loaded with aromatic sweet purple yam paste.",
+  "Salted Egg Lotus Bun": "Fragrant steamed buns featuring a rich combination of lotus paste and salted egg.",
+
+  // THE SIDE STORY (cat-4)
+  "Stir Fried Radish Cake": "Savory radish cake wok-fried to smoky perfection with crunchy bean sprouts and egg.",
+  "Chicken Glutinous Rice": "Sticky, savory glutinous rice steamed with tender marinated chicken and mushrooms.",
+  "Chicken Porridge": "Warm, silky rice porridge topped with shredded chicken and fragrant sesame oil.",
+
+  // THE RICE PRESS (cat-5)
+  "Butter Milk Chicken Rice": "Crispy chicken cubes drenched in a rich, buttery, and slightly sweet cream sauce.",
+  "Kampung Fried Rice": "Smoky village-style fried rice tossed with traditional anchovies and fiery chilies.",
+  "Fried Chicken Nasi Lemak": "Fragrant coconut rice served with crunchy fried chicken, spicy sambal, and hardboiled egg.",
+  "Dried Chilli Chicken Rice": "Stir-fried chicken tossed with sweet-and-spicy dried chilies, served with rice.",
+  "Sweet And Sour Chicken Rice": "Tender chicken in a perfectly balanced tangy-sweet glaze with peppers and onions.",
+  "Butter Milk Salted Egg Chicken Rice": "Crispy fried chicken tossed in a savory buttermilk sauce enhanced with rich salted egg yolk.",
+  "Sambal Chicken Rice": "Zesty, robust chicken wok-fried in our signature spicy house sambal.",
+  "Black Pepper Chicken Rice": "Sizzling wok-fried chicken in a bold, aromatic black pepper sauce with rice.",
+  "Curry Buttermilk Chicken Rice": "Golden chicken breast slices simmered in a creamy, mildly spiced curry-infused buttermilk.",
+  "Chinese Fried Rice": "Wok-fried rice with fluffy eggs, sweet corn, peas, and savory seasoned chicken.",
+  "Tomyam Fried Rice": "Fragrant fried rice packed with hot, sour, and aromatic Thai Tom Yum spices.",
+  "Nasi Lemak Biasa": "Traditional fragrant coconut rice served with sweet-spicy sambal, anchovies, and peanuts.",
+  "Nasi Lemak With Sambal Prawn": "Coconut-infused rice paired with succulent prawns simmered in sweet-spicy sambal.",
+
+  // THE WOK DISPATCH (cat-6)
+  "Penang Fried Keow Teow": "Flat rice noodles wok-fried over intense heat with fresh prawns and savory chives.",
+  "Cantonese Style Yee Mee": "Crisp Yee Mee noodles drowned in a silky, rich egg gravy with chicken and vegetables.",
+  "Cantonese Style Keow Teow": "Velvety flat noodles smothered in a hot, luxurious Cantonese-style egg flower gravy.",
+  "Cantonese Style Yuan Yang": "A texturally rich blend of crispy vermicelli and flat noodles in savory egg gravy.",
+  "Signature Fried Noodle": "House-special noodles tossed in high-heat wok action with signature soy sauce.",
+  "Cantonese Style Meehon": "Fine rice vermicelli stir-fried and covered in delicious, comforting egg gravy.",
+
+  // THE TEA EDITION (cat-7)
+  "Poh Lei": "A dark, rich, and earthy fermented black tea perfect for digesting hearty meals.",
+  "Tie Guan Yin": "Fragrant, premium oolong tea with refreshing floral notes and a smooth finish.",
+  "Tea King": "A balanced, full-bodied premium tea that offers a highly aromatic brew.",
+  "Kok Poh": "A cooling, herbal tea blend that is light and incredibly refreshing in warm weather.",
+  "Jasmine Tea": "Gentle, soothing green tea naturally infused with fragrant jasmine blossoms.",
+  "Chrysanthemum Tea": "A mild, naturally sweet, caffeine-free herbal infusion made from whole yellow flowers.",
+  "Own Tea": "Bring your own premium loose leaves and we will prepare hot water for your table.",
+
+  // THE KOPITIAM POST (cat-8)
+  "100 Plus": "Refreshing, carbonated local isotonic drink to quench your thirst.",
+  "Coca-Cola": "The classic, world-famous sparkling soda served ice-cold.",
+  "Soya": "Sweet, creamy, and nourishing chilled local soybean milk.",
+  "Mineral Water": "Fresh, clean bottled mineral water for pure hydration.",
+  "Kopi": "Traditional, robust local coffee brewed with sweet condensed milk.",
+  "Kopi O": "Classic bold, sweet black coffee served hot or iced.",
+  "Teh": "Fragrant local black tea brewed with sweet condensed milk.",
+  "Teh O": "Sweet, aromatic black tea served hot or cold.",
+  "Cham": "The perfect local hybrid blending rich coffee and fragrant milk tea.",
+  "Milo": "Nostalgic, rich, and comforting chocolate malt drink.",
+  "Sirap": "Sweet, fragrant rose syrup drink, beautifully pink and chilled.",
+  "Sirap Limau": "Tangy local lime juice combined with sweet rose syrup.",
+  "Sirap Limau Bandung": "Rich, creamy milk tea combined with sweet rose syrup and fresh lime.",
+  "Honey Lemon": "Soothing natural honey paired with fresh, zesty lemon juice.",
+  "Lemon Tea": "Brewed black tea infused with refreshing slices of real lemon.",
+  "Chinese Tea": "Light, warm, or cold Chinese tea to cleanse the palate.",
+  "Sky Juice": "Crisp, plain chilled drinking water.",
+
+  // JUICE SERIES (cat-9)
+  "Green Apple": "Freshly pressed green apples, yielding a crisp, sweet, and tart taste.",
+  "Orange": "Sweet, vibrant, and packed with vitamin C, freshly squeezed.",
+  "Carrot Milk": "Creamy sweet beverage blending fresh, nutritious carrot juice and milk.",
+  "Lemon": "Zesty and refreshing ice-cold drink from real squeezed lemons.",
+  "Limau": "Sharp and incredibly refreshing juice made from fresh local calamansi lime.",
+
+  // DESSERT SERIES (cat-10)
+  "Longan Sea Coconut": "A cooling, traditional sweet soup loaded with juicy longans and sea coconut.",
+  "Bamboo Cane": "Traditionally boiled herbal drink featuring sweet bamboo cane and water chestnut.",
+
+  // THE MOCKTAIL TIMES (cat-11)
+  "Pink Guava Soda": "Sparkling soda blended with tropical pink guava fruit nectar.",
+  "Peach Lemon Fizz": "Crisp, bubbly soda infused with sweet peach puree and zesty fresh lemon.",
+  "Lychee Lime Soda": "Effervescent soda packed with plump, sweet lychees and a splash of lime.",
+  "Tropical Passion Cooler": "An exotic, refreshing sparkling blend of passion fruit and tangy citrus.",
+  "Watermelon Mint Sparkler": "A refreshing ice-cold sparkler combining sweet watermelon juice and fresh mint.",
+  "Blue Ocean Citrus": "A visually striking citrus soda with a splash of blue curacao and fresh lime.",
+
+  // FROZEN FRESH (cat-12)
+  "Chicken & Shrimp Dumplings (12 pcs)": "Premium chicken & shrimp siew mai, frozen to seal in freshness for home steaming.",
+  "Shrimp Dumplings (9 pcs)": "Classic crystal har gao, frozen and ready to steam at your convenience at home.",
+  "Salted Egg Dumplings (12 pcs)": "Rich siew mai dumplings with savory salted egg yolk, perfect for quick steaming.",
+  "Coriander Dumplings (9 pcs)": "Fragrant coriander and chicken dumplings, frozen fresh for your home dining.",
+  "Seaweed Roll (9 pcs)": "Savory seafood rolls wrapped in seaweed, great for steaming or light pan-frying.",
+  "Original Dumplings (12 pcs)": "Our signature chicken dumplings, frozen fresh in a family-friendly pack.",
+  "Tom Yum Dumplings (12 pcs)": "Tantalizing dumplings infused with hot and sour Tom Yum herbs, frozen fresh.",
+  "Black Pepper Dumplings (12 pcs)": "Savory chicken dumplings spiced with cracked black pepper, ready to steam.",
+  "Chicken Glutinous Rice (2 pcs)": "Classic Lo Mai Gai sticky rice with chicken and mushrooms, pre-cooked and frozen.",
+  "Golden Custard Bun (6 pcs)": "Fluffy bao buns filled with rich golden custard, perfect for quick home breakfasts.",
+  "Charcoal Red Bean Bun (6 pcs)": "Soft black charcoal buns with silky sweet red bean paste, ready to steam.",
+  "BBQ Chicken Bun (6 pcs)": "Warm, fluffy buns stuffed with succulent sweet BBQ chicken filling, frozen fresh.",
+  "Yam Bun (6 pcs)": "Fluffy white buns packed with creamy, aromatic purple yam paste, ready to steam.",
+  "Salted Egg Lotus Bun (6 pcs)": "Delectable sweet lotus paste and savory salted egg yolk in a soft bun."
+};
 
 // A custom page component required by react-pageflip to use ref
 const Page = React.forwardRef<HTMLDivElement, { title?: string; subtitle?: string; description?: string; children: React.ReactNode; number: number; noPadding?: boolean; bgClass?: string }>((props, ref) => {
@@ -310,84 +439,76 @@ export default function MenuFlipbook() {
                 {isKopitiam ? (
                   <div className="flex flex-col space-y-3">
                     <div className="flex justify-between border-b-2 border-[#1a362a] pb-1 mb-2 font-sans text-[10px] font-bold uppercase tracking-widest text-[#1a362a]">
-                      <div className="w-1/3">Drink</div>
-                      <div className="w-1/3 text-center">☕ Hot</div>
-                      <div className="w-1/3 text-right">🧊 Cold</div>
+                      <div className="w-1/2">Drink</div>
+                      <div className="w-1/2 text-right">Option / Code</div>
                     </div>
                     {cat.dishes.map((dish) => {
                       const hotVariant = dish.variants?.find(v => v.type === 'Hot');
                       const coldVariant = dish.variants?.find(v => v.type === 'Cold');
+                      const drinkDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
                       
                       return (
-                        <div key={dish.id} className="flex justify-between items-center group cursor-default hover:bg-[#8a2a2b]/5 p-1 -mx-1 rounded transition-colors">
-                          <div className="w-1/3 font-sans font-bold text-[#1a362a] text-[11px] uppercase leading-tight">{dish.name}</div>
-                          
-                          <div className="w-1/3 text-center flex flex-col items-center">
-                            {hotVariant ? (
-                              <>
-                                <span className="font-mono text-[9px] text-[#2c3e38]/70">{hotVariant.code}</span>
-                                <span className="font-sans text-[11px] font-bold text-[#8a2a2b]">RM {hotVariant.price.toFixed(2)}</span>
-                              </>
-                            ) : (
-                              <span className="text-transparent">-</span>
-                            )}
+                        <div key={dish.id} className="flex flex-col py-1 border-b border-[#1a362a]/5 last:border-0 group cursor-default hover:bg-[#8a2a2b]/5 px-1 -mx-1 rounded transition-colors">
+                          <div className="flex justify-between items-center">
+                            <div className="w-1/2 font-sans font-bold text-[#1a362a] text-[11px] uppercase leading-tight">{dish.name}</div>
+                            
+                            <div className="w-1/2 text-right flex flex-wrap justify-end gap-1.5 text-[10px]">
+                              {hotVariant && (
+                                <span className="bg-[#1a362a]/5 px-2 py-0.5 rounded text-[#1a362a] font-sans">
+                                  ☕ Hot ({hotVariant.code})
+                                </span>
+                              )}
+                              {coldVariant && (
+                                <span className="bg-[#1a362a]/5 px-2 py-0.5 rounded text-[#1a362a] font-sans">
+                                  🧊 Cold ({coldVariant.code})
+                                </span>
+                              )}
+                            </div>
                           </div>
-                          
-                          <div className="w-1/3 text-right flex flex-col items-end">
-                            {coldVariant ? (
-                              <>
-                                <span className="font-mono text-[9px] text-[#2c3e38]/70">{coldVariant.code}</span>
-                                <span className="font-sans text-[11px] font-bold text-[#8a2a2b]">RM {coldVariant.price.toFixed(2)}</span>
-                              </>
-                            ) : (
-                              <span className="text-transparent">-</span>
-                            )}
-                          </div>
+                          {drinkDesc && (
+                            <p className="font-sans text-[#2c3e38]/60 text-[9px] leading-tight italic mt-0.5">
+                              {drinkDesc}
+                            </p>
+                          )}
                         </div>
                       );
                     })}
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 gap-x-8 gap-y-0">
-                    {cat.dishes.map((dish) => (
-                      <div key={dish.id} className="flex flex-col group relative border-b border-[#1a362a]/10 py-3 last:border-0 [&:nth-last-child(2):nth-child(odd)]:border-0">
-                        <div className="absolute -inset-x-3 inset-y-0 bg-[#8a2a2b]/0 group-hover:bg-[#8a2a2b]/[0.03] rounded-lg transition-colors duration-300 pointer-events-none" />
-                        
-                          <div className="relative z-10 flex flex-col h-full justify-center">
-                            <div className="flex items-start justify-between mb-1 gap-2">
-                              <div className="flex items-center flex-wrap gap-1.5">
-                                {dish.code && (
-                                  <span className="font-sans text-[#1a362a] font-bold text-[9px] tracking-wider bg-[#1a362a]/10 px-1 py-0.5 rounded-sm shadow-sm transition-colors">{dish.code}</span>
-                                )}
-                                <h4 className="font-serif font-bold text-[#1a362a] text-[13px] leading-snug uppercase transition-colors">{dish.name}</h4>
+                    {cat.dishes.map((dish) => {
+                      const dishDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
+                      return (
+                        <div key={dish.id} className="flex flex-col group relative border-b border-[#1a362a]/10 py-3 last:border-0 [&:nth-last-child(2):nth-child(odd)]:border-0">
+                          <div className="absolute -inset-x-3 inset-y-0 bg-[#8a2a2b]/0 group-hover:bg-[#8a2a2b]/[0.03] rounded-lg transition-colors duration-300 pointer-events-none" />
+                          
+                            <div className="relative z-10 flex flex-col h-full justify-center">
+                              <div className="flex items-start justify-between mb-1 gap-2">
+                                <div className="flex items-center flex-wrap gap-1.5">
+                                  {dish.code && (
+                                    <span className="font-sans text-[#1a362a] font-bold text-[9px] tracking-wider bg-[#1a362a]/10 px-1 py-0.5 rounded-sm shadow-sm transition-colors">{dish.code}</span>
+                                  )}
+                                  <h4 className="font-serif font-bold text-[#1a362a] text-[13px] leading-snug uppercase transition-colors">{dish.name}</h4>
+                                </div>
                               </div>
                               
-                              <div className="shrink-0 flex items-baseline">
-                                 {dish.price !== undefined ? (
-                                   <span className="font-sans text-[13px] font-bold text-[#8a2a2b] group-hover:scale-105 transition-transform origin-right whitespace-nowrap"><span className="text-[9px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{dish.price.toFixed(2)}</span>
-                                 ) : dish.variants ? null : (
-                                   <span className="font-sans text-[13px] font-bold text-[#8a2a2b] whitespace-nowrap"><span className="text-[9px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>TBA</span>
-                                 )}
-                              </div>
-                            </div>
-                            
-                            {dish.description && (
-                               <p className="font-sans text-[#2c3e38]/70 text-[10px] leading-snug mb-2">{dish.description}</p>
-                            )}
+                              {dishDesc && (
+                                 <p className="font-sans text-[#2c3e38]/70 text-[10px] leading-snug mb-2">{dishDesc}</p>
+                              )}
                             
                             {dish.variants && (
-                              <div className="flex flex-col space-y-1 mt-1">
+                              <div className="flex flex-wrap gap-1.5 mt-1">
                                  {dish.variants.map((v, i) => (
-                                    <div key={i} className="flex justify-between items-center text-xs">
-                                       <span className="font-sans text-[#2c3e38]/80 text-[10px]">{v.type} <span className="font-mono text-[8px] opacity-60">({v.code})</span></span>
-                                       <span className="font-sans font-bold text-[#8a2a2b] text-[11px] transition-colors"><span className="text-[8px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{v.price.toFixed(2)}</span>
-                                    </div>
+                                    <span key={i} className="inline-block bg-[#1a362a]/5 px-2 py-0.5 rounded text-[9px] text-[#2c3e38]/80 font-sans">
+                                       {v.type} ({v.code})
+                                    </span>
                                  ))}
                               </div>
                             )}
                           </div>
                       </div>
-                    ))}
+                    );
+                    })}
                   </div>
                 )}
                 
@@ -398,12 +519,11 @@ export default function MenuFlipbook() {
                       <h4 className="font-serif font-bold text-[#1a362a] text-[12px] tracking-widest uppercase text-center">Add On</h4>
                       <span className="text-[#8a2a2b] text-[10px] mx-2">❖</span>
                     </div>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-3">
+                    <div className="flex flex-wrap justify-center gap-2">
                       {cat.addOns.map((addon, i) => (
-                         <div key={i} className="flex justify-between items-center text-xs group cursor-default">
-                            <span className="font-sans uppercase text-[#2c3e38] text-[10px] font-medium transition-colors">• {addon.name}</span>
-                            <span className="font-sans font-bold text-[#8a2a2b] text-[11px] group-hover:scale-105 transition-transform origin-right"><span className="text-[8px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{addon.price.toFixed(2)}</span>
-                         </div>
+                         <span key={i} className="inline-block bg-[#1a362a]/5 px-3 py-1 rounded-full font-sans uppercase text-[#2c3e38] text-[9px] font-bold tracking-wider">
+                           {addon.name}
+                         </span>
                       ))}
                     </div>
                   </div>
@@ -482,87 +602,83 @@ export default function MenuFlipbook() {
                       )}
                       
                       {isKopitiam ? (
-                        <div className="flex flex-col space-y-4">
+                        <div className="flex flex-col space-y-3">
                           <div className="flex justify-between border-b-2 border-[#1a362a] pb-2 font-sans text-[10px] font-bold uppercase tracking-widest text-[#1a362a]">
-                            <div className="w-1/3">Drink</div>
-                            <div className="w-1/3 text-center">☕ Hot</div>
-                            <div className="w-1/3 text-right">🧊 Cold</div>
+                            <div className="w-1/2">Drink</div>
+                            <div className="w-1/2 text-right">Option / Code</div>
                           </div>
                           {cat.dishes.map((dish) => {
                             const hotVariant = dish.variants?.find(v => v.type === 'Hot');
                             const coldVariant = dish.variants?.find(v => v.type === 'Cold');
+                            const drinkDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
                             return (
-                              <div key={dish.id} className="flex justify-between items-center group">
-                                <div className="w-1/3 font-sans font-bold text-[#1a362a] text-[12px] uppercase leading-tight">{dish.name}</div>
-                                <div className="w-1/3 text-center flex flex-col items-center">
-                                  {hotVariant ? (
-                                    <>
-                                      <span className="font-mono text-[9px] text-[#2c3e38]/70">{hotVariant.code}</span>
-                                      <span className="font-sans text-[12px] font-bold text-[#8a2a2b]">RM {hotVariant.price.toFixed(2)}</span>
-                                    </>
-                                  ) : <span className="text-transparent">-</span>}
+                              <div key={dish.id} className="flex flex-col py-1.5 border-b border-[#1a362a]/5 last:border-0 group">
+                                <div className="flex justify-between items-center">
+                                  <div className="w-1/2 font-sans font-bold text-[#1a362a] text-[12px] uppercase leading-tight">{dish.name}</div>
+                                  <div className="w-1/2 text-right flex flex-wrap justify-end gap-1.5 text-[10px]">
+                                    {hotVariant && (
+                                      <span className="bg-[#1a362a]/5 px-2 py-0.5 rounded text-[#1a362a] font-sans">
+                                        ☕ Hot ({hotVariant.code})
+                                      </span>
+                                    )}
+                                    {coldVariant && (
+                                      <span className="bg-[#1a362a]/5 px-2 py-0.5 rounded text-[#1a362a] font-sans">
+                                        🧊 Cold ({coldVariant.code})
+                                      </span>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="w-1/3 text-right flex flex-col items-end">
-                                  {coldVariant ? (
-                                    <>
-                                      <span className="font-mono text-[9px] text-[#2c3e38]/70">{coldVariant.code}</span>
-                                      <span className="font-sans text-[12px] font-bold text-[#8a2a2b]">RM {coldVariant.price.toFixed(2)}</span>
-                                    </>
-                                  ) : <span className="text-transparent">-</span>}
-                                </div>
+                                {drinkDesc && (
+                                  <p className="font-sans text-[#2c3e38]/60 text-[10px] leading-tight italic mt-0.5">
+                                    {drinkDesc}
+                                  </p>
+                                )}
                               </div>
                             );
                           })}
                         </div>
                       ) : (
                         <div className="flex flex-col mt-4">
-                          {cat.dishes.map((dish) => (
-                            <div key={dish.id} className="flex flex-col border-b border-[#1a362a]/10 py-4 last:border-0">
-                              <div className="flex items-start justify-between mb-1 gap-3">
-                                <div className="flex items-center flex-wrap gap-2">
-                                  {dish.code && (
-                                    <span className="font-sans text-[#1a362a] font-bold text-[10px] tracking-wider bg-[#1a362a]/10 px-1.5 py-0.5 rounded-sm mr-1">{dish.code}</span>
-                                  )}
-                                  <h4 className="font-serif font-bold text-[#1a362a] text-[15px] leading-tight uppercase">{dish.name}</h4>
+                          {cat.dishes.map((dish) => {
+                            const dishDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
+                            return (
+                              <div key={dish.id} className="flex flex-col border-b border-[#1a362a]/10 py-4 last:border-0">
+                                <div className="flex items-start justify-between mb-1 gap-3">
+                                  <div className="flex items-center flex-wrap gap-2">
+                                    {dish.code && (
+                                      <span className="font-sans text-[#1a362a] font-bold text-[10px] tracking-wider bg-[#1a362a]/10 px-1.5 py-0.5 rounded-sm mr-1">{dish.code}</span>
+                                    )}
+                                    <h4 className="font-serif font-bold text-[#1a362a] text-[15px] leading-tight uppercase">{dish.name}</h4>
+                                  </div>
                                 </div>
                                 
-                                <div className="shrink-0 flex items-baseline pt-0.5">
-                                   {dish.price !== undefined ? (
-                                     <span className="font-sans text-[14px] font-bold text-[#8a2a2b] whitespace-nowrap"><span className="text-[10px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{dish.price.toFixed(2)}</span>
-                                   ) : dish.variants ? null : (
-                                     <span className="font-sans text-[14px] font-bold text-[#8a2a2b] whitespace-nowrap"><span className="text-[10px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>TBA</span>
-                                   )}
-                                </div>
+                                {dishDesc && (
+                                   <p className="font-sans text-[#2c3e38]/70 text-[12px] leading-relaxed mb-2">{dishDesc}</p>
+                                )}
+                                
+                                {dish.variants && (
+                                  <div className="flex flex-wrap gap-1.5 mt-2">
+                                     {dish.variants.map((v, i) => (
+                                        <span key={i} className="inline-block bg-[#1a362a]/5 px-2 py-0.5 rounded text-[10px] text-[#2c3e38]/90 font-sans">
+                                           {v.type} ({v.code})
+                                        </span>
+                                     ))}
+                                  </div>
+                                )}
                               </div>
-                              
-                              {dish.description && (
-                                 <p className="font-sans text-[#2c3e38]/70 text-[12px] leading-relaxed mb-2">{dish.description}</p>
-                              )}
-                              
-                              {dish.variants && (
-                                <div className="flex flex-col space-y-1.5 mt-2 pl-2 border-l-2 border-[#1a362a]/10">
-                                   {dish.variants.map((v, i) => (
-                                      <div key={i} className="flex justify-between items-center text-xs">
-                                         <span className="font-sans text-[#2c3e38]/90 text-[11px]">{v.type} <span className="font-mono text-[9px] opacity-60">({v.code})</span></span>
-                                         <span className="font-sans font-bold text-[#8a2a2b] text-[13px]"><span className="text-[9px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{v.price.toFixed(2)}</span>
-                                      </div>
-                                   ))}
-                                </div>
-                              )}
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       )}
                       
                       {cat.addOns && (
                         <div className="mt-6 pt-5 border-t border-double border-[#8a2a2b]/20">
                           <h4 className="font-serif font-bold text-[#1a362a] mb-4 text-center text-sm tracking-widest uppercase">Add On</h4>
-                          <div className="grid grid-cols-1 gap-y-3">
+                          <div className="flex flex-wrap justify-center gap-2">
                             {cat.addOns.map((addon, i) => (
-                               <div key={i} className="flex justify-between items-center text-xs">
-                                  <span className="font-sans uppercase text-[#2c3e38] text-[11px] font-medium">• {addon.name}</span>
-                                  <span className="font-sans font-bold text-[#8a2a2b] text-[12px]"><span className="text-[9px] text-[#8a2a2b]/80 mr-0.5 font-semibold">RM</span>{addon.price.toFixed(2)}</span>
-                               </div>
+                               <span key={i} className="inline-block bg-[#1a362a]/5 px-3 py-1 rounded-full font-sans uppercase text-[#2c3e38] text-[10px] font-bold tracking-wider">
+                                 {addon.name}
+                               </span>
                             ))}
                           </div>
                         </div>
