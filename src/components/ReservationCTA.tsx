@@ -35,9 +35,11 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
   };
 
   return (
-    <section className="relative py-32 bg-jade-950 overflow-hidden" id="contact">
+    <section className="relative py-32 bg-[#Fdfbf7] overflow-hidden" id="contact">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-jade-950/80 z-10" />
+        {/* Dot pattern */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(#061F1A 2px, transparent 2px)', backgroundSize: '32px 32px' }} />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#Fdfbf7]/60 to-[#Fdfbf7] opacity-90 z-10" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -48,9 +50,9 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-cream-50 mb-6 leading-tight"
+            className="font-serif text-4xl sm:text-5xl lg:text-6xl font-black text-[#061F1A] mb-6 leading-tight tracking-tight"
           >
-            Ready for Fresh Handmade <span className="text-gold-400 italic">Dim Sum?</span>
+            Ready for Fresh Handmade <span className="text-[#C5A059] italic font-script rotate-[-2deg] inline-block ml-2 text-5xl sm:text-6xl lg:text-7xl">Dim Sum?</span>
           </motion.h2>
 
           <motion.p
@@ -58,7 +60,7 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="font-sans text-lg text-cream-200/80 mb-10 max-w-md"
+            className="font-sans text-lg text-[#061F1A]/80 mb-10 max-w-md font-medium"
           >
             Skip the queue. Book your table now and we'll instantly confirm your reservation via WhatsApp.
           </motion.p>
@@ -68,15 +70,15 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
-            className="inline-flex items-center space-x-3 bg-jade-900/50 p-4 rounded-xl border border-gold-500/10 cursor-pointer hover:bg-jade-900/80 transition-colors"
+            className="inline-flex items-center space-x-4 bg-white p-4 rounded-xl border border-[#ECE6D9] cursor-pointer hover:border-[#C5A059]/50 hover:shadow-lg transition-all shadow-sm"
             onClick={() => setShowAIChat(true)}
           >
-            <div className="w-12 h-12 rounded-full bg-gold-500/20 flex items-center justify-center text-gold-400">
+            <div className="w-12 h-12 rounded-full bg-[#F9F6F0] flex items-center justify-center text-[#C5A059]">
                <MessageSquare className="w-6 h-6" />
             </div>
             <div>
-              <p className="font-bold text-cream-50 text-sm">Need help deciding?</p>
-              <p className="text-cream-200/50 text-xs">Chat with our AI Concierge</p>
+              <p className="font-bold text-[#061F1A] text-sm">Need help deciding?</p>
+              <p className="text-[#061F1A]/50 text-xs">Chat with our AI Concierge</p>
             </div>
           </motion.div>
         </div>
@@ -87,7 +89,7 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="bg-cream-50 p-8 rounded-2xl shadow-2xl relative overflow-hidden"
+          className="bg-white p-8 rounded-2xl shadow-[0_15px_40px_rgb(0,0,0,0.08)] border border-[#ECE6D9] relative overflow-hidden"
         >
           <AnimatePresence>
             {isSuccess && (
@@ -95,43 +97,43 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute inset-0 bg-jade-950 flex flex-col items-center justify-center z-20 text-center px-6"
+                className="absolute inset-0 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center z-20 text-center px-6"
               >
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", delay: 0.2 }}
                 >
-                  <CheckCircle2 className="w-20 h-20 text-gold-500 mb-6 mx-auto" />
+                  <CheckCircle2 className="w-20 h-20 text-[#1C6658] mb-6 mx-auto" />
                 </motion.div>
-                <h3 className="text-2xl font-serif font-bold text-cream-50 mb-2">Booking Confirmed!</h3>
-                <p className="text-cream-200/70 text-sm">We've just sent the details to your WhatsApp.</p>
+                <h3 className="text-2xl font-serif font-black text-[#061F1A] mb-2 tracking-tight">Booking Confirmed!</h3>
+                <p className="text-[#061F1A]/70 text-sm font-medium">We've just sent the details to your WhatsApp.</p>
               </motion.div>
             )}
           </AnimatePresence>
 
-          <h3 className="font-serif text-2xl font-bold text-jade-950 mb-6">Reserve a Table</h3>
+          <h3 className="font-serif text-2xl font-bold text-[#061F1A] mb-6">Reserve a Table</h3>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-jade-900/60 uppercase tracking-wider mb-1">Name</label>
+                <label className="block text-xs font-bold text-[#061F1A]/60 uppercase tracking-widest mb-1">Name</label>
                 <input 
                   type="text" 
                   required
                   value={formData.name}
                   onChange={e => setFormData({...formData, name: e.target.value})}
-                  className="w-full bg-white border border-jade-900/10 rounded px-4 py-3 text-jade-950 focus:outline-none focus:border-gold-500" 
+                  className="w-full bg-[#F9F6F0] border border-[#ECE6D9] rounded-sm px-4 py-3 text-[#061F1A] focus:outline-none focus:border-[#C5A059] focus:bg-white transition-colors" 
                   placeholder="John Doe" 
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-jade-900/60 uppercase tracking-wider mb-1">WhatsApp Number</label>
+                <label className="block text-xs font-bold text-[#061F1A]/60 uppercase tracking-widest mb-1">WhatsApp Number</label>
                 <input 
                   type="tel" 
                   required
                   value={formData.phone}
                   onChange={e => setFormData({...formData, phone: e.target.value})}
-                  className="w-full bg-white border border-jade-900/10 rounded px-4 py-3 text-jade-950 focus:outline-none focus:border-gold-500" 
+                  className="w-full bg-[#F9F6F0] border border-[#ECE6D9] rounded-sm px-4 py-3 text-[#061F1A] focus:outline-none focus:border-[#C5A059] focus:bg-white transition-colors" 
                   placeholder="+60123456789" 
                 />
               </div>
@@ -139,21 +141,21 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-jade-900/60 uppercase tracking-wider mb-1">Date & Time</label>
+                <label className="block text-xs font-bold text-[#061F1A]/60 uppercase tracking-widest mb-1">Date & Time</label>
                 <input 
                   type="datetime-local" 
                   required
                   value={formData.date}
                   onChange={e => setFormData({...formData, date: e.target.value})}
-                  className="w-full bg-white border border-jade-900/10 rounded px-4 py-3 text-jade-950 focus:outline-none focus:border-gold-500" 
+                  className="w-full bg-[#F9F6F0] border border-[#ECE6D9] rounded-sm px-4 py-3 text-[#061F1A] focus:outline-none focus:border-[#C5A059] focus:bg-white transition-colors" 
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-jade-900/60 uppercase tracking-wider mb-1">Guests</label>
+                <label className="block text-xs font-bold text-[#061F1A]/60 uppercase tracking-widest mb-1">Guests</label>
                 <select 
                   value={formData.guests}
                   onChange={e => setFormData({...formData, guests: e.target.value})}
-                  className="w-full bg-white border border-jade-900/10 rounded px-4 py-3 text-jade-950 focus:outline-none focus:border-gold-500"
+                  className="w-full bg-[#F9F6F0] border border-[#ECE6D9] rounded-sm px-4 py-3 text-[#061F1A] focus:outline-none focus:border-[#C5A059] focus:bg-white transition-colors"
                 >
                   <option value="1">1 Person</option>
                   <option value="2">2 People</option>
@@ -167,7 +169,7 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full mt-4 flex items-center justify-center space-x-2 px-8 py-4 bg-gold-500 hover:bg-gold-400 disabled:bg-gold-500/50 text-jade-950 font-display font-bold tracking-widest uppercase rounded transition-colors shadow-lg cursor-pointer"
+              className="w-full mt-6 flex items-center justify-center space-x-2 px-8 py-4 bg-[#061F1A] hover:bg-black disabled:bg-[#061F1A]/50 text-white font-sans font-bold tracking-widest uppercase rounded-sm transition-colors shadow-md cursor-pointer text-sm"
             >
               {isSubmitting ? (
                 <span>Confirming...</span>
@@ -190,33 +192,33 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed bottom-24 right-6 w-80 bg-white rounded-2xl shadow-2xl z-50 overflow-hidden border border-jade-900/10 flex flex-col"
+            className="fixed bottom-24 right-6 w-80 bg-white rounded-2xl shadow-[0_15px_40px_rgb(0,0,0,0.15)] z-50 overflow-hidden border border-[#ECE6D9] flex flex-col"
           >
-            <div className="bg-jade-950 p-4 flex justify-between items-center">
+            <div className="bg-white border-b border-[#ECE6D9] p-4 flex justify-between items-center">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 rounded-full bg-gold-500 flex items-center justify-center text-jade-950 font-bold font-serif">W</div>
+                <div className="w-8 h-8 rounded-full bg-[#F9F6F0] flex items-center justify-center text-[#C5A059] font-bold font-serif">W</div>
                 <div>
-                  <h4 className="text-cream-50 font-bold text-sm">WAKi Concierge</h4>
-                  <p className="text-gold-400 text-[10px]">AI Assistant</p>
+                  <h4 className="text-[#061F1A] font-bold text-sm">WAKi Concierge</h4>
+                  <p className="text-[#061F1A]/50 font-bold text-[10px] uppercase tracking-widest">AI Assistant</p>
                 </div>
               </div>
-              <button onClick={() => setShowAIChat(false)} className="text-cream-50/50 hover:text-cream-50 transition-colors">
+              <button onClick={() => setShowAIChat(false)} className="text-[#061F1A]/40 hover:text-[#061F1A] transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="p-4 h-64 bg-cream-50 flex flex-col justify-end">
+            <div className="p-4 h-64 bg-[#Fdfbf7] flex flex-col justify-end">
               {/* Mock Chat */}
               <div className="space-y-3 mb-4">
-                <div className="bg-white p-3 rounded-xl rounded-tl-none shadow-sm text-sm text-jade-950 max-w-[85%] border border-jade-900/5">
+                <div className="bg-white p-3 rounded-xl rounded-tl-none shadow-sm text-sm text-[#061F1A] max-w-[85%] border border-[#ECE6D9]">
                   Hi there! 👋 I'm your WAKi AI Concierge. How can I help you plan your visit?
                 </div>
-                <div className="bg-gold-500/20 p-3 rounded-xl rounded-tr-none shadow-sm text-sm text-jade-950 max-w-[85%] ml-auto border border-gold-500/20">
+                <div className="bg-[#F9F6F0] p-3 rounded-xl rounded-tr-none shadow-sm text-sm text-[#061F1A] max-w-[85%] ml-auto border border-[#ECE6D9]">
                   Do you have vegetarian options for a group of 4?
                 </div>
               </div>
               <div className="relative">
-                <input type="text" placeholder="Type a message..." className="w-full bg-white border border-jade-900/10 rounded-full px-4 py-2 pr-10 text-sm focus:outline-none focus:border-gold-500" />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gold-500 hover:text-gold-600">
+                <input type="text" placeholder="Type a message..." className="w-full bg-white border border-[#ECE6D9] rounded-full px-4 py-2 pr-10 text-sm focus:outline-none focus:border-[#C5A059] text-[#061F1A]" />
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 text-[#C5A059] hover:text-[#061F1A] transition-colors">
                   <Send className="w-4 h-4" />
                 </button>
               </div>
