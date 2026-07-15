@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageCircle, ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 import Navbar from './components/Navbar';
 import StoryHero from './components/StoryHero';
 import MenuFlipbook from './components/MenuFlipbook';
@@ -52,16 +52,6 @@ export default function App() {
         <ReservationCTA onReserveClick={() => scrollToSection('contact')} />
         <LocationAndFooter />
       </main>
-
-      {/* Floating WhatsApp Button */}
-      <a
-        href="https://wa.me/60166634376"
-        target="_blank"
-        rel="noreferrer"
-        className="fixed bottom-24 md:bottom-6 left-6 z-40 p-4 rounded-full bg-green-500 hover:bg-green-400 text-white shadow-xl shadow-green-900/50 hover:scale-110 transition-transform flex items-center justify-center"
-      >
-        <MessageCircle className="w-6 h-6" />
-      </a>
 
       {/* Scroll To Top */}
       <AnimatePresence>
