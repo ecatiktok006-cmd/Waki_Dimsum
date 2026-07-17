@@ -2,74 +2,77 @@ import { useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Check } from 'lucide-react';
 
-import aboutIngredients from '../assets/images/about_ingredients_1783567499817.jpg';
-import aboutSteam from '../assets/images/about_steam_1783567485399.jpg';
-import gatheringImg from '../assets/images/gathering.png';
-import aboutPlatter from '../assets/images/about_platter_1783567469486.jpg';
-import heroDimSum from '../assets/images/hero_dim_sum_1783567454638.jpg';
+import ingredientsImg from '../assets/images/ingredients_dimsum_1784099917619.jpg';
+import rollingImg from '../assets/images/rolling_wrappers_1784099933601.jpg';
+import fillingImg from '../assets/images/preparing_filling_1784099945958.jpg';
+import foldingImg from '../assets/images/hand_folded_1784099957917.jpg';
+import steamImg from '../assets/images/steamed_baskets_1784099970714.jpg';
+import sharedImg from '../assets/images/family_enjoying_1784099982164.jpg';
+import wrapperVideo from '../assets/images/wrapper.mp4';
+import fillingVideo from '../assets/images/filling.mp4';
+import foldingVideo from '../assets/images/folding.mp4';
+import steamVideo from '../assets/images/steam.mp4';
+import gatheringVideo from '../assets/images/gathering.mp4';
 
 interface TimelineEvent {
-  year: number;
+  keyword: string;
   title: string;
   description: string;
   image: string;
-  stats?: { value: string; label: string }[];
-  promises?: string[];
-  closing?: string;
+  video?: string;
 }
 
 const TIMELINE_EVENTS: TimelineEvent[] = [
   {
-    year: 2021,
-    title: "A Passion for Dim Sum",
-    description: "Founded to serve authentic handmade dim sum. Every dish begins with care and craftsmanship.",
-    image: aboutIngredients,
+    keyword: "Selected",
+    title: "Fresh Ingredients",
+    description: "Every great dim sum begins with carefully selected ingredients. Fresh seafood, premium meats, seasonal vegetables, and quality flour lay the foundation for authentic flavor.",
+    image: ingredientsImg,
   },
   {
-    year: 2022,
-    title: "First Kitchen",
-    description: "Focused on hand-making dim sum with fresh ingredients. Every fold reflects our commitment.",
-    image: aboutSteam,
+    keyword: "Prepared",
+    title: "Handmade Wrappers",
+    description: "Our dough is prepared with precision and rolled to the perfect thickness, creating delicate wrappers that hold every filling beautifully.",
+    image: rollingImg,
+    video: wrapperVideo,
   },
   {
-    year: 2023,
-    title: "Welcoming Families",
-    description: "Expanded our dining experience while preserving handmade quality. A destination to reconnect.",
-    image: gatheringImg,
+    keyword: "Crafted",
+    title: "Crafted Filling",
+    description: "Each filling is carefully seasoned and mixed to achieve the perfect balance of texture, aroma, and taste using traditional recipes.",
+    image: fillingImg,
+    video: fillingVideo,
   },
   {
-    year: 2024,
-    title: "Perfecting Every Bite",
-    description: "Our production expanded, but every dumpling is still handcrafted with precision.",
-    image: aboutPlatter,
+    keyword: "Handcrafted",
+    title: "Hand Folded",
+    description: "Every dumpling is folded by hand with skill and care. Each shape reflects years of craftsmanship passed down through generations.",
+    image: foldingImg,
+    video: foldingVideo,
   },
   {
-    year: 2025,
-    title: "A Fresh Identity",
-    description: "Refreshed visual identity while staying true to our philosophy—bringing people together.",
-    image: heroDimSum,
+    keyword: "Steamed",
+    title: "Steam to Perfection",
+    description: "Steamed at precisely controlled temperatures, every basket preserves freshness while achieving the ideal texture and flavor.",
+    image: steamImg,
+    video: steamVideo,
   },
   {
-    year: 2026,
-    title: "Growing Into the Future",
-    description: "Continuing to innovate and serve, honoring the craftsmanship that started it all.",
-    image: gatheringImg,
-    promises: [
-      "Handmade with care",
-      "Fresh ingredients",
-      "Warm hospitality",
-      "Delicious food"
-    ]
+    keyword: "Shared",
+    title: "Served with Happiness",
+    description: "The final destination is your table, where friends and families gather to share delicious food, meaningful conversations, and memorable moments.",
+    image: sharedImg,
+    video: gatheringVideo,
   }
 ];
 
 const TIMELINE_NODES = [
-  { year: 2021, y: 300, cardPos: 'bottom' as const },
-  { year: 2022, y: 550, cardPos: 'top' as const },
-  { year: 2023, y: 250, cardPos: 'bottom' as const },
-  { year: 2024, y: 600, cardPos: 'top' as const },
-  { year: 2025, y: 300, cardPos: 'bottom' as const },
-  { year: 2026, y: 400, cardPos: 'end' as const },
+  { y: 300, cardPos: 'bottom' as const },
+  { y: 550, cardPos: 'top' as const },
+  { y: 250, cardPos: 'bottom' as const },
+  { y: 600, cardPos: 'top' as const },
+  { y: 300, cardPos: 'bottom' as const },
+  { y: 400, cardPos: 'end' as const },
 ];
 
 export default function AboutTimeline() {
@@ -142,13 +145,13 @@ export default function AboutTimeline() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
           viewport={{ once: true }}
-          className="max-w-3xl mb-4 flex flex-col items-center"
+          className="max-w-4xl md:max-w-5xl mb-4 flex flex-col items-center"
         >
           <span className="font-display text-jade-950/60 font-bold tracking-[0.3em] text-xs uppercase mb-4 block text-center">
             Our Journey
           </span>
           <h2 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-jade-950 leading-tight mb-4 flex flex-col items-center justify-center">
-            <span>The Journey of</span>
+            <span className="md:whitespace-nowrap text-center">The Dimsum Journey of</span>
             <div className="flex items-center justify-center gap-3 mt-2">
               <span className="text-jade-900 italic font-medium">WAKi</span> 
               <span className="bg-red-800 text-white text-sm md:text-base px-2 py-1 rounded-sm shadow-md inline-flex flex-col items-center justify-center transform -translate-y-1 md:-translate-y-2">
@@ -209,7 +212,7 @@ export default function AboutTimeline() {
             const node = TIMELINE_NODES[index];
             const isRotatedRight = index % 2 === 0;
             return (
-              <div key={event.year} className="relative w-[300px] h-full shrink-0 flex justify-center z-10">
+              <div key={event.keyword} className="relative w-[300px] h-full shrink-0 flex justify-center z-10">
                 
                 {/* Node Circle */}
                 <motion.div 
@@ -230,7 +233,7 @@ export default function AboutTimeline() {
                   />
                 </motion.div>
 
-                {/* Year Text */}
+                {/* Keyword Text */}
                 <motion.div 
                   initial={{ opacity: 0, y: node.cardPos === 'bottom' || node.cardPos === 'end' ? -10 : 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -243,9 +246,8 @@ export default function AboutTimeline() {
                   } whitespace-nowrap z-10`}
                   style={{ top: node.y }}
                 >
-                  <span className="font-script text-[#C5A059] text-2xl -mb-3 rotate-[-5deg] ml-12 opacity-90">Est.</span>
-                  <span className="font-serif text-6xl text-[#061F1A] font-black tracking-tight drop-shadow-sm">
-                    {event.year}
+                  <span className="font-script text-[#C5A059] text-3xl md:text-4xl font-bold rotate-[-5deg] px-4 drop-shadow-sm">
+                    {event.keyword}
                   </span>
                 </motion.div>
 
@@ -253,7 +255,7 @@ export default function AboutTimeline() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9, y: 20, rotate: isRotatedRight ? -6 : 6 }}
                   whileInView={{ opacity: 1, scale: 1, y: 0, rotate: isRotatedRight ? 2 : -2 }}
-                  viewport={{ margin: "0px -25% 0px -25%", once: false }}
+                  viewport={{ margin: "0px -10% 0px -10%", once: true }}
                   transition={{ duration: 0.7, type: "spring", bounce: 0.3 }}
                   className={`absolute w-[300px] bg-white p-4 pb-10 shadow-[0_15px_35px_rgb(0,0,0,0.08),_0_3px_10px_rgb(0,0,0,0.04)] border border-[#ECE6D9] z-10 transition-all hover:z-30 hover:scale-105 hover:shadow-[0_25px_50px_rgb(0,0,0,0.12)] cursor-default ${
                     node.cardPos === 'end' ? 'left-full ml-4 transform -translate-y-1/2' : 'transform -translate-x-1/2 left-1/2'
@@ -270,43 +272,56 @@ export default function AboutTimeline() {
                   <div className="absolute -top-4 right-1/4 w-14 h-6 bg-white/70 backdrop-blur-md rotate-[8deg] shadow-sm z-20 border border-white/80 rounded-sm" />
                   
                   <div className="relative overflow-hidden mb-5 bg-[#F9F6F0] p-1.5 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] border border-[#ECE6D9]/50">
-                    <motion.img 
-                      src={event.image} 
-                      alt={event.title} 
-                      initial={{ filter: 'grayscale(50%) sepia(20%) brightness(0.95)' }}
-                      whileInView={{ filter: 'grayscale(0%) sepia(0%) brightness(1)' }}
-                      viewport={{ once: false }}
-                      transition={{ duration: 1 }}
-                      className="w-full h-[200px] object-cover mix-blend-multiply" 
-                    />
+                    {event.video ? (
+                      <motion.video 
+                        src={event.video}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        initial={{ opacity: 0.85 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="w-full h-[200px] object-cover rounded-sm"
+                      />
+                    ) : (
+                      <motion.img 
+                        src={event.image} 
+                        alt={event.title} 
+                        initial={{ opacity: 0.85 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="w-full h-[200px] object-cover rounded-sm" 
+                      />
+                    )}
                   </div>
                   
-                  <h4 className="font-script text-[2.25rem] font-bold text-[#061F1A] mb-1.5 leading-none rotate-[-2deg] text-center px-2">
+                  <h4 className="font-serif text-xl font-bold text-[#061F1A] mb-2 leading-tight text-center px-2 pt-1">
                     {event.title}
                   </h4>
                   <p className="font-sans text-[13px] text-[#061F1A]/75 leading-relaxed font-medium text-center px-4">
                     {event.description}
                   </p>
-                  
-                  {event.promises && (
-                    <div className="mt-5 pt-4 border-t border-dashed border-[#C5A059]/30 mx-2">
-                      <ul className="space-y-2">
-                        {event.promises.map((promise, idx) => (
-                          <li key={idx} className="flex items-center space-x-3">
-                            <div className="w-1.5 h-1.5 rounded-full bg-[#C5A059] shrink-0" />
-                            <span className="font-sans text-[11px] text-[#061F1A]/80 font-bold tracking-widest uppercase">
-                              {promise}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
                 </motion.div>
               </div>
             );
           })}
         </div>
+      </div>
+
+      {/* Bottom Quote */}
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pointer-events-none pb-8 flex flex-col items-center text-center mt-8">
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="font-serif italic text-[#061F1A]/80 text-xl md:text-2xl max-w-2xl leading-relaxed"
+        >
+          "From fresh ingredients to every shared smile, every dim sum is crafted with heart."
+        </motion.p>
       </div>
     </section>
   );

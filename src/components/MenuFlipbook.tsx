@@ -267,9 +267,9 @@ const CoverPageContent = () => (
     </div>
     <div className="border-t border-b border-[#1a362a] h-1 mb-6 shrink-0"></div>
 
-    {/* THE MENU */}
-    <h1 className="font-serif text-[4rem] md:text-[4.5rem] font-black text-[#1a362a] text-center leading-none mb-6 shrink-0" style={{ transform: 'scaleY(1.1)' }}>
-      THE MENU
+    {/* THE CULINARY JOURNAL */}
+    <h1 className="font-serif text-[2.2rem] md:text-[2.8rem] font-black text-[#1a362a] text-center leading-none mb-6 shrink-0" style={{ transform: 'scaleY(1.1)' }}>
+      THE CULINARY JOURNAL
     </h1>
 
     {/* Info Bar */}
@@ -311,6 +311,7 @@ const CoverPageContent = () => (
 
 export default function MenuFlipbook() {
   const flipBookRef = useRef(null);
+  const [selectedMobileTab, setSelectedMobileTab] = React.useState<string>('cover');
   
   return (
     <section id="menu" className="py-24 bg-cream-50 relative overflow-hidden">
@@ -321,7 +322,7 @@ export default function MenuFlipbook() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="font-serif text-4xl sm:text-5xl lg:text-6xl font-black mb-6 text-[#1a362a] uppercase tracking-widest"
+            className="font-serif text-4xl sm:text-5xl lg:text-6xl font-black mb-6 text-[#131010] uppercase tracking-widest"
             style={{ transform: 'scaleY(1.1)' }}
           >
             The Menu
@@ -559,38 +560,119 @@ export default function MenuFlipbook() {
         </div>
         
         {/* Mobile View fallback since Flipbook is tricky on very small screens */}
-        <div className="md:hidden flex flex-col space-y-8 mt-8">
-           <div className="bg-[#f8f5eb] p-6 rounded-xl shadow-lg border border-[#e2d5c3] relative overflow-hidden">
-             <div 
-                className="absolute inset-0 opacity-[0.08] pointer-events-none"
-                style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover', mixBlendMode: 'multiply' }}
-              />
-              <div className="relative z-10">
-                <div className="mb-10 w-full min-h-[500px]">
-                  <CoverPageContent />
-                </div>
-                
-                {MENU_CATEGORIES.map((cat, index) => {
-                  const isKopitiam = cat.id === 'cat-8';
-                  const isHomeEdition = cat.id === 'cat-12';
-                  const bgClass = isHomeEdition ? 'bg-[#f0f4f8]' : 'bg-[#f8f5eb]';
+        <div className="md:hidden flex flex-col space-y-6 mt-6">
+          {/* Horizontal Category Tab Bar */}
+          <div className="w-full">
+            <p className="text-[11px] font-sans uppercase tracking-wider text-[#1a362a]/60 font-bold mb-2">
+              Browse Menu Categories
+            </p>
+            <div className="flex overflow-x-auto gap-2 pb-3 pt-1 hide-scrollbar -mx-4 px-4 snap-x">
+              {/* Cover Tab */}
+              <button
+                type="button"
+                onClick={() => setSelectedMobileTab('cover')}
+                className={`snap-center shrink-0 px-4 py-2.5 rounded-lg text-xs font-serif font-black uppercase tracking-wider transition-all duration-300 border ${
+                  selectedMobileTab === 'cover'
+                    ? 'bg-[#1a362a] text-[#f8f5eb] border-[#1a362a] shadow-md scale-105'
+                    : 'bg-white text-[#1a362a] border-[#e2d5c3] shadow-sm hover:bg-[#1a362a]/5'
+                }`}
+              >
+                📖 Cover Page
+              </button>
+              
+              {/* Category Tabs */}
+              {MENU_CATEGORIES.map((cat) => {
+                const getMobileTabName = (id: string, name: string) => {
+                  switch (id) {
+                    case 'cat-0': return '🥢 Silky Rolls';
+                    case 'cat-1': return '🔥 Golden Crisp';
+                    case 'cat-2': return '♨️ Steamy';
+                    case 'cat-3': return '🥟 Bao Times';
+                    case 'cat-4': return '🥣 Sides';
+                    case 'cat-5': return '🍚 Rice Press';
+                    case 'cat-6': return '🔥 Wok Dispatch';
+                    case 'cat-7': return '🍵 Tea Edition';
+                    case 'cat-8': return '☕ Kopitiam';
+                    case 'cat-9': return '🍊 Juice';
+                    case 'cat-10': return '🍧 Dessert';
+                    case 'cat-11': return '🍹 Mocktail';
+                    case 'cat-12': return '❄️ Frozen';
+                    default: return name;
+                  }
+                };
+                const tabName = getMobileTabName(cat.id, cat.name);
+                const isSelected = selectedMobileTab === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setSelectedMobileTab(cat.id)}
+                    className={`snap-center shrink-0 px-4 py-2.5 rounded-lg text-xs font-serif font-black uppercase tracking-wider transition-all duration-300 border ${
+                      isSelected
+                        ? 'bg-[#1a362a] text-[#f8f5eb] border-[#1a362a] shadow-md scale-105'
+                        : 'bg-white text-[#1a362a] border-[#e2d5c3] shadow-sm hover:bg-[#1a362a]/5'
+                    }`}
+                  >
+                    {tabName}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-                  return (
-                  <div key={cat.id} className={`mb-10 ${bgClass} p-5 rounded-xl border border-[#e2d5c3] shadow-sm relative overflow-hidden`}>
+          {/* Tab Content Window with smooth fade-in */}
+          <div className="min-h-[450px]">
+            {selectedMobileTab === 'cover' ? (
+              <motion.div 
+                key="cover"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="bg-[#f8f5eb] p-5 sm:p-6 rounded-2xl shadow-xl border border-[#e2d5c3] relative overflow-hidden min-h-[550px] flex flex-col"
+              >
+                <div 
+                  className="absolute inset-0 opacity-[0.08] pointer-events-none"
+                  style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover', mixBlendMode: 'multiply' }}
+                />
+                <CoverPageContent />
+              </motion.div>
+            ) : (
+              MENU_CATEGORIES.map((cat) => {
+                if (cat.id !== selectedMobileTab) return null;
+                
+                const isKopitiam = cat.id === 'cat-8';
+                const isHomeEdition = cat.id === 'cat-12';
+                const bgClass = isHomeEdition ? 'bg-[#f0f4f8]' : 'bg-[#f8f5eb]';
+
+                return (
+                  <motion.div
+                    key={cat.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className={`${bgClass} p-5 sm:p-6 rounded-2xl border border-[#e2d5c3] shadow-lg relative overflow-hidden`}
+                  >
                     <div className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-multiply" style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }} />
+                    
                     <div className="relative z-10">
                       {catHeroImages[cat.id] && (
-                        <div className="w-full h-32 mb-6 border border-[#1a362a]/20 p-1 bg-[#f8f5eb] shrink-0 relative">
-                          <div className="w-full h-full relative overflow-hidden">
+                        <div className="w-full h-40 sm:h-48 mb-6 border border-[#1a362a]/20 p-1 bg-[#f8f5eb] rounded-lg overflow-hidden relative">
+                          <div className="w-full h-full relative overflow-hidden rounded">
                             <img src={catHeroImages[cat.id]} className="w-full h-full object-cover" alt={cat.name} />
                             {(cat.id === 'cat-2' || cat.id === 'cat-3') && <SteamAnimation />}
                           </div>
                         </div>
                       )}
+                      
                       <div className="mb-6 text-center">
-                        <h3 className="font-serif text-2xl font-black text-[#1a362a] border-b border-[#8a2a2b]/30 inline-block pb-2 uppercase tracking-wide">{cat.name}</h3>
-                        {cat.subtitle && <p className="font-serif italic text-[#8a2a2b] text-sm mt-3">{cat.subtitle}</p>}
-                        {cat.description && <p className="font-sans text-[#2c3e38]/80 text-xs mt-3 max-w-[280px] mx-auto leading-relaxed">{cat.description}</p>}
+                        <span className="text-[9px] font-sans uppercase tracking-[0.25em] text-[#8a2a2b] font-extrabold block mb-1">
+                          Category {MENU_CATEGORIES.findIndex(c => c.id === cat.id) + 1} of {MENU_CATEGORIES.length}
+                        </span>
+                        <h3 className="font-serif text-2xl sm:text-3xl font-black text-[#1a362a] border-b border-[#8a2a2b]/30 inline-block pb-2 uppercase tracking-wide leading-tight">
+                          {cat.name}
+                        </h3>
+                        {cat.subtitle && <p className="font-serif italic text-[#8a2a2b] text-xs sm:text-sm mt-3">{cat.subtitle}</p>}
+                        {cat.description && <p className="font-sans text-[#2c3e38]/80 text-[11px] sm:text-xs mt-3 max-w-[320px] mx-auto leading-relaxed">{cat.description}</p>}
                       </div>
                       
                       {isHomeEdition && (
@@ -602,8 +684,8 @@ export default function MenuFlipbook() {
                       )}
                       
                       {isKopitiam ? (
-                        <div className="flex flex-col space-y-3">
-                          <div className="flex justify-between border-b-2 border-[#1a362a] pb-2 font-sans text-[10px] font-bold uppercase tracking-widest text-[#1a362a]">
+                        <div className="flex flex-col space-y-3 bg-white/50 backdrop-blur-sm p-4 rounded-xl border border-[#1a362a]/5">
+                          <div className="flex justify-between border-b border-[#1a362a]/30 pb-2 font-sans text-[10px] font-bold uppercase tracking-widest text-[#1a362a]">
                             <div className="w-1/2">Drink</div>
                             <div className="w-1/2 text-right">Option / Code</div>
                           </div>
@@ -612,24 +694,24 @@ export default function MenuFlipbook() {
                             const coldVariant = dish.variants?.find(v => v.type === 'Cold');
                             const drinkDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
                             return (
-                              <div key={dish.id} className="flex flex-col py-1.5 border-b border-[#1a362a]/5 last:border-0 group">
+                              <div key={dish.id} className="flex flex-col py-2 border-b border-[#1a362a]/5 last:border-0">
                                 <div className="flex justify-between items-center">
-                                  <div className="w-1/2 font-sans font-bold text-[#1a362a] text-[12px] uppercase leading-tight">{dish.name}</div>
-                                  <div className="w-1/2 text-right flex flex-wrap justify-end gap-1.5 text-[10px]">
+                                  <div className="w-1/2 font-sans font-bold text-[#1a362a] text-[12px] sm:text-[13px] uppercase leading-tight">{dish.name}</div>
+                                  <div className="w-1/2 text-right flex flex-wrap justify-end gap-1.5 text-[9px] sm:text-[10px]">
                                     {hotVariant && (
-                                      <span className="bg-[#1a362a]/5 px-2 py-0.5 rounded text-[#1a362a] font-sans">
+                                      <span className="bg-[#1a362a]/10 px-2 py-0.5 rounded text-[#1a362a] font-sans font-medium">
                                         ☕ Hot ({hotVariant.code})
                                       </span>
                                     )}
                                     {coldVariant && (
-                                      <span className="bg-[#1a362a]/5 px-2 py-0.5 rounded text-[#1a362a] font-sans">
+                                      <span className="bg-[#1a362a]/10 px-2 py-0.5 rounded text-[#1a362a] font-sans font-medium">
                                         🧊 Cold ({coldVariant.code})
                                       </span>
                                     )}
                                   </div>
                                 </div>
                                 {drinkDesc && (
-                                  <p className="font-sans text-[#2c3e38]/60 text-[10px] leading-tight italic mt-0.5">
+                                  <p className="font-sans text-[#2c3e38]/75 text-[10px] leading-tight italic mt-1">
                                     {drinkDesc}
                                   </p>
                                 )}
@@ -638,31 +720,31 @@ export default function MenuFlipbook() {
                           })}
                         </div>
                       ) : (
-                        <div className="flex flex-col mt-4">
+                        <div className="flex flex-col space-y-1 bg-white/40 backdrop-blur-sm p-3 sm:p-4 rounded-xl border border-[#1a362a]/5">
                           {cat.dishes.map((dish) => {
                             const dishDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
                             return (
-                              <div key={dish.id} className="flex flex-col border-b border-[#1a362a]/10 py-4 last:border-0">
+                              <div key={dish.id} className="flex flex-col border-b border-[#1a362a]/5 py-3.5 last:border-0">
                                 <div className="flex items-start justify-between mb-1 gap-3">
-                                  <div className="flex items-center flex-wrap gap-2">
+                                  <div className="flex items-center flex-wrap gap-1.5">
                                     {dish.code && (
-                                      <span className="font-sans text-[#1a362a] font-bold text-[10px] tracking-wider bg-[#1a362a]/10 px-1.5 py-0.5 rounded-sm mr-1">{dish.code}</span>
+                                      <span className="font-sans text-[#1a362a] font-extrabold text-[9px] tracking-wider bg-[#1a362a]/10 px-1.5 py-0.5 rounded-sm">{dish.code}</span>
                                     )}
-                                    <h4 className="font-serif font-bold text-[#1a362a] text-[15px] leading-tight uppercase">{dish.name}</h4>
+                                    <h4 className="font-serif font-bold text-[#1a362a] text-[13px] sm:text-[14px] leading-tight uppercase">{dish.name}</h4>
                                   </div>
                                 </div>
                                 
                                 {dishDesc && (
-                                   <p className="font-sans text-[#2c3e38]/70 text-[12px] leading-relaxed mb-2">{dishDesc}</p>
+                                  <p className="font-sans text-[#2c3e38]/85 text-[11px] sm:text-[12px] leading-relaxed mb-1.5">{dishDesc}</p>
                                 )}
                                 
                                 {dish.variants && (
-                                  <div className="flex flex-wrap gap-1.5 mt-2">
-                                     {dish.variants.map((v, i) => (
-                                        <span key={i} className="inline-block bg-[#1a362a]/5 px-2 py-0.5 rounded text-[10px] text-[#2c3e38]/90 font-sans">
-                                           {v.type} ({v.code})
-                                        </span>
-                                     ))}
+                                  <div className="flex flex-wrap gap-1.5 mt-1">
+                                    {dish.variants.map((v, i) => (
+                                      <span key={i} className="inline-block bg-[#1a362a]/10 px-2 py-0.5 rounded text-[9px] sm:text-[10px] text-[#1a362a] font-sans font-medium">
+                                        {v.type} ({v.code})
+                                      </span>
+                                    ))}
                                   </div>
                                 )}
                               </div>
@@ -673,21 +755,22 @@ export default function MenuFlipbook() {
                       
                       {cat.addOns && (
                         <div className="mt-6 pt-5 border-t border-double border-[#8a2a2b]/20">
-                          <h4 className="font-serif font-bold text-[#1a362a] mb-4 text-center text-sm tracking-widest uppercase">Add On</h4>
+                          <h4 className="font-serif font-bold text-[#1a362a] mb-4 text-center text-xs tracking-widest uppercase">Add On</h4>
                           <div className="flex flex-wrap justify-center gap-2">
                             {cat.addOns.map((addon, i) => (
-                               <span key={i} className="inline-block bg-[#1a362a]/5 px-3 py-1 rounded-full font-sans uppercase text-[#2c3e38] text-[10px] font-bold tracking-wider">
-                                 {addon.name}
-                               </span>
+                              <span key={i} className="inline-block bg-[#1a362a]/10 px-3 py-1 rounded-full font-sans uppercase text-[#2c3e38] text-[9px] sm:text-[10px] font-bold tracking-wider">
+                                {addon.name}
+                              </span>
                             ))}
                           </div>
                         </div>
                       )}
                     </div>
-                  </div>
-                );})}
-              </div>
-           </div>
+                  </motion.div>
+                );
+              })
+            )}
+          </div>
         </div>
 
       </div>

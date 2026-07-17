@@ -76,10 +76,12 @@ export default function StoryHero({ onLearnMore, onExploreMenu, onOrderNow }: St
             initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
             animate={{ opacity: 1, scale: 1, rotate: -3 }}
             transition={{ duration: 0.8, delay: 0.6, type: "spring", bounce: 0.4 }}
-            className="font-script text-[5rem] sm:text-[8rem] md:text-[11rem] text-[#1A1A1A] leading-none absolute top-[25%] sm:top-[28%] z-20 w-[120%]"
+            className="font-script text-[5rem] sm:text-[8rem] md:text-[11rem] text-[#1A1A1A] leading-none absolute top-[25%] sm:top-[28%] z-20 w-[120%] cursor-default select-none origin-center"
             style={{ transform: 'rotate(-3deg)' }}
           >
-            Malaysian
+            <span className="inline-block">
+              Malaysian
+            </span>
           </motion.div>
           
           <motion.h1 
