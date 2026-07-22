@@ -38,8 +38,8 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
     <section className="relative py-32 bg-[#FFFBE3] overflow-hidden" id="contact">
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* Dot pattern */}
-        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(#061F1A 2px, transparent 2px)', backgroundSize: '32px 32px' }} />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#FFFBE3]/60 to-[#FFFBE3] opacity-90 z-10" />
+        <div className="absolute inset-0 opacity-15" style={{ backgroundImage: 'radial-gradient(#061F1A 2px, transparent 2px)', backgroundSize: '32px 32px' }} />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#FFFBE3]/60 to-[#FFFBE3] opacity-80 z-10" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">

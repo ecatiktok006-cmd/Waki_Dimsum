@@ -78,42 +78,68 @@ function ReviewsFetcher() {
   return <ReviewsList reviews={displayReviews} placeRating={placeRating} />;
 }
 
+function ReviewCard({ review, idx }: { review: any; idx: number }) {
+  const [expanded, setExpanded] = useState(false);
+  const isLong = review.text && review.text.length > 150;
+
+  return (
+    <motion.div
+      key={review.id || idx}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: idx * 0.1 }}
+      className="bg-white/80 backdrop-blur-sm p-8 lg:p-10 border border-[#1a362a]/10 hover:border-[#8a2a2b]/30 transition-colors duration-500 text-left flex flex-col h-full relative group shadow-sm hover:shadow-md"
+    >
+      <div className="absolute top-4 right-6 text-[#1a362a]/5 font-serif text-[8rem] leading-none font-black select-none pointer-events-none group-hover:text-[#8a2a2b]/5 transition-colors duration-500">
+        "
+      </div>
+      
+      <div className="flex text-[#D4AF37] mb-6 relative z-10">
+        {[...Array(Math.floor(review.rating))].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+      </div>
+      <div className="mb-8 flex-grow relative z-10">
+        <p className={`font-serif italic text-[#1a362a] text-lg lg:text-xl leading-relaxed ${!expanded && isLong ? 'line-clamp-4' : ''}`}>
+          "{review.text}"
+        </p>
+        {isLong && (
+          <button 
+            onClick={() => setExpanded(!expanded)}
+            className="text-[10px] font-bold font-sans text-[#8a2a2b] uppercase tracking-widest mt-4 hover:text-[#1a362a] transition-colors focus:outline-none flex items-center"
+          >
+            <span className="w-4 h-[1px] bg-current inline-block mr-2"></span>
+            {expanded ? 'Read Less' : 'Read More'}
+          </button>
+        )}
+      </div>
+      <div className="flex items-center space-x-4 mt-auto relative z-10 border-t border-[#1a362a]/10 pt-6">
+        <div className="w-12 h-12 rounded-full bg-[#1a362a] text-[#f8f5eb] flex items-center justify-center font-bold font-serif text-lg shrink-0 border border-[#8a2a2b]/30">
+          {review.initials}
+        </div>
+        <div className="min-w-0">
+          <h4 className="font-sans font-bold text-[13px] tracking-wider uppercase text-[#1a362a] truncate">{review.name}</h4>
+          <span className="text-[10px] font-sans tracking-widest uppercase text-[#1a362a]/50">{review.date}</span>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 function ReviewsList({ reviews, placeRating }: { reviews: any[], placeRating: number }) {
   return (
     <>
-      <div className="flex items-center justify-center space-x-2 mb-16">
-        <div className="flex text-[#D4AF37]">
-          {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
+      <div className="flex flex-col items-center justify-center mb-16">
+        <div className="flex text-[#D4AF37] mb-3">
+          {[...Array(5)].map((_, i) => <Star key={i} className="w-6 h-6 fill-current" />)}
         </div>
-        <span className="font-sans font-bold">{placeRating.toFixed(1)}/5 on Google Reviews</span>
+        <span className="font-sans text-[11px] font-bold tracking-[0.2em] uppercase text-[#1a362a]/70">
+          Rated {placeRating.toFixed(1)}/5 on Google Reviews
+        </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 items-start">
         {reviews.map((review, idx) => (
-          <motion.div
-            key={review.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: idx * 0.1 }}
-            className="bg-white p-8 rounded-xl border border-[#e2d5c3] shadow-sm text-left flex flex-col"
-          >
-            <div className="flex text-[#D4AF37] mb-4">
-              {[...Array(Math.floor(review.rating))].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-            </div>
-            <p className="font-sans text-[#2c3e38]/90 mb-6 flex-grow leading-relaxed line-clamp-5">
-              "{review.text}"
-            </p>
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full bg-[#1a362a]/10 text-[#1a362a] flex items-center justify-center font-bold font-serif shrink-0">
-                {review.initials}
-              </div>
-              <div className="min-w-0">
-                <h4 className="font-sans font-bold text-sm text-[#1a362a] truncate">{review.name}</h4>
-                <span className="text-xs text-[#1a362a]/60">{review.date}</span>
-              </div>
-            </div>
-          </motion.div>
+          <ReviewCard key={review.id || idx} review={review} idx={idx} />
         ))}
       </div>
     </>
@@ -122,10 +148,14 @@ function ReviewsList({ reviews, placeRating }: { reviews: any[], placeRating: nu
 
 export default function CustomerReviews() {
   return (
-    <section className="py-24 bg-[#FFFBE3] text-[#1a362a]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="font-serif text-3xl sm:text-5xl font-bold mb-4">What Our Guests Say</h2>
-        <div className="w-16 h-1 bg-[#D4AF37] mx-auto rounded mb-6" />
+    <section className="py-24 lg:py-32 bg-[#FFFBE3] text-[#1a362a] relative border-t border-[#ECE6D9]">
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#1a362a 2px, transparent 2px)', backgroundSize: '32px 32px' }}></div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <div className="flex flex-col items-center mb-10">
+          <span className="font-sans text-[10px] tracking-widest uppercase text-[#8a2a2b] font-bold mb-3">Testimonials</span>
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-black mb-6 text-[#1a362a] uppercase tracking-wide">What Our Guests Say</h2>
+          <div className="w-16 h-[2px] bg-[#D4AF37] mx-auto rounded"></div>
+        </div>
         
         {!hasValidKey ? (
           <div className="py-12 bg-white/50 border border-[#e2d5c3] rounded-xl max-w-2xl mx-auto shadow-sm">
