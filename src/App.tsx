@@ -5,7 +5,7 @@ import Navbar from './components/Navbar';
 import StoryHero from './components/StoryHero';
 import MenuFlipbook from './components/MenuFlipbook';
 import AboutTimeline from './components/AboutTimeline';
-import Gallery from './components/Gallery';
+import CustomerReviews from './components/CustomerReviews';
 import LocationAndFooter from './components/LocationAndFooter';
 import ReservationCTA from './components/ReservationCTA';
 
@@ -48,7 +48,7 @@ export default function App() {
         <div id="whats-cooking">
           <MenuFlipbook />
         </div>
-        <Gallery />
+        <CustomerReviews />
         <ReservationCTA onReserveClick={() => scrollToSection('contact')} />
         <LocationAndFooter />
       </main>

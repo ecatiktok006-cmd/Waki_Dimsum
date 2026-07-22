@@ -1,6 +1,6 @@
 {
-  "name": "WAKi Malaysian Dim Sum",
-  "description": "A premium, modern interpretation of Malaysian dim sum craft, presenting artisanal delicacies in a sophisticated, culturally rich dining experience.",
+  "name": "WAKi Live Review App",
+  "description": "A premium, modern interpretation of Malaysian dim sum craft, presenting artisanal delicacies in a sophisticated, culturally rich dining experience. Includes live Google Reviews.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

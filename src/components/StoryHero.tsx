@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { ChevronDown, UtensilsCrossed } from 'lucide-react';
 import gatheringImg from '../assets/images/gathering.png';
-import bgImg from '../assets/images/bg.png';
+import bgImg from '../assets/images/bg2.png';
 
 interface StoryHeroProps {
   onLearnMore: () => void;
@@ -26,7 +26,7 @@ export default function StoryHero({ onLearnMore, onExploreMenu, onOrderNow }: St
     <section 
       id="home" 
       ref={containerRef}
-      className="relative min-h-[100svh] overflow-hidden bg-[#FCFCFA] flex flex-col items-center justify-start pt-32"
+      className="relative min-h-[100svh] overflow-hidden bg-[#FFFBE3] flex flex-col items-center justify-start pt-32"
     >
       {/* Background Image Layer */}
       <div 
@@ -44,7 +44,7 @@ export default function StoryHero({ onLearnMore, onExploreMenu, onOrderNow }: St
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="absolute top-1/2 left-1/2 w-[320px] h-[320px] sm:w-[450px] sm:h-[450px] md:w-[550px] md:h-[550px] rounded-full z-0 bg-[#F2F3F2] origin-center"
+        className="absolute top-1/2 left-1/2 w-[320px] h-[320px] sm:w-[450px] sm:h-[450px] md:w-[550px] md:h-[550px] rounded-full z-0 bg-[#FFFEE8] origin-center"
       />
 
       {/* Text Lockup */}

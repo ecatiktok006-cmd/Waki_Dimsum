@@ -128,14 +128,14 @@ export default function AboutTimeline() {
   const pathD = pathParts.join(' ');
 
   return (
-    <section id="about" className="pt-16 pb-24 bg-[#Fdfbf7] relative overflow-hidden" ref={containerRef}>
+    <section id="about" className="pt-16 pb-24 bg-[#FFFBE3] relative overflow-hidden" ref={containerRef}>
       
       {/* Background decor */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* Dot pattern */}
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(#061F1A 2px, transparent 2px)', backgroundSize: '32px 32px' }} />
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#Fdfbf7]/60 to-[#Fdfbf7] opacity-90" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#FFFBE3]/60 to-[#FFFBE3] opacity-90" />
       </div>
 
       {/* Header Section */}
@@ -220,7 +220,7 @@ export default function AboutTimeline() {
                   whileInView={{ scale: 1, opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2, duration: 0.5 }}
-                  className="absolute w-8 h-8 rounded-full bg-[#Fdfbf7] border-[3px] border-[#C5A059] shadow-[0_0_20px_rgba(197,160,89,0.3)] z-20 transform -translate-x-1/2 -translate-y-1/2 left-1/2 flex items-center justify-center" 
+                  className="absolute w-8 h-8 rounded-full bg-[#FFFBE3] border-[3px] border-[#C5A059] shadow-[0_0_20px_rgba(197,160,89,0.3)] z-20 transform -translate-x-1/2 -translate-y-1/2 left-1/2 flex items-center justify-center" 
                   style={{ top: node.y }}
                 >
                   <div className="w-2.5 h-2.5 bg-[#061F1A] rounded-full" />

@@ -35,11 +35,11 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
   };
 
   return (
-    <section className="relative py-32 bg-[#Fdfbf7] overflow-hidden" id="contact">
+    <section className="relative py-32 bg-[#FFFBE3] overflow-hidden" id="contact">
       <div className="absolute inset-0 z-0 pointer-events-none">
         {/* Dot pattern */}
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(#061F1A 2px, transparent 2px)', backgroundSize: '32px 32px' }} />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#Fdfbf7]/60 to-[#Fdfbf7] opacity-90 z-10" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#FFFBE3]/60 to-[#FFFBE3] opacity-90 z-10" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -206,7 +206,7 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="p-4 h-64 bg-[#Fdfbf7] flex flex-col justify-end">
+            <div className="p-4 h-64 bg-[#FFFBE3] flex flex-col justify-end">
               {/* Mock Chat */}
               <div className="space-y-3 mb-4">
                 <div className="bg-white p-3 rounded-xl rounded-tl-none shadow-sm text-sm text-[#061F1A] max-w-[85%] border border-[#ECE6D9]">
