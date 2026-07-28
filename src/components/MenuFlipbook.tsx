@@ -16,19 +16,30 @@ import heroDimSumImg from '../assets/images/hero_dim_sum_1783567454638.jpg';
 import juiceImg from '../assets/images/juice_series_1784088829410.jpg';
 import dessertImg from '../assets/images/dessert_series_1784088847264.jpg';
 
+// Newly Generated Images
+import cheeCheongFunImg from '../assets/images/chee_cheong_fun_1784880521892.jpg';
+import friedDimSumImg from '../assets/images/fried_dim_sum_1784880537552.jpg';
+import congeeSidesImg from '../assets/images/congee_sides_1784880591182.jpg';
+import nasiLemakImg from '../assets/images/nasi_lemak_chicken_rice_1784880558182.jpg';
+import wokNoodlesImg from '../assets/images/wok_noodles_1784880572372.jpg';
+import kopitiamDrinksImg from '../assets/images/kopitiam_drinks_1784880507463.jpg';
+import mocktailsImg from '../assets/images/mocktails_1784880606773.jpg';
+import frozenDimSumImg from '../assets/images/frozen_dim_sum_1784880624167.jpg';
+
 const catHeroImages: Record<string, string> = {
-  'cat-0': ingredientsImg,
-  'cat-1': platterImg,
+  'cat-0': cheeCheongFunImg,
+  'cat-1': friedDimSumImg,
   'cat-2': siewMaiImg,
   'cat-3': custardBunImg,
-  'cat-4': steamImg,
-  'cat-5': platterImg,
-  'cat-6': harGowImg,
+  'cat-4': congeeSidesImg,
+  'cat-5': nasiLemakImg,
+  'cat-6': wokNoodlesImg,
   'cat-7': heroDimSumImg,
+  'cat-8': kopitiamDrinksImg,
   'cat-9': juiceImg,
   'cat-10': dessertImg,
-  'cat-11': heroDimSumImg,
-  'cat-12': steamImg,
+  'cat-11': mocktailsImg,
+  'cat-12': frozenDimSumImg,
 };
 
 // Need to suppress TypeScript errors for HTMLFlipBook because of missing types
@@ -193,7 +204,7 @@ const DEFAULT_EXPLANATIONS: Record<string, string> = {
 };
 
 // A custom page component required by react-pageflip to use ref
-const Page = React.forwardRef<HTMLDivElement, { title?: string; subtitle?: string; description?: string; children: React.ReactNode; number: number; noPadding?: boolean; bgClass?: string }>((props, ref) => {
+const Page = React.forwardRef<HTMLDivElement, { title?: string; subtitle?: string; description?: string; image?: string; children: React.ReactNode; number: number; noPadding?: boolean; bgClass?: string }>((props, ref) => {
   return (
     <div className={`${props.bgClass || 'bg-[#f8f5eb]'} h-full w-full shadow-[inset_0_0_20px_rgba(0,0,0,0.05)] border-l border-r border-[#e2d5c3] relative overflow-hidden`} ref={ref}>
       {/* Background Texture */}
@@ -218,35 +229,42 @@ const Page = React.forwardRef<HTMLDivElement, { title?: string; subtitle?: strin
         )}
         
         <div className="relative z-10 h-full flex flex-col">
-          {props.title && (
-            <div className="mb-4">
-              <h2 className="font-serif text-[2.5rem] md:text-[3.25rem] font-black text-[#1a362a] uppercase tracking-wider leading-[0.9]" style={{ transform: 'scaleY(1.1)', transformOrigin: 'left' }}>
-                {props.title}
-              </h2>
-              {props.subtitle && (
-                <p className="font-serif italic text-[#8a2a2b] text-sm md:text-base mt-2">{props.subtitle}</p>
-              )}
-              
-              {(props.title || props.subtitle) && (
-                <div className="flex items-center my-3 w-1/3">
-                   <div className="flex-1 h-px bg-[#8a2a2b]/20" />
-                   <span className="mx-2 text-[10px] text-[#8a2a2b]">❖</span>
-                   <div className="flex-1 h-px bg-[#8a2a2b]/20" />
-                </div>
-              )}
-              
-              {props.description && (
-                 <p className="font-sans text-[#2c3e38]/80 text-xs md:text-sm max-w-[250px] leading-relaxed">{props.description}</p>
-              )}
-            </div>
-          )}
-          
-          <div className="flex-1 overflow-y-auto hide-scrollbar">
+          <div className="flex-1 overflow-y-auto hide-scrollbar pr-1">
+            {props.title && (
+              <div className="mb-4">
+                <h2 className="font-serif text-[2.5rem] md:text-[3.25rem] font-black text-[#1a362a] uppercase tracking-wider leading-[0.9]" style={{ transform: 'scaleY(1.1)', transformOrigin: 'left' }}>
+                  {props.title}
+                </h2>
+                {props.subtitle && (
+                  <p className="font-serif italic text-[#8a2a2b] text-sm md:text-base mt-2">{props.subtitle}</p>
+                )}
+                
+                {(props.title || props.subtitle) && (
+                  <div className="flex items-center my-3 w-1/3">
+                     <div className="flex-1 h-px bg-[#8a2a2b]/20" />
+                     <span className="mx-2 text-[10px] text-[#8a2a2b]">❖</span>
+                     <div className="flex-1 h-px bg-[#8a2a2b]/20" />
+                  </div>
+                )}
+                
+                {props.description && (
+                   <p className="font-sans text-[#2c3e38]/80 text-xs md:text-sm max-w-full leading-relaxed">{props.description}</p>
+                )}
+              </div>
+            )}
+            
+            {props.image && (
+              <div className="w-full h-40 md:h-56 mb-6 overflow-hidden rounded-md border-2 border-[#1a362a]/10 shadow-sm relative group">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1a362a]/30 to-transparent z-10 mix-blend-multiply" />
+                <img src={props.image} alt={props.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+              </div>
+            )}
+            
             {props.children}
           </div>
           
           {!props.noPadding && (
-            <div className="mt-auto pt-4 flex justify-between items-center font-serif text-[10px] uppercase tracking-widest font-bold text-[#8a2a2b]">
+            <div className="mt-auto pt-4 flex justify-between items-center font-serif text-[10px] uppercase tracking-widest font-bold text-[#8a2a2b] shrink-0">
               <span className="flex-1 border-t border-[#8a2a2b]/20 mr-2" />
               <span>{props.number}</span>
               <span className="flex-1 border-t border-[#8a2a2b]/20 ml-2" />
@@ -315,7 +333,7 @@ export default function MenuFlipbook() {
   
   return (
     <section id="menu" className="py-24 bg-cream-50 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1450px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         <div className="text-center mb-12">
           <motion.h2 
@@ -340,13 +358,13 @@ export default function MenuFlipbook() {
 
         <div className="flex justify-center items-center drop-shadow-2xl hidden md:flex">
           <FlipBook
-            width={550}
-            height={750}
+            width={640}
+            height={780}
             size="stretch"
-            minWidth={315}
-            maxWidth={700}
+            minWidth={350}
+            maxWidth={800}
             minHeight={400}
-            maxHeight={900}
+            maxHeight={950}
             maxShadowOpacity={0.5}
             showCover={true}
             mobileScrollSupport={true}
@@ -476,36 +494,41 @@ export default function MenuFlipbook() {
                     })}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-x-8 gap-y-0">
+                  <div className="flex flex-col space-y-4 pt-2">
                     {cat.dishes.map((dish) => {
                       const dishDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
                       return (
-                        <div key={dish.id} className="flex flex-col group relative border-b border-[#1a362a]/10 py-3 last:border-0 [&:nth-last-child(2):nth-child(odd)]:border-0">
+                        <div key={dish.id} className="flex group relative pb-3 border-b border-dashed border-[#1a362a]/20 last:border-0">
                           <div className="absolute -inset-x-3 inset-y-0 bg-[#8a2a2b]/0 group-hover:bg-[#8a2a2b]/[0.03] rounded-lg transition-colors duration-300 pointer-events-none" />
                           
-                            <div className="relative z-10 flex flex-col h-full justify-center">
-                              <div className="flex items-start justify-between mb-1 gap-2">
-                                <div className="flex items-center flex-wrap gap-1.5">
-                                  {dish.code && (
-                                    <span className="font-sans text-[#1a362a] font-bold text-[9px] tracking-wider bg-[#1a362a]/10 px-1 py-0.5 rounded-sm shadow-sm transition-colors">{dish.code}</span>
-                                  )}
-                                  <h4 className="font-serif font-bold text-[#1a362a] text-[13px] leading-snug uppercase transition-colors">{dish.name}</h4>
-                                </div>
-                              </div>
-                              
-                              {dishDesc && (
-                                 <p className="font-sans text-[#2c3e38]/70 text-[10px] leading-snug mb-2">{dishDesc}</p>
-                              )}
-                            
-                            {dish.variants && (
-                              <div className="flex flex-wrap gap-1.5 mt-1">
-                                 {dish.variants.map((v, i) => (
-                                    <span key={i} className="inline-block bg-[#1a362a]/5 px-2 py-0.5 rounded text-[9px] text-[#2c3e38]/80 font-sans">
-                                       {v.type} ({v.code})
-                                    </span>
-                                 ))}
+                          <div className="relative z-10 flex w-full gap-3">
+                            {dish.image && (
+                              <div className="w-12 h-12 shrink-0 mt-1 rounded shadow-sm border border-[#1a362a]/10 overflow-hidden">
+                                <img src={dish.image} alt={dish.name} className="w-full h-full object-cover" />
                               </div>
                             )}
+                            {dish.code && (
+                              <div className="shrink-0 mt-0.5">
+                                <span className="font-sans text-[#8a2a2b] font-bold text-[10px] tracking-widest border border-[#8a2a2b]/30 px-1.5 py-0.5 rounded shadow-sm bg-white/50">{dish.code}</span>
+                              </div>
+                            )}
+                            <div className="flex-1 flex flex-col justify-center">
+                              <h4 className="font-serif font-black text-[#1a362a] text-[14px] leading-snug uppercase">{dish.name}</h4>
+                              
+                              {dishDesc && (
+                                 <p className="font-sans text-[#2c3e38]/80 text-[11px] leading-relaxed mt-1 italic">{dishDesc}</p>
+                              )}
+                            
+                              {dish.variants && (
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                   {dish.variants.map((v, i) => (
+                                      <span key={i} className="inline-flex items-center gap-1 bg-[#1a362a]/5 px-2 py-0.5 rounded border border-[#1a362a]/10 text-[9px] text-[#2c3e38] font-sans uppercase tracking-wider font-bold">
+                                         {v.type} <span className="text-[#8a2a2b]">{v.code}</span>
+                                      </span>
+                                   ))}
+                                </div>
+                              )}
+                            </div>
                           </div>
                       </div>
                     );
@@ -672,7 +695,7 @@ export default function MenuFlipbook() {
                           {cat.name}
                         </h3>
                         {cat.subtitle && <p className="font-serif italic text-[#8a2a2b] text-xs sm:text-sm mt-3">{cat.subtitle}</p>}
-                        {cat.description && <p className="font-sans text-[#2c3e38]/80 text-[11px] sm:text-xs mt-3 max-w-[320px] mx-auto leading-relaxed">{cat.description}</p>}
+                        {cat.description && <p className="font-sans text-[#2c3e38]/80 text-[11px] sm:text-xs mt-3 max-w-xl mx-auto leading-relaxed">{cat.description}</p>}
                       </div>
                       
                       {isHomeEdition && (
@@ -720,33 +743,38 @@ export default function MenuFlipbook() {
                           })}
                         </div>
                       ) : (
-                        <div className="flex flex-col space-y-1 bg-white/40 backdrop-blur-sm p-3 sm:p-4 rounded-xl border border-[#1a362a]/5">
+                        <div className="flex flex-col space-y-3 bg-white/40 backdrop-blur-sm p-4 rounded-xl border border-[#1a362a]/5">
                           {cat.dishes.map((dish) => {
                             const dishDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
                             return (
-                              <div key={dish.id} className="flex flex-col border-b border-[#1a362a]/5 py-3.5 last:border-0">
-                                <div className="flex items-start justify-between mb-1 gap-3">
-                                  <div className="flex items-center flex-wrap gap-1.5">
-                                    {dish.code && (
-                                      <span className="font-sans text-[#1a362a] font-extrabold text-[9px] tracking-wider bg-[#1a362a]/10 px-1.5 py-0.5 rounded-sm">{dish.code}</span>
-                                    )}
-                                    <h4 className="font-serif font-bold text-[#1a362a] text-[13px] sm:text-[14px] leading-tight uppercase">{dish.name}</h4>
+                              <div key={dish.id} className="flex gap-3 border-b border-dashed border-[#1a362a]/15 pb-3 last:border-0 last:pb-0">
+                                {dish.image && (
+                                  <div className="w-16 h-16 shrink-0 mt-0.5 rounded shadow border border-[#1a362a]/10 overflow-hidden">
+                                    <img src={dish.image} alt={dish.name} className="w-full h-full object-cover" />
                                   </div>
+                                )}
+                                {dish.code && (
+                                  <div className="shrink-0 mt-0.5">
+                                    <span className="font-sans text-[#8a2a2b] font-bold text-[10px] sm:text-[11px] tracking-widest border border-[#8a2a2b]/30 px-1.5 py-0.5 rounded shadow-sm bg-white/50">{dish.code}</span>
+                                  </div>
+                                )}
+                                <div className="flex-1">
+                                  <h4 className="font-serif font-black text-[#1a362a] text-[14px] sm:text-[15px] leading-tight uppercase">{dish.name}</h4>
+                                  
+                                  {dishDesc && (
+                                    <p className="font-sans text-[#2c3e38]/85 text-[12px] sm:text-[13px] leading-relaxed mt-1 italic">{dishDesc}</p>
+                                  )}
+                                  
+                                  {dish.variants && (
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                      {dish.variants.map((v, i) => (
+                                        <span key={i} className="inline-flex items-center gap-1 bg-[#1a362a]/5 px-2 py-0.5 rounded border border-[#1a362a]/10 text-[10px] text-[#2c3e38] font-sans uppercase tracking-wider font-bold">
+                                          {v.type} <span className="text-[#8a2a2b]">{v.code}</span>
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
-                                
-                                {dishDesc && (
-                                  <p className="font-sans text-[#2c3e38]/85 text-[11px] sm:text-[12px] leading-relaxed mb-1.5">{dishDesc}</p>
-                                )}
-                                
-                                {dish.variants && (
-                                  <div className="flex flex-wrap gap-1.5 mt-1">
-                                    {dish.variants.map((v, i) => (
-                                      <span key={i} className="inline-block bg-[#1a362a]/10 px-2 py-0.5 rounded text-[9px] sm:text-[10px] text-[#1a362a] font-sans font-medium">
-                                        {v.type} ({v.code})
-                                      </span>
-                                    ))}
-                                  </div>
-                                )}
                               </div>
                             );
                           })}

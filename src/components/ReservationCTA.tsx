@@ -12,17 +12,32 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
   const [isSuccess, setIsSuccess] = useState(false);
   const [showAIChat, setShowAIChat] = useState(false);
 
-  // Mock Supabase Submission & Webhook Trigger
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate Supabase insert delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Format the date to be more readable
+    const formattedDate = new Date(formData.date).toLocaleString('en-US', {
+      weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+    });
+
+    // Construct the WhatsApp message for the admin
+    const adminPhone = "60195333827"; // Admin phone number
+    const text = `Hi WAKi Admin! I would like to make a reservation:
+
+*Reservation Details:*
+• Name: ${formData.name}
+• Contact: ${formData.phone}
+• Date: ${formattedDate}
+• Guests: ${formData.guests}
+
+Please confirm if this table is available.`;
     
-    // In a real app, this would be:
-    // const { data, error } = await supabase.from('bookings').insert([formData]);
-    // Then an Edge Function would listen to DB inserts and ping WhatsApp API
+    const encodedText = encodeURIComponent(text);
+    const waUrl = `https://wa.me/${adminPhone}?text=${encodedText}`;
+    
+    // Open WhatsApp in a new tab
+    window.open(waUrl, '_blank');
     
     setIsSubmitting(false);
     setIsSuccess(true);

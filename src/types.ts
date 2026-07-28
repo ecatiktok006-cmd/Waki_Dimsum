@@ -26,6 +26,7 @@ export interface Category {
   name: string;
   subtitle?: string;
   description?: string;
+  image?: string;
   dishes: Dish[];
   addOns?: { name: string; price: number }[];
 }
