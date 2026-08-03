@@ -15,6 +15,16 @@ import ingredientsImg from '../assets/images/about_ingredients_1783567499817.jpg
 import heroDimSumImg from '../assets/images/hero_dim_sum_1783567454638.jpg';
 import juiceImg from '../assets/images/juice_series_1784088829410.jpg';
 import dessertImg from '../assets/images/dessert_series_1784088847264.jpg';
+import top10BgImg from '../assets/images/top10_bg.png';
+import img01 from '../assets/images/Chicken dumpling.png';
+import img02 from '../assets/images/Cheongfan.png';
+import img03 from '../assets/images/Cheesy Prawn Roll.png';
+import img04 from '../assets/images/Golden Custard bun.png';
+import img05 from '../assets/images/Stir Radish Cake.png';
+import img06 from '../assets/images/Prawn Spring Roll.png';
+import img07 from '../assets/images/Spicy Sauce dumpling.png';
+import img08 from '../assets/images/Signature Fried Noodle.png';
+import img09 from '../assets/images/Buttermilk Chicken Rice.png';
 
 // Newly Generated Images
 import cheeCheongFunImg from '../assets/images/chee_cheong_fun_1784880521892.jpg';
@@ -330,6 +340,7 @@ const CoverPageContent = () => (
 export default function MenuFlipbook() {
   const flipBookRef = useRef(null);
   const [selectedMobileTab, setSelectedMobileTab] = React.useState<string>('cover');
+  const [hoveredFoodIdx, setHoveredFoodIdx] = React.useState<number | null>(null);
   
   return (
     <section id="menu" className="py-24 bg-cream-50 relative overflow-hidden">
@@ -383,49 +394,121 @@ export default function MenuFlipbook() {
             {/* Inner Cover (Most Loved) */}
             <Page number={1} noPadding={true}>
               <div className="h-full w-full relative bg-[#f8f5eb] overflow-hidden">
-                <img src={mostLovedImg} alt="Most Loved at Waki" className="absolute inset-0 w-full h-full object-cover opacity-90" />
+                <img src={top10BgImg} alt="Most Loved at Waki" className="absolute inset-0 w-full h-full object-fill pointer-events-none" />
                 
-                {/* Text Overlay */}
-                <div className="relative z-10 pt-10 px-6 flex flex-col items-center text-center">
-                   <h2 className="font-serif text-[2.5rem] md:text-[3.5rem] font-black text-[#f8f5eb] uppercase tracking-wide leading-[0.9] mt-2 mb-2 drop-shadow-md" style={{ transform: 'scaleY(1.1)' }}>
-                     MOST LOVED<br />AT WAKI
-                   </h2>
-                   
-                   <div className="flex items-center space-x-2 my-3">
-                     <span className="text-[#8a2a2b] text-xs">❖</span>
-                     <p className="font-serif italic text-[#f8f5eb] text-base md:text-xl drop-shadow">The Favorites Everyone Comes Back For</p>
-                     <span className="text-[#8a2a2b] text-xs">❖</span>
-                   </div>
-
-                   <div className="text-[#8a2a2b] mb-4">❖</div>
-                   
-                   <p className="font-sans text-[#f8f5eb]/90 text-xs md:text-sm max-w-sm leading-relaxed px-4 drop-shadow">
-                     Our signature handmade dim sum and comfort dishes loved by families, office crowds, and regulars every day.
-                   </p>
-                </div>
-
-                {/* Legend */}
-                <div className="absolute top-6 right-6 border border-[#f8f5eb]/30 p-2.5 bg-[#1a362a]/80 backdrop-blur-sm rounded-sm text-left">
-                  <div className="flex items-center mb-1.5">
-                    <span className="mr-2 text-xl leading-none">🥇</span>
-                    <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-[#f8f5eb] font-bold">Most Ordered</span>
-                  </div>
-                  <div className="flex items-center mb-1.5">
-                    <span className="mr-2 text-[#8a2a2b] font-serif font-black italic text-lg leading-none">//</span>
-                    <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-[#f8f5eb] font-bold">Chef Recommend</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="mr-2 text-xl leading-none">🔥</span>
-                    <span className="font-sans text-[9px] uppercase tracking-[0.15em] text-[#f8f5eb] font-bold">Crispy Favorite</span>
-                  </div>
-                </div>
-
-                {/* Bottom text */}
-                <div className="absolute bottom-6 left-0 w-full text-center px-6">
-                  <div className="inline-block border border-[#1a362a]/30 px-6 py-1.5 bg-[#f8f5eb]/90 backdrop-blur-sm">
-                    <p className="font-sans text-[#1a362a] text-xs md:text-sm tracking-wide font-medium">Handmade with care. Steamed fresh. Shared with love.</p>
-                  </div>
-                </div>
+                {/* Overlaid Food Images */}
+                {[
+                  { 
+                    img: img01, 
+                    imgCls: 'top-[32.5%] left-[28.5%] w-[32%]', 
+                    labelCls: 'top-[25%] left-[10%]', 
+                    num: '01', icon: '🥇', 
+                    title: 'Chicken & Shrimp\nDumplings', code: 'D01' 
+                  },
+                  { 
+                    img: img02, 
+                    imgCls: 'top-[26%] right-[-2%] w-[48%]', 
+                    labelCls: 'top-[22%] right-[8%]', 
+                    num: '02', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                    title: 'Chee Cheong Fun\nWith Prawn Spring Roll', code: 'C01' 
+                  },
+                  { 
+                    img: img03, 
+                    imgCls: 'top-[39%] left-[4%] w-[45%]', 
+                    labelCls: 'top-[35%] left-[8%]', 
+                    num: '03', icon: '🔥', 
+                    title: 'Cheesy\nPrawn Roll', code: 'F17' 
+                  },
+                  { 
+                    img: img04, 
+                    imgCls: 'top-[53%] left-[43%] w-[24%]', 
+                    labelCls: 'top-[47%] right-[10%]', 
+                    num: '04', icon: '🥇', 
+                    title: 'Golden\nCustard Bun', code: 'B02' 
+                  },
+                  { 
+                    img: img05, 
+                    imgCls: 'top-[56%] left-[-3%] w-[44%]', 
+                    labelCls: 'top-[52%] left-[2%]', 
+                    num: '05', icon: '🔥', 
+                    title: 'Stir Fried\nRadish Cake', code: 'L03' 
+                  },
+                  { 
+                    img: img06, 
+                    imgCls: 'top-[52%] right-[-2%] w-[42%]', 
+                    labelCls: 'top-[52%] right-[6%]', 
+                    num: '06', icon: '🔥', 
+                    title: 'Prawn\nSpring Roll', code: 'F06' 
+                  },
+                  { 
+                    img: img07, 
+                    imgCls: 'top-[74%] left-[38%] w-[24%]', 
+                    labelCls: 'top-[66%] left-[42%]', 
+                    num: '07', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                    title: 'Spicy Sauce\nDumpling', code: 'D12' 
+                  },
+                  { 
+                    img: img08, 
+                    imgCls: 'top-[72%] left-[2%] w-[36%]', 
+                    labelCls: 'top-[62%] left-[6%]', 
+                    num: '08', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                    title: 'Signature\nFried Noodle', code: 'M02' 
+                  },
+                  { 
+                    img: img09, 
+                    imgCls: 'top-[71%] right-[2%] w-[35%]', 
+                    labelCls: 'top-[63%] right-[8%]', 
+                    num: '09', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                    title: 'Butter Milk\nChicken Rice', code: 'R04' 
+                  },
+                ].map((item, idx) => {
+                  const isHovered = hoveredFoodIdx === idx;
+                  return (
+                    <div 
+                      key={idx} 
+                      className="absolute inset-0 pointer-events-none transition-all duration-300"
+                      style={{ zIndex: isHovered ? 100 : 10 }}
+                    >
+                      {/* Food Image */}
+                      <div 
+                        className={`absolute ${item.imgCls} pointer-events-auto`}
+                        onMouseEnter={() => setHoveredFoodIdx(idx)}
+                        onMouseLeave={() => setHoveredFoodIdx(null)}
+                      >
+                        <img 
+                          src={item.img} 
+                          alt={`Top 10 Dish ${idx + 1}`} 
+                          className={`w-full h-auto object-contain transition-transform duration-300 ease-out cursor-pointer origin-center drop-shadow-xl ${
+                            isHovered ? 'scale-[1.08]' : 'scale-100'
+                          }`}
+                        />
+                      </div>
+                      
+                      {/* Text Label Popup */}
+                      <div 
+                        className={`absolute ${item.labelCls} z-40 flex flex-col pointer-events-none bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-white/50 min-w-[150px] transition-all duration-400 ease-out ${
+                          isHovered 
+                            ? 'opacity-100 translate-y-0 scale-100' 
+                            : 'opacity-0 translate-y-3 scale-95'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="font-serif text-3xl md:text-4xl text-[#1a362a] font-medium tracking-tight leading-none">{item.num}</span>
+                          <span className={`text-lg md:text-xl -mt-1 ${item.iconCls || ''}`}>{item.icon}</span>
+                        </div>
+                        <div className="w-6 h-[2px] bg-[#d4af37] mb-2.5"></div>
+                        <p className="font-sans text-[#1a362a] text-[12px] md:text-sm font-semibold leading-snug whitespace-pre-line mb-3">
+                          {item.title}
+                        </p>
+                        <div className="mt-auto">
+                          <span className="inline-block bg-[#1a362a] px-2.5 py-1 text-[9px] md:text-[10px] font-bold text-white tracking-[0.2em] uppercase rounded">
+                            {item.code}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </Page>
 

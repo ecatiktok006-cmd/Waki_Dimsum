@@ -7,7 +7,7 @@ interface ReservationCTAProps {
 }
 
 export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) {
-  const [formData, setFormData] = useState({ name: '', phone: '', date: '', guests: '2' });
+  const [formData, setFormData] = useState({ name: '', phone: '', date: '', guests: '2', specialRequest: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [showAIChat, setShowAIChat] = useState(false);
@@ -16,22 +16,35 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Format the date to be more readable
-    const formattedDate = new Date(formData.date).toLocaleString('en-US', {
-      weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
-    });
+    // Format the date & time safely
+    let formattedDate = '-';
+    let formattedTime = '-';
+    if (formData.date) {
+      const dateObj = new Date(formData.date);
+      if (!isNaN(dateObj.getTime())) {
+        formattedDate = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        formattedTime = dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      } else {
+        formattedDate = formData.date;
+      }
+    }
 
     // Construct the WhatsApp message for the admin
     const adminPhone = "60195333827"; // Admin phone number
-    const text = `Hi WAKi Admin! I would like to make a reservation:
+    const text = `Hi 😊
 
-*Reservation Details:*
-• Name: ${formData.name}
-• Contact: ${formData.phone}
-• Date: ${formattedDate}
-• Guests: ${formData.guests}
+Thank you for your interest in WAKI DIMSUM.
 
-Please confirm if this table is available.`;
+Kindly fill in the details below. Our team will check table availability and get back to you as soon as possible.
+
+👤 Name: ${formData.name || '-'}
+📞 Contact Number: ${formData.phone || '-'}
+📅 Reservation Date: ${formattedDate}
+🕒 Preferred Time: ${formattedTime}
+👥 Number of Pax: ${formData.guests || '-'}
+📝 Special Request (Optional): ${formData.specialRequest || '-'}
+
+⚠️ *Please note that submitting this form does NOT confirm your reservation. Your booking is only confirmed after you receive a confirmation message from our team.*`;
     
     const encodedText = encodeURIComponent(text);
     const waUrl = `https://wa.me/${adminPhone}?text=${encodedText}`;
@@ -45,7 +58,7 @@ Please confirm if this table is available.`;
     // Reset after showing success
     setTimeout(() => {
       setIsSuccess(false);
-      setFormData({ name: '', phone: '', date: '', guests: '2' });
+      setFormData({ name: '', phone: '', date: '', guests: '2', specialRequest: '' });
     }, 4000);
   };
 
@@ -179,6 +192,17 @@ Please confirm if this table is available.`;
                   <option value="5+">5+ People (We will call you)</option>
                 </select>
               </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#061F1A]/60 uppercase tracking-widest mb-1">Special Request (Optional)</label>
+              <input 
+                type="text"
+                value={formData.specialRequest}
+                onChange={e => setFormData({...formData, specialRequest: e.target.value})}
+                className="w-full bg-[#F9F6F0] border border-[#ECE6D9] rounded-sm px-4 py-3 text-[#061F1A] focus:outline-none focus:border-[#C5A059] focus:bg-white transition-colors"
+                placeholder="High chair, dietary restrictions, indoor seating, etc."
+              />
             </div>
 
             <button
