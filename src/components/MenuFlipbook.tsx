@@ -396,6 +396,13 @@ export default function MenuFlipbook() {
               <div className="h-full w-full relative bg-[#f8f5eb] overflow-hidden">
                 <img src={top10BgImg} alt="Most Loved at Waki" className="absolute inset-0 w-full h-full object-fill pointer-events-none" />
                 
+                {/* Title */}
+                <div className="absolute top-10 left-0 right-0 text-center z-20 pointer-events-none flex flex-col items-center">
+                  <h2 className="font-serif text-[#1a362a] text-4xl md:text-5xl font-black uppercase tracking-widest drop-shadow-md">Most Loved</h2>
+                  <h3 className="font-serif text-[#8a2a2b] text-2xl md:text-3xl font-black uppercase tracking-[0.25em] drop-shadow-sm mt-1 mb-3 italic">At Waki</h3>
+                  <div className="w-16 h-1 bg-[#1a362a]/20 rounded-full"></div>
+                </div>
+
                 {/* Overlaid Food Images */}
                 {[
                   { 
