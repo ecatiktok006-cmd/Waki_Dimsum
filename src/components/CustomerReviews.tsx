@@ -1,21 +1,12 @@
 import { useEffect, useState } from 'react';
-import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { Star } from 'lucide-react';
 import { motion } from 'motion/react';
 import { REVIEWS as FALLBACK_REVIEWS } from '../data';
-
-const API_KEY =
-  process.env.GOOGLE_MAPS_PLATFORM_KEY ||
-  (import.meta as any).env?.VITE_GOOGLE_MAPS_PLATFORM_KEY ||
-  (globalThis as any).GOOGLE_MAPS_PLATFORM_KEY ||
-  '';
-const hasValidKey = Boolean(API_KEY) && API_KEY !== 'YOUR_API_KEY';
 
 // Using the user's provided place ID
 const DEFAULT_PLACE_ID = 'ChIJu5fjyZRNzDERhlMsF4oloAQ';
 
 function ReviewsFetcher() {
-  const placesLib = useMapsLibrary('places');
   const [reviews, setReviews] = useState<any[]>([]);
   const [placeRating, setPlaceRating] = useState<number>(4.8);
   const [loading, setLoading] = useState(true);
@@ -24,54 +15,44 @@ function ReviewsFetcher() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!placesLib) return;
-
     async function fetchReviews() {
       try {
-        const place = new placesLib.Place({ id: DEFAULT_PLACE_ID });
-        await place.fetchFields({ fields: ['reviews', 'rating'] });
+        const res = await fetch(`/api/reviews?placeId=${DEFAULT_PLACE_ID}`);
         
-        if (place.rating) setPlaceRating(place.rating);
-        if (place.reviews) {
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `HTTP error ${res.status}`);
+        }
+
+        const data = await res.json();
+        
+        if (data.rating) setPlaceRating(data.rating);
+        if (data.reviews) {
           // Sort by highest rating or just take first 3
-          const sortedReviews = [...place.reviews].sort((a, b) => b.rating - a.rating);
+          const sortedReviews = [...data.reviews].sort((a: any, b: any) => b.rating - a.rating);
           setReviews(sortedReviews.slice(0, 3));
         }
         setLoading(false);
       } catch (err: any) {
-        console.error("Failed to fetch Google Reviews:", err);
         setError(true);
-        if (err.message?.includes('PERMISSION_DENIED') || err.message?.includes('blocked')) {
-          setErrorMsg("Places API (New) is not enabled for your API key. Please go to Google Cloud Console, find your project, search for 'Places API (New)' and enable it.");
+        if (err.message?.includes('missing') || err.message?.includes('configuration')) {
+          setErrorMsg("Google Maps API key is missing on the server. Please configure it in your Vercel project environment variables.");
         } else {
-          setErrorMsg("Failed to load reviews. Please check your API key configuration.");
+          setErrorMsg("Failed to load reviews. Please check your API key and billing configuration.");
         }
         setLoading(false);
       }
     }
 
     fetchReviews();
-  }, [placesLib]);
-
-  if (error && errorMsg) {
-    return (
-      <div className="py-8 bg-red-50 border border-red-200 rounded-xl max-w-2xl mx-auto shadow-sm text-red-800">
-        <h3 className="font-serif text-lg font-bold mb-2">Google Maps API Error</h3>
-        <p className="font-sans text-sm mb-4 px-8">{errorMsg}</p>
-        <p className="font-sans text-xs italic opacity-80">Showing fallback reviews below.</p>
-        <div className="mt-6 pt-6 border-t border-red-200/50">
-          <ReviewsList reviews={FALLBACK_REVIEWS} placeRating={4.8} />
-        </div>
-      </div>
-    );
-  }
+  }, []);
 
   const displayReviews = (reviews.length > 0 && !error) ? reviews.map(r => ({
     id: r.name,
     name: r.authorAttribution?.displayName || 'Google User',
     initials: r.authorAttribution?.displayName?.substring(0, 1) || 'G',
     rating: r.rating || 5,
-    text: r.text || '',
+    text: r.text?.text || r.text || '', // handle Google Places API v1 text format
     date: r.publishTime ? new Date(r.publishTime).toLocaleDateString() : 'Recent',
   })) : FALLBACK_REVIEWS;
 
@@ -157,30 +138,7 @@ export default function CustomerReviews() {
           <div className="w-16 h-[2px] bg-[#D4AF37] mx-auto rounded"></div>
         </div>
         
-        {!hasValidKey ? (
-          <div className="py-12 bg-white/50 border border-[#e2d5c3] rounded-xl max-w-2xl mx-auto shadow-sm">
-            <h3 className="font-serif text-xl font-bold mb-4 text-[#8a2a2b]">Google Maps API Key Required</h3>
-            <p className="font-sans text-sm mb-4 px-8 text-[#2c3e38]">
-              To fetch live reviews from Google Maps, you need to add your Google Maps Platform API key.
-            </p>
-            <ol className="text-left max-w-md mx-auto font-sans text-sm space-y-2 mb-6 text-[#1a362a]">
-              <li><strong>1.</strong> Get an API Key from Google Cloud Console.</li>
-              <li><strong>2.</strong> Open <strong>Settings</strong> (⚙️) in the top-right corner.</li>
-              <li><strong>3.</strong> Select <strong>Secrets</strong>.</li>
-              <li><strong>4.</strong> Add <code>GOOGLE_MAPS_PLATFORM_KEY</code> with your key.</li>
-            </ol>
-            <p className="font-sans text-xs opacity-70 italic">
-              Showing fallback reviews preview below...
-            </p>
-            <div className="mt-8 border-t border-[#e2d5c3] pt-8 px-4">
-               <ReviewsList reviews={FALLBACK_REVIEWS} placeRating={4.8} />
-            </div>
-          </div>
-        ) : (
-          <APIProvider apiKey={API_KEY} version="weekly">
-            <ReviewsFetcher />
-          </APIProvider>
-        )}
+        <ReviewsFetcher />
       </div>
     </section>
   );
