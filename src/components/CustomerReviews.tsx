@@ -28,8 +28,12 @@ function ReviewsFetcher() {
         
         if (data.rating) setPlaceRating(data.rating);
         if (data.reviews) {
-          // Sort by highest rating or just take first 3
-          const sortedReviews = [...data.reviews].sort((a: any, b: any) => b.rating - a.rating);
+          // Sort by newest
+          const sortedReviews = [...data.reviews].sort((a: any, b: any) => {
+            const timeA = new Date(a.publishTime || 0).getTime();
+            const timeB = new Date(b.publishTime || 0).getTime();
+            return timeB - timeA;
+          });
           setReviews(sortedReviews.slice(0, 3));
         }
         setLoading(false);

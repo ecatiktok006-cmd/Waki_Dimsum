@@ -66,7 +66,7 @@ export default function LocationAndFooter() {
               </div>
               <h4 className="font-serif font-bold text-[#061F1A] text-2xl mb-1">Opening Hours</h4>
               <p className="text-[#C5A059] font-sans font-bold text-xs uppercase tracking-widest mb-6">
-                Open Daily <span className="text-[#061F1A]/20 font-normal">|</span> Closed Wednesdays
+                Open Mon, Tue & Thu–Sun <span className="text-[#061F1A]/20 font-normal">|</span> Closed Wednesday
               </p>
               
               <div className="space-y-4 flex-1">

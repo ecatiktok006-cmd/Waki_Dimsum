@@ -66,40 +66,30 @@ export default function StoryHero({ onLearnMore, onExploreMenu, onOrderNow }: St
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="font-serif text-[4rem] sm:text-[6rem] md:text-[7.5rem] font-bold text-[#D4AF37] tracking-tight leading-none z-10"
+            className="font-serif text-[5rem] sm:text-[7rem] md:text-[9rem] font-bold text-[#D4AF37] tracking-tight leading-none z-10"
             style={{ textShadow: '1px 1px 0px rgba(255,255,255,1)' }}
           >
-            Authentic
+            Waki
           </motion.h1>
           
           <motion.div 
             initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
             animate={{ opacity: 1, scale: 1, rotate: -3 }}
             transition={{ duration: 0.8, delay: 0.6, type: "spring", bounce: 0.4 }}
-            className="font-script text-[5rem] sm:text-[8rem] md:text-[11rem] text-[#1A1A1A] leading-none absolute top-[25%] sm:top-[28%] z-20 w-[120%] cursor-default select-none origin-center"
+            className="font-script text-[4.5rem] sm:text-[7rem] md:text-[9.5rem] text-[#1A1A1A] leading-none absolute top-[55%] sm:top-[60%] z-20 w-[120%] cursor-default select-none origin-center"
             style={{ transform: 'rotate(-3deg)' }}
           >
             <span className="inline-block">
-              Malaysian
+              Dimsum
             </span>
           </motion.div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="font-serif text-[4rem] sm:text-[6rem] md:text-[7.5rem] font-bold text-[#D4AF37] tracking-tight leading-none mt-8 sm:mt-12 md:mt-16 z-10"
-            style={{ textShadow: '1px 1px 0px rgba(255,255,255,1)' }}
-          >
-            Flavours
-          </motion.h1>
         </div>
 
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1 }}
-          className="mt-12 sm:mt-16 z-20 flex items-center justify-center space-x-3 sm:space-x-6 w-full px-4"
+          className="mt-20 sm:mt-24 md:mt-32 z-20 flex items-center justify-center space-x-3 sm:space-x-6 w-full px-4"
         >
           {/* Left Line */}
           <div className="h-[1.5px] bg-jade-900/20 w-10 sm:w-16 md:w-24" />

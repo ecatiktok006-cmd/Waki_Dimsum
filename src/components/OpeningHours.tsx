@@ -64,8 +64,11 @@ export default function OpeningHours() {
                 <span className="font-display text-xs tracking-wider text-gold-400 uppercase font-semibold">
                   Serving Days
                 </span>
-                <p className="font-serif font-bold text-2xl text-cream-50">
-                  Monday to Sunday
+                <p className="font-serif font-bold text-2xl text-cream-50 whitespace-nowrap">
+                  Mon, Tue, Thu-Sun
+                </p>
+                <p className="font-sans text-sm text-gold-400 font-medium">
+                  Closed on Wednesday
                 </p>
               </div>
 

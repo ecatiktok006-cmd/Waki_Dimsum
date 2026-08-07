@@ -11,6 +11,21 @@ export default function ReservationCTA({ onReserveClick }: ReservationCTAProps) 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [showAIChat, setShowAIChat] = useState(false);
+  const [dateError, setDateError] = useState('');
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedValue = e.target.value;
+    if (selectedValue) {
+      const selectedDate = new Date(selectedValue);
+      if (selectedDate.getDay() === 3) { // 3 is Wednesday
+        setDateError('We are closed every Wednesday. Please select another date.');
+        setFormData({ ...formData, date: '' });
+        return;
+      }
+    }
+    setDateError('');
+    setFormData({ ...formData, date: selectedValue });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,15 +98,21 @@ Kindly fill in the details below. Our team will check table availability and get
             Ready for Fresh Handmade <span className="text-[#C5A059] italic font-script rotate-[-2deg] inline-block ml-2 text-5xl sm:text-6xl lg:text-7xl">Dim Sum?</span>
           </motion.h2>
 
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="font-sans text-lg text-[#061F1A]/80 mb-10 max-w-md font-medium"
+            className="font-sans text-[#061F1A]/80 mb-10 max-w-lg space-y-4"
           >
-            Skip the queue. Book your table now and we'll instantly confirm your reservation via WhatsApp.
-          </motion.p>
+            <p className="text-xl font-bold text-[#061F1A]">Submit a Reservation Request</p>
+            <p className="font-medium text-sm leading-relaxed text-[#061F1A]/80">
+              Our team will review your request and confirm the availability via WhatsApp. Your reservation is only confirmed after you receive our confirmation message.
+            </p>
+            <p className="font-medium text-sm leading-relaxed text-[#061F1A]/80">
+              Weekend & Public Holiday reservations require pre-order and deposit. Your table is not confirmed until both requirements are completed.
+            </p>
+          </motion.div>
           
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -174,9 +195,10 @@ Kindly fill in the details below. Our team will check table availability and get
                   type="datetime-local" 
                   required
                   value={formData.date}
-                  onChange={e => setFormData({...formData, date: e.target.value})}
-                  className="w-full bg-[#F9F6F0] border border-[#ECE6D9] rounded-sm px-4 py-3 text-[#061F1A] focus:outline-none focus:border-[#C5A059] focus:bg-white transition-colors" 
+                  onChange={handleDateChange}
+                  className={`w-full bg-[#F9F6F0] border ${dateError ? 'border-red-500 text-red-500' : 'border-[#ECE6D9] text-[#061F1A]'} rounded-sm px-4 py-3 focus:outline-none focus:border-[#C5A059] focus:bg-white transition-colors`} 
                 />
+                {dateError && <p className="text-red-500 text-xs font-medium mt-1">{dateError}</p>}
               </div>
               <div>
                 <label className="block text-xs font-bold text-[#061F1A]/60 uppercase tracking-widest mb-1">Guests</label>
@@ -189,7 +211,12 @@ Kindly fill in the details below. Our team will check table availability and get
                   <option value="2">2 People</option>
                   <option value="3">3 People</option>
                   <option value="4">4 People</option>
-                  <option value="5+">5+ People (We will call you)</option>
+                  <option value="5">5 People</option>
+                  <option value="6">6 People</option>
+                  <option value="7">7 People</option>
+                  <option value="8">8 People</option>
+                  <option value="9">9 People</option>
+                  <option value="10+">10+ People (We will WhatsApp you)</option>
                 </select>
               </div>
             </div>
