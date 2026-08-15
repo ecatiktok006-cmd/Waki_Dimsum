@@ -449,21 +449,21 @@ export default function MenuFlipbook() {
                   },
                   { 
                     img: img07, 
-                    imgCls: 'top-[74%] left-[38%] w-[24%]', 
+                    imgCls: 'top-[63%] left-[42%] w-[24%]', 
                     labelCls: 'top-[66%] left-[42%]', 
                     num: '07', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
                     title: 'Spicy Sauce\nDumpling', code: 'D12' 
                   },
                   { 
                     img: img08, 
-                    imgCls: 'top-[72%] left-[2%] w-[36%]', 
-                    labelCls: 'top-[62%] left-[6%]', 
+                    imgCls: 'top-[75%] left-[27%] w-[36%]', 
+                    labelCls: 'top-[56%] left-[6%]', 
                     num: '08', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
                     title: 'Signature\nFried Noodle', code: 'M02' 
                   },
                   { 
                     img: img09, 
-                    imgCls: 'top-[71%] right-[2%] w-[35%]', 
+                    imgCls: 'top-[71%] right-[4%] w-[35%]', 
                     labelCls: 'top-[63%] right-[8%]', 
                     num: '09', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
                     title: 'Butter Milk\nChicken Rice', code: 'R04' 
