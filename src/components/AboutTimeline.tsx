@@ -154,10 +154,6 @@ export default function AboutTimeline() {
             <span className="md:whitespace-nowrap text-center">The Dimsum Journey of</span>
             <div className="flex items-center justify-center gap-3 mt-2">
               <span className="text-jade-900 italic font-medium">WAKi</span> 
-              <span className="bg-red-800 text-white text-sm md:text-base px-2 py-1 rounded-sm shadow-md inline-flex flex-col items-center justify-center transform -translate-y-1 md:-translate-y-2">
-                <span className="font-bold">点</span>
-                <span className="font-bold">心</span>
-              </span>
               <span className="text-xs uppercase tracking-widest text-jade-900/60 font-sans font-bold pt-2 md:pt-4">Dim Sum</span>
             </div>
           </h2>

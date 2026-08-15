@@ -100,7 +100,7 @@ export default function StoryHero({ onLearnMore, onExploreMenu, onOrderNow }: St
             <span className="w-2 h-2 rounded-full bg-[#D4AF37] mx-3 sm:mx-4 inline-block" />
             <span>HALAL</span>
             <span className="w-2 h-2 rounded-full bg-[#D4AF37] mx-3 sm:mx-4 inline-block" />
-            <span>FRESHLY STEAM</span>
+            <span>FRESHLY STEAMED</span>
           </p>
           
           {/* Right Line */}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Youtube, Star, Check, MessageSquare } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Star, Check, MessageSquare } from 'lucide-react';
 
 export default function LocationAndFooter() {
   const [rating, setRating] = useState<number>(5);
@@ -191,37 +191,58 @@ export default function LocationAndFooter() {
         </div>
 
         {/* Footer Links & Copyright */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-12 border-t border-[#ECE6D9]">
-          <div>
-            <div className="flex items-center space-x-2 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-12 border-t border-[#ECE6D9]">
+          <div className="flex flex-col space-y-6">
+            <div className="flex items-center space-x-2">
               <div className="w-8 h-8 rounded-full border-2 border-[#061F1A] bg-transparent flex items-center justify-center text-[#061F1A] font-serif font-black text-xs">W</div>
-              <span className="font-serif font-black text-[#061F1A] tracking-wider uppercase">WAKi</span>
+              <span className="font-serif font-black text-[#061F1A] tracking-wider uppercase">WAKI DIMSUM</span>
             </div>
-            <p className="text-[#061F1A]/60 text-sm leading-relaxed font-medium">Authentic Malaysian Dim Sum.</p>
+            <div className="space-y-2 flex flex-col">
+              <p className="font-montserrat font-semibold uppercase tracking-wider text-[#355B4C] text-xs md:text-[13px] lg:text-sm leading-relaxed">
+                HANDMADE HALAL DIM SUM,<br />
+                FRESHLY STEAMED DAILY.
+              </p>
+              <p className="font-cormorant italic text-[#6A4B3B] text-[11px] xs:text-[13px] sm:text-[15px] md:text-base lg:text-lg whitespace-nowrap leading-none pt-0.5">
+                “Great Taste Unites The Differences Among Us.”
+              </p>
+            </div>
+            <div className="pt-2">
+              <h4 className="font-bold mb-3 text-[#061F1A] text-xs uppercase tracking-widest">FOLLOW US</h4>
+              <div className="flex space-x-4">
+                <a href="https://www.facebook.com/WAKiDimSums" target="_blank" rel="noopener noreferrer" className="text-[#061F1A]/70 hover:text-[#061F1A] hover:bg-[#F9F6F0] transition-colors bg-white p-2.5 rounded-full border border-[#ECE6D9] shadow-sm"><Facebook className="w-4 h-4" /></a>
+                <a href="https://www.instagram.com/wakidimsum/" target="_blank" rel="noopener noreferrer" className="text-[#061F1A]/70 hover:text-[#061F1A] hover:bg-[#F9F6F0] transition-colors bg-white p-2.5 rounded-full border border-[#ECE6D9] shadow-sm"><Instagram className="w-4 h-4" /></a>
+                <a href="https://www.tiktok.com/@wakidimsum?lang=en" target="_blank" rel="noopener noreferrer" className="text-[#061F1A]/70 hover:text-[#061F1A] hover:bg-[#F9F6F0] transition-colors bg-white p-2.5 rounded-full border border-[#ECE6D9] shadow-sm">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
 
           <div>
-            <h4 className="font-bold mb-4 text-[#061F1A] text-xs uppercase tracking-widest">Quick Links</h4>
+            <h4 className="font-bold mb-6 text-[#061F1A] text-xs uppercase tracking-widest">OPENING HOURS</h4>
+            <div className="space-y-3 text-sm text-[#061F1A]/70 font-medium leading-relaxed">
+              <p className="font-bold text-[#061F1A]">Mon, Tue & Thu–Sun</p>
+              <p>10:00 AM–3:00 PM · 5:00 PM–9:00 PM</p>
+              <p className="text-red-700 font-semibold">Closed on Wednesday</p>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="font-bold mb-6 text-[#061F1A] text-xs uppercase tracking-widest">QUICK LINKS</h4>
             <ul className="space-y-3 text-sm text-[#061F1A]/70 font-medium">
               <li><a href="#home" className="hover:text-[#C5A059] transition-colors">Home</a></li>
-              <li><a href="#signature-menu" className="hover:text-[#C5A059] transition-colors">Signature Menu</a></li>
+              <li><a href="#about" className="hover:text-[#C5A059] transition-colors">Our Story</a></li>
               <li><a href="#menu" className="hover:text-[#C5A059] transition-colors">Full Menu</a></li>
               <li><a href="#contact" className="hover:text-[#C5A059] transition-colors">Reservations</a></li>
+              <li><a href="#contact" className="hover:text-[#C5A059] transition-colors">Contact & Location</a></li>
             </ul>
           </div>
+        </div>
 
-          <div>
-            <h4 className="font-bold mb-4 text-[#061F1A] text-xs uppercase tracking-widest">Follow Us</h4>
-            <div className="flex space-x-4">
-              <a href="#" className="text-[#061F1A]/70 hover:text-[#061F1A] hover:bg-[#F9F6F0] transition-colors bg-white p-2.5 rounded-full border border-[#ECE6D9] shadow-sm"><Facebook className="w-4 h-4" /></a>
-              <a href="#" className="text-[#061F1A]/70 hover:text-[#061F1A] hover:bg-[#F9F6F0] transition-colors bg-white p-2.5 rounded-full border border-[#ECE6D9] shadow-sm"><Instagram className="w-4 h-4" /></a>
-              <a href="#" className="text-[#061F1A]/70 hover:text-[#061F1A] hover:bg-[#F9F6F0] transition-colors bg-white p-2.5 rounded-full border border-[#ECE6D9] shadow-sm"><Youtube className="w-4 h-4" /></a>
-            </div>
-          </div>
-
-          <div>
-            <p className="text-sm text-[#061F1A]/50 mb-2 font-medium">© {new Date().getFullYear()} WAKi Malaysian Dim Sum. All Rights Reserved.</p>
-          </div>
+        <div className="mt-16 pt-8 border-t border-[#ECE6D9] flex flex-col md:flex-row justify-between items-center text-sm text-[#061F1A]/50 font-medium">
+          <p>© 2026 WAKI DIMSUM. All Rights Reserved.</p>
         </div>
 
       </div>
