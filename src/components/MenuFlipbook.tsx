@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import HTMLFlipBook from 'react-pageflip';
 import { MENU_CATEGORIES } from '../data';
 import logoImg from '../assets/images/logo.png';
@@ -7,7 +7,7 @@ import bgImg from '../assets/images/bg.png';
 import menuFrontPageImg from '../assets/images/menu_front_page.png';
 import mostLovedImg from '../assets/images/mostloved.png';
 import harGowImg from '../assets/images/dish_har_gow_1783567535786.jpg';
-import siewMaiImg from '../assets/images/dish_siew_mai_1783567518247.jpg';
+import siewMaiImg from '../assets/images/steamy_edition_cover_prawn_siew_mai_1786859999733.jpg';
 import custardBunImg from '../assets/images/dish_custard_bun_1783567550286.jpg';
 import steamImg from '../assets/images/about_steam_1783567485399.jpg';
 import platterImg from '../assets/images/about_platter_1783567469486.jpg';
@@ -27,7 +27,7 @@ import img08 from '../assets/images/Signature Fried Noodle.png';
 import img09 from '../assets/images/Buttermilk Chicken Rice.png';
 
 // Newly Generated Images
-import cheeCheongFunImg from '../assets/images/chee_cheong_fun_1784880521892.jpg';
+import cheeCheongFunImg from '../assets/images/chee_cheong_fun_new_1786798471175.jpg';
 import friedDimSumImg from '../assets/images/fried_dim_sum_1784880537552.jpg';
 import congeeSidesImg from '../assets/images/congee_sides_1784880591182.jpg';
 import nasiLemakImg from '../assets/images/nasi_lemak_chicken_rice_1784880558182.jpg';
@@ -37,7 +37,6 @@ import mocktailsImg from '../assets/images/mocktails_1784880606773.jpg';
 import frozenDimSumImg from '../assets/images/frozen_dim_sum_1784880624167.jpg';
 
 const catHeroImages: Record<string, string> = {
-  'cat-0': cheeCheongFunImg,
   'cat-1': friedDimSumImg,
   'cat-2': siewMaiImg,
   'cat-3': custardBunImg,
@@ -90,10 +89,10 @@ const SteamAnimation = () => (
 
 const DEFAULT_EXPLANATIONS: Record<string, string> = {
   // SILKY JOURNAL (cat-0)
-  "Signature Steamed Rice Noodle With Prawn Spring Roll": "Crispy prawn spring rolls wrapped in silky-smooth steamed rice noodles.",
-  "Steamed Rice Noodle With Prawn": "Succulent whole prawns nestled in delicate, freshly steamed rice noodle rolls.",
-  "Steamed Rice Noodle With Chicken": "Savory tender chicken chunks wrapped in warm, soft steamed rice noodles.",
-  "Steamed Rice Noodle": "Classic plain silky steamed rice noodles served with sweet-savory soy sauce.",
+  "Chee Cheong Fun With Prawn Spring Roll": "Handmade halal silky chee cheong fun paired with crispy fresh prawn beancurd roll.",
+  "Chee Cheong Fun With Prawn": "Handmade halal smooth rice rolls filled with juicy fresh prawns and savoury sauce.",
+  "Chee Cheong Fun With Chicken Char-Siu": "Handmade halal chee cheong fun filled with sweet savoury chicken char-siu.",
+  "Chee Cheong Fun": "Handmade halal silky smooth rice rolls served with fragrant special soy sauce.",
 
   // GOLDEN CRISP (cat-1)
   "Cheesy Prawn Roll": "Succulent prawns and melted gooey cheese fried inside crispy bean curd skin.",
@@ -114,103 +113,94 @@ const DEFAULT_EXPLANATIONS: Record<string, string> = {
   "Spicy Sauce Dumpling": "Juicy steamed dumplings drenched in an aromatic, spicy house-made chili oil.",
 
   // THE BAO TIMES (cat-3)
-  "Golden Custard Bun": "Warm, fluffy steamed bun filled with smooth, sweet salted egg custard.",
-  "BBQ Chicken Bun": "Classic soft bun stuffed with tender, sweet, and savory barbecued chicken.",
-  "Shanghai Soup Dumpling": "Delicate wrappers holding a rich, savory broth and seasoned minced chicken.",
-  "Vegetarian Charcoal Red Bean Bun": "Unique charcoal-infused steamed buns with sweet, earthy red bean filling.",
-  "Vegetarian Yam Bun": "Soft, pillowy-white steamed buns loaded with aromatic sweet purple yam paste.",
-  "Salted Egg Lotus Bun": "Fragrant steamed buns featuring a rich combination of lotus paste and salted egg.",
+  "Shanghai Soup Dumpling 上海小笼包": "Handmade halal soup dumplings bursting with rich savoury broth and juicy filling.",
+  "Golden Custard Bun 流沙包": "Handmade halal fluffy buns with rich molten salted egg custard centre.",
+  "Charcoal Red Bean Bun 豆沙包": "Handmade halal charcoal buns filled with smooth sweet red bean paste.",
+  "Chicken Char-Siu Bun 密汁鸡叉烧包": "Handmade halal fluffy buns packed with sweet savoury chicken char-siu filling.",
+  "Yam Bun 芋香包": "Handmade halal steamed buns with creamy chef yam filling.",
+  "Salty Egg Lotus Bun 咸蛋莲蓉包": "Handmade halal fluffy buns filled with smooth lotus paste and rich salted egg flavour.",
 
   // THE SIDE STORY (cat-4)
-  "Stir Fried Radish Cake": "Savory radish cake wok-fried to smoky perfection with crunchy bean sprouts and egg.",
-  "Chicken Glutinous Rice": "Sticky, savory glutinous rice steamed with tender marinated chicken and mushrooms.",
-  "Chicken Porridge": "Warm, silky rice porridge topped with shredded chicken and fragrant sesame oil.",
+  "Chicken Glutinous Rice 糯米鸡": "Handmade halal glutinous rice steamed with tender chicken and savoury seasoning.",
+  "Chicken Porridge 鸡丝粥": "Warm comforting handmade halal porridge topped with tender shredded chicken.",
+  "Stir Fried Radish Cake 酱炒萝卜糕": "Handmade halal radish cake wok-fried with crunchy bean sprouts and our homemade dried shrimp sambal for an extra fragrant smoky flavour.",
 
   // THE RICE PRESS (cat-5)
-  "Butter Milk Chicken Rice": "Crispy chicken cubes drenched in a rich, buttery, and slightly sweet cream sauce.",
-  "Kampung Fried Rice": "Smoky village-style fried rice tossed with traditional anchovies and fiery chilies.",
-  "Fried Chicken Nasi Lemak": "Fragrant coconut rice served with crunchy fried chicken, spicy sambal, and hardboiled egg.",
-  "Dried Chilli Chicken Rice": "Stir-fried chicken tossed with sweet-and-spicy dried chilies, served with rice.",
-  "Sweet And Sour Chicken Rice": "Tender chicken in a perfectly balanced tangy-sweet glaze with peppers and onions.",
-  "Butter Milk Salted Egg Chicken Rice": "Crispy fried chicken tossed in a savory buttermilk sauce enhanced with rich salted egg yolk.",
-  "Sambal Chicken Rice": "Zesty, robust chicken wok-fried in our signature spicy house sambal.",
-  "Black Pepper Chicken Rice": "Sizzling wok-fried chicken in a bold, aromatic black pepper sauce with rice.",
-  "Curry Buttermilk Chicken Rice": "Golden chicken breast slices simmered in a creamy, mildly spiced curry-infused buttermilk.",
-  "Chinese Fried Rice": "Wok-fried rice with fluffy eggs, sweet corn, peas, and savory seasoned chicken.",
-  "Tomyam Fried Rice": "Fragrant fried rice packed with hot, sour, and aromatic Thai Tom Yum spices.",
-  "Nasi Lemak Biasa": "Traditional fragrant coconut rice served with sweet-spicy sambal, anchovies, and peanuts.",
-  "Nasi Lemak With Sambal Prawn": "Coconut-infused rice paired with succulent prawns simmered in sweet-spicy sambal.",
+  "Dried Chilli Chicken Rice 宫保鸡饭": "Halal chicken stir-fried with dried chilli and savoury soy sauce.",
+  "Sweet And Sour Chicken Rice 酸甜咕噜鸡饭": "Halal crispy chicken coated in sweet and sour glaze.",
+  "Butter Milk Salted Egg Chicken Rice 咸蛋奶油鸡饭": "Halal crispy chicken covered in rich, creamy salted egg butter milk.",
+  "Butter Milk Chicken Rice 奶油鸡饭": "Halal crispy chicken tossed in smooth and fragrant butter milk sauce.",
+  "Sambal Chicken Rice 参巴鸡炒饭": "Halal spicy sambal chicken packed with rich local seasonings and robust flavor.",
+  "Black Pepper Chicken Rice 黑胡椒鸡饭": "Halal chicken stir-fried with aromatic black pepper sauce.",
+  "Curry Butter Milk Chicken Rice 咖喱奶油鸡饭": "Halal crispy chicken combined with creamy butter milk and aromatic curry flavour.",
+  "Kampung Fried Rice 马来家乡炒饭": "Halal kampung fried rice cooked with anchovies and spicy bird's eye chilies.",
+  "Chinese Fried Rice 扬州炒饭": "Halal classic Yang Zhou fried rice wok-tossed with fresh eggs and vegetables.",
+  "Tom Yam Fried Rice 东炎炒饭": "Halal fried rice infused with spicy and sour tom yam flavors.",
 
   // THE WOK DISPATCH (cat-6)
-  "Penang Fried Keow Teow": "Flat rice noodles wok-fried over intense heat with fresh prawns and savory chives.",
-  "Cantonese Style Yee Mee": "Crisp Yee Mee noodles drowned in a silky, rich egg gravy with chicken and vegetables.",
-  "Cantonese Style Keow Teow": "Velvety flat noodles smothered in a hot, luxurious Cantonese-style egg flower gravy.",
-  "Cantonese Style Yuan Yang": "A texturally rich blend of crispy vermicelli and flat noodles in savory egg gravy.",
-  "Signature Fried Noodle": "House-special noodles tossed in high-heat wok action with signature soy sauce.",
-  "Cantonese Style Meehon": "Fine rice vermicelli stir-fried and covered in delicious, comforting egg gravy.",
+  "Penang Fried Keow Teow 槟城炒果条": "Halal Penang-style fried kuey teow.",
+  "Signature Fried Noodle 招牌炒面": "Halal signature fried noodles stir-fried with fresh ingredients and rich sauce.",
+  "Cantonese Style Meehon 广府米粉": "Halal silky rice vermicelli served with smooth egg gravy.",
+  "Cantonese Style YeeMee 广府伊面": "Halal yee mee cooked with smooth egg gravy.",
+  "Cantonese Style Keow Teow 广府果条": "Halal flat rice noodles served with silky egg gravy.",
+  "Cantonese Style Yuan Yang 广府鸳鸯": "Halal combination of fried mee hoon and flat rice noodles in rich egg gravy.",
 
   // THE TEA EDITION (cat-7)
-  "Poh Lei": "A dark, rich, and earthy fermented black tea perfect for digesting hearty meals.",
-  "Tie Guan Yin": "Fragrant, premium oolong tea with refreshing floral notes and a smooth finish.",
-  "Tea King": "A balanced, full-bodied premium tea that offers a highly aromatic brew.",
-  "Kok Poh": "A cooling, herbal tea blend that is light and incredibly refreshing in warm weather.",
-  "Jasmine Tea": "Gentle, soothing green tea naturally infused with fragrant jasmine blossoms.",
-  "Chrysanthemum Tea": "A mild, naturally sweet, caffeine-free herbal infusion made from whole yellow flowers.",
-  "Own Tea": "Bring your own premium loose leaves and we will prepare hot water for your table.",
+  "Poh Lei 普洱茶": "Traditional Chinese tea with rich earthy aroma, perfect for enjoying with dim sum.",
+  "Tie Guan Yin 铁观音": "Premium Chinese tea with floral aroma and smooth roasted aftertaste.",
+  "Tea King 茶王": "Rich and balanced premium Chinese tea with smooth traditional flavour.",
+  "Kok Poh Tea 菊堡": "Light and soothing tea with refreshing chrysanthemum aroma.",
+  "Jasmine Tea 香片": "Fragrant jasmine tea with floral aroma and light smooth taste.",
+  "Chrysanthemum Tea 菊花": "Classic chrysanthemum tea with light floral sweetness and soothing flavour.",
 
   // THE KOPITIAM POST (cat-8)
-  "100 Plus": "Refreshing, carbonated local isotonic drink to quench your thirst.",
-  "Coca-Cola": "The classic, world-famous sparkling soda served ice-cold.",
-  "Soya": "Sweet, creamy, and nourishing chilled local soybean milk.",
-  "Mineral Water": "Fresh, clean bottled mineral water for pure hydration.",
-  "Kopi": "Traditional, robust local coffee brewed with sweet condensed milk.",
-  "Kopi O": "Classic bold, sweet black coffee served hot or iced.",
-  "Teh": "Fragrant local black tea brewed with sweet condensed milk.",
-  "Teh O": "Sweet, aromatic black tea served hot or cold.",
-  "Cham": "The perfect local hybrid blending rich coffee and fragrant milk tea.",
-  "Milo": "Nostalgic, rich, and comforting chocolate malt drink.",
-  "Sirap": "Sweet, fragrant rose syrup drink, beautifully pink and chilled.",
-  "Sirap Limau": "Tangy local lime juice combined with sweet rose syrup.",
-  "Sirap Limau Bandung": "Rich, creamy milk tea combined with sweet rose syrup and fresh lime.",
-  "Honey Lemon": "Soothing natural honey paired with fresh, zesty lemon juice.",
-  "Lemon Tea": "Brewed black tea infused with refreshing slices of real lemon.",
-  "Chinese Tea": "Light, warm, or cold Chinese tea to cleanse the palate.",
-  "Sky Juice": "Crisp, plain chilled drinking water.",
+  "Kopi": "Rich and aromatic local coffee with a smooth traditional kopitiam taste.",
+  "Kopi O": "Classic black local coffee with deep roasted aroma and stronger coffee flavour.",
+  "Teh": "Smooth and creamy milk tea with comforting traditional flavour.",
+  "Teh O": "Classic black tea with fragrant aroma and smooth finish.",
+  "Teh O Limau": "Warm black tea mixed with fresh lime for a refreshing citrusy flavour.",
+  "Cham": "Perfect mix of coffee and tea for a rich and balanced local favourite.",
+  "Milo": "Rich and chocolatey Milo served warm for a comforting treat.",
+  "Sirap": "Sweet rosy syrup drink with nostalgic Malaysian flavour.",
+  "Sirap Limau": "Sweet sirap mixed with fresh lime for a balanced fruity taste.",
+  "Sirap Bandung": "Creamy rose syrup milk drink with smooth and fragrant sweetness.",
+  "Honey Lemon": "Warm honey lemon drink that’s soothing, fragrant and refreshing.",
+  "Lemon Tea": "Fragrant tea combined with fresh lemon for a smooth citrusy taste.",
+  "Organic Soya": "Warm and comforting organic soy drink with a smooth, creamy texture. Available with no added sugar upon request.",
 
   // JUICE SERIES (cat-9)
-  "Green Apple": "Freshly pressed green apples, yielding a crisp, sweet, and tart taste.",
-  "Orange": "Sweet, vibrant, and packed with vitamin C, freshly squeezed.",
-  "Carrot Milk": "Creamy sweet beverage blending fresh, nutritious carrot juice and milk.",
-  "Lemon": "Zesty and refreshing ice-cold drink from real squeezed lemons.",
-  "Limau": "Sharp and incredibly refreshing juice made from fresh local calamansi lime.",
+  "Green Apple": "Refreshing green apple juice with sweet and slightly tangy flavour.",
+  "Orange": "Fresh orange juice bursting with natural citrus sweetness.",
+  "Carrot Milk": "Smooth carrot milk juice with creamy texture and natural sweetness.",
+  "Lemon": "Refreshing lemon juice with tangy citrus flavour.",
+  "Limau": "Classic Malaysian lime juice that’s sweet, tangy and cooling.",
 
   // DESSERT SERIES (cat-10)
-  "Longan Sea Coconut": "A cooling, traditional sweet soup loaded with juicy longans and sea coconut.",
-  "Bamboo Cane": "Traditionally boiled herbal drink featuring sweet bamboo cane and water chestnut.",
+  "Longan Sea Coconut 龙眼海底椰": "Refreshing chilled longan dessert with sea coconut for a light and soothing treat. Perfect after a meal.",
+  "Bamboo Cane": "Refreshing sugar cane drink with naturally sweet and cooling flavour.",
 
   // THE MOCKTAIL TIMES (cat-11)
-  "Pink Guava Soda": "Sparkling soda blended with tropical pink guava fruit nectar.",
-  "Peach Lemon Fizz": "Crisp, bubbly soda infused with sweet peach puree and zesty fresh lemon.",
-  "Lychee Lime Soda": "Effervescent soda packed with plump, sweet lychees and a splash of lime.",
-  "Tropical Passion Cooler": "An exotic, refreshing sparkling blend of passion fruit and tangy citrus.",
-  "Watermelon Mint Sparkler": "A refreshing ice-cold sparkler combining sweet watermelon juice and fresh mint.",
-  "Blue Ocean Citrus": "A visually striking citrus soda with a splash of blue curacao and fresh lime.",
+  "Spring Blush (Pink Guava Sparkling)": "A refreshing pink guava sparkling drink with a gentle citrus finish, topped with mint and lemon.",
+  "Summer Blue (Tropical Blue Sparkling)": "A bright tropical blue sparkling drink with a zesty lime twist, served with fresh mint and lime.",
+  "Autumn Fruit Glow (Fruit Punch Sparkling)": "A fruity and refreshing sparkling blend with a light citrus finish, topped with mint and lemon.",
+  "Winter Mint (Mint Lime Iced Tea)": "A cooling blend of lime, tea and refreshing mint, finished with a hint of fresh lime.",
+  "Four Seasons Fruit Tea (Fruit Punch Lemon Tea)": "A refreshing fruit punch tea with a gentle citrus flavour and a bright lemon finish.",
 
-  // FROZEN FRESH (cat-12)
-  "Chicken & Shrimp Dumplings (12 pcs)": "Premium chicken & shrimp siew mai, frozen to seal in freshness for home steaming.",
-  "Shrimp Dumplings (9 pcs)": "Classic crystal har gao, frozen and ready to steam at your convenience at home.",
-  "Salted Egg Dumplings (12 pcs)": "Rich siew mai dumplings with savory salted egg yolk, perfect for quick steaming.",
-  "Coriander Dumplings (9 pcs)": "Fragrant coriander and chicken dumplings, frozen fresh for your home dining.",
-  "Seaweed Roll (9 pcs)": "Savory seafood rolls wrapped in seaweed, great for steaming or light pan-frying.",
-  "Original Dumplings (12 pcs)": "Our signature chicken dumplings, frozen fresh in a family-friendly pack.",
-  "Tom Yum Dumplings (12 pcs)": "Tantalizing dumplings infused with hot and sour Tom Yum herbs, frozen fresh.",
-  "Black Pepper Dumplings (12 pcs)": "Savory chicken dumplings spiced with cracked black pepper, ready to steam.",
-  "Chicken Glutinous Rice (2 pcs)": "Classic Lo Mai Gai sticky rice with chicken and mushrooms, pre-cooked and frozen.",
-  "Golden Custard Bun (6 pcs)": "Fluffy bao buns filled with rich golden custard, perfect for quick home breakfasts.",
-  "Charcoal Red Bean Bun (6 pcs)": "Soft black charcoal buns with silky sweet red bean paste, ready to steam.",
-  "BBQ Chicken Bun (6 pcs)": "Warm, fluffy buns stuffed with succulent sweet BBQ chicken filling, frozen fresh.",
-  "Yam Bun (6 pcs)": "Fluffy white buns packed with creamy, aromatic purple yam paste, ready to steam.",
-  "Salted Egg Lotus Bun (6 pcs)": "Delectable sweet lotus paste and savory salted egg yolk in a soft bun."
+  // THE HOME EDITION (FROZEN) (cat-12)
+  "Chicken & Prawn Dumpling 鲜虾烧卖(12PCS)": "Frozen handmade dumplings filled with tender chicken and juicy prawns.",
+  "Shrimp Dumpling 鲜折蒸虾饺 (9PCS)": "Frozen handmade premium crystal shrimp dumplings.",
+  "Salted Egg Dumpling 咸蛋卖 (12 PCS)": "Frozen handmade chicken siew mai with rich, savoury salted egg yolk.",
+  "Coriander Dumpling 香茜饺 (9 PCS)": "Frozen handmade chicken dumplings packed with aromatic coriander.",
+  "Seaweed Roll 日式紫菜卷 (9 PCS)": "Frozen handmade savoury chicken rolls wrapped in seaweed.",
+  "Original Chicken Dumpling 原味烧卖 (12 PCS)": "Frozen handmade signature classic chicken siew mai.",
+  "Tom Yum Dumpling 东炎烧卖 (12 PCS)": "Frozen handmade chicken siew mai infused with spicy and tangy Tom Yum flavours.",
+  "Black Pepper Dumpling 黑胡椒烧卖 (12 PCS)": "Frozen handmade chicken siew mai spiced with aromatic black pepper.",
+  "Chicken Glutinous Rice 糯米鸡 (2PCS)": "Frozen handmade traditional Lo Mai Gai glutinous rice with chicken.",
+  "Golden Custard Bun 流沙包 (6 PCS)": "Frozen handmade sweet buns filled with rich, flowing golden egg custard.",
+  "Charcoal Red Bean Bun 豆沙包 (6 PCS)": "Frozen handmade soft charcoal buns with a sweet and smooth red bean filling.",
+  "BBQ Chicken Bun 密汁鸡叉烧包 (6 PCS)": "Frozen handmade fluffy buns stuffed with sweet and savoury BBQ chicken.",
+  "Yam Bun 芋香包 (6 PCS)": "Frozen handmade soft buns filled with sweet, fragrant taro yam paste.",
+  "Salted Egg Lotus Bun 咸蛋莲蓉包 (6 PCS)": "Frozen handmade sweet lotus seed paste buns with savoury salted egg yolk."
 };
 
 // A custom page component required by react-pageflip to use ref
@@ -290,36 +280,38 @@ const CoverPageContent = () => (
   <div className="relative z-10 flex flex-col h-full w-full">
     {/* Top Bar */}
     <div className="flex justify-between items-center text-[#1a362a]/80 font-sans text-[10px] tracking-widest uppercase mb-2 shrink-0">
-      <span>Kuala Lumpur, Malaysia</span>
-      <span>Est. 2024</span>
+      <span>KUALA LUMPUR, MALAYSIA</span>
+      <span className="opacity-0">Est. 2024</span>
     </div>
-    <div className="border-t border-b border-[#1a362a] h-1 mb-6 shrink-0"></div>
+    <div className="border-t border-b border-[#1a362a] h-[1.5px] mb-6 shrink-0"></div>
 
-    {/* THE CULINARY JOURNAL */}
-    <h1 className="font-serif text-[2.2rem] md:text-[2.8rem] font-black text-[#1a362a] text-center leading-none mb-6 shrink-0" style={{ transform: 'scaleY(1.1)' }}>
-      THE CULINARY JOURNAL
+    {/* THE MENU */}
+    <h1 className="font-serif text-[2.5rem] md:text-[3.2rem] font-black text-[#1a362a] text-center leading-none mb-6 shrink-0 tracking-[0.05em]" style={{ transform: 'scaleY(1.1)' }}>
+      THE MENU
     </h1>
 
     {/* Info Bar */}
-    <div className="border-t border-b border-dashed border-[#8a2a2b]/40 py-4 mb-4 flex items-center justify-between shrink-0">
-      <p className="font-sans text-[9px] md:text-[10px] uppercase tracking-widest text-[#1a362a] text-left w-1/3 leading-tight">
-        Handmade Halal<br/>Dim Sum,
+    <div className="py-2 mb-4 flex items-center justify-between shrink-0">
+      <p className="font-sans text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-[#1a362a]/90 text-center w-[35%] leading-relaxed border-t border-b border-dotted border-[#1a362a]/40 py-2">
+        HANDMADE HALAL<br/>DIM SUM,
       </p>
-      <div className="flex-1 flex justify-center w-1/3">
+      <div className="flex-1 flex justify-center w-[30%]">
         <div className="w-10 h-10 md:w-12 md:h-12 bg-[#1a362a] rounded-full p-1 border border-[#8a2a2b]/30 flex items-center justify-center">
            <img src={logoImg} alt="WAKi Dim Sum" className="w-full h-full object-contain brightness-200" />
         </div>
       </div>
-      <p className="font-sans text-[9px] md:text-[10px] uppercase tracking-widest text-[#1a362a] text-right w-1/3 leading-tight">
-        Served<br/>Fresh Daily
+      <p className="font-sans text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-[#1a362a]/90 text-center w-[35%] leading-relaxed border-t border-b border-dotted border-[#1a362a]/40 py-2">
+        SERVED<br/>FRESH DAILY
       </p>
     </div>
 
     {/* Ribbon Text */}
     <div className="text-center mb-4 shrink-0 flex items-center justify-center space-x-2">
-       <span className="text-[#8a2a2b] text-[10px]">❖</span>
-       <p className="font-serif italic text-[#1a362a] text-sm md:text-base">Modern Nostalgia on Every Plate</p>
-       <span className="text-[#8a2a2b] text-[10px]">❖</span>
+       <span className="text-[#8a2a2b]/80 text-[10px] transform rotate-45">✦</span>
+       <p className="font-cormorant italic text-[#1a362a] text-sm md:text-[17px] font-semibold leading-none">
+         Handmade Halal Dim Sum, Served Fresh Daily
+       </p>
+       <span className="text-[#8a2a2b]/80 text-[10px] transform rotate-45">✦</span>
     </div>
 
     {/* Main Photo */}
@@ -393,13 +385,24 @@ export default function MenuFlipbook() {
 
             {/* Inner Cover (Most Loved) */}
             <Page number={1} noPadding={true}>
-              <div className="h-full w-full relative bg-[#f8f5eb] overflow-hidden">
-                <img src={top10BgImg} alt="Most Loved at Waki" className="absolute inset-0 w-full h-full object-fill pointer-events-none" />
+              <div className="h-full w-full relative overflow-hidden">
+                {/* Standard Borders to match the rest of the book */}
+                <div className="absolute top-3 left-3 right-3 bottom-3 border border-[#1a362a]/10 pointer-events-none z-0" />
+                <div className="absolute top-2 left-2 right-2 bottom-2 border border-[#1a362a]/5 pointer-events-none z-0" />
+                
+                {/* Corner decorations */}
+                <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-[#8a2a2b]/60 z-0" />
+                <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-[#8a2a2b]/60 z-0" />
+                <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-[#8a2a2b]/60 z-0" />
+                <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-[#8a2a2b]/60 z-0" />
+                
+                {/* Subtle warm tabletop grounding layer to support all dishes */}
+                <div className="absolute bottom-4 left-4 right-4 h-[75%] bg-gradient-to-t from-[#2a1a08]/[0.025] via-transparent to-transparent pointer-events-none rounded-xl z-0" />
                 
                 {/* Title */}
                 <div className="absolute top-10 left-0 right-0 text-center z-20 pointer-events-none flex flex-col items-center">
-                  <h2 className="font-serif text-[#1a362a] text-4xl md:text-5xl font-black uppercase tracking-widest drop-shadow-md">Most Loved</h2>
-                  <h3 className="font-serif text-[#8a2a2b] text-2xl md:text-3xl font-black uppercase tracking-[0.25em] drop-shadow-sm mt-1 mb-3 italic">At Waki</h3>
+                  <h2 className="font-serif text-[#1a362a] text-4xl md:text-5xl font-black uppercase tracking-widest drop-shadow-sm">Must Try</h2>
+                  <h3 className="font-serif text-[#8a2a2b] text-2xl md:text-3xl font-black uppercase tracking-[0.15em] drop-shadow-sm mt-1 mb-3 italic">In Waki DimSum</h3>
                   <div className="w-16 h-1 bg-[#1a362a]/20 rounded-full"></div>
                 </div>
 
@@ -407,66 +410,75 @@ export default function MenuFlipbook() {
                 {[
                   { 
                     img: img01, 
-                    imgCls: 'top-[32.5%] left-[28.5%] w-[32%]', 
-                    labelCls: 'top-[25%] left-[10%]', 
+                    imgCls: 'top-[22%] left-[36%] w-[28%]', 
+                    labelCls: 'top-[18%] left-[28%]', 
                     num: '01', icon: '🥇', 
-                    title: 'Chicken & Shrimp\nDumplings', code: 'D01' 
+                    title: 'Chicken & Shrimp\nDumplings', code: 'D01',
+                    shadowCls: 'bottom-[1%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/25 blur-[6px] rounded-full scale-y-[0.45]'
                   },
                   { 
                     img: img02, 
-                    imgCls: 'top-[26%] right-[-2%] w-[48%]', 
-                    labelCls: 'top-[22%] right-[8%]', 
+                    imgCls: 'top-[21%] right-[5%] w-[35%]', 
+                    labelCls: 'top-[18%] right-[22%]', 
                     num: '02', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
-                    title: 'Chee Cheong Fun\nWith Prawn Spring Roll', code: 'C01' 
+                    title: 'Chee Cheong Fun\nWith Prawn Spring Roll', code: 'C01',
+                    shadowCls: 'bottom-[2%] left-[15%] right-[25%] h-[12px] bg-[#22160a]/20 blur-[5px] rounded-full scale-y-[0.35]'
                   },
                   { 
                     img: img03, 
-                    imgCls: 'top-[39%] left-[4%] w-[45%]', 
-                    labelCls: 'top-[35%] left-[8%]', 
+                    imgCls: 'top-[25%] left-[5%] w-[33%]', 
+                    labelCls: 'top-[20%] left-[12%]', 
                     num: '03', icon: '🔥', 
-                    title: 'Cheesy\nPrawn Roll', code: 'F17' 
+                    title: 'Cheesy\nPrawn Roll', code: 'F17',
+                    shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[12px] bg-[#22160a]/20 blur-[5px] rounded-full scale-y-[0.35]'
                   },
                   { 
                     img: img04, 
-                    imgCls: 'top-[53%] left-[43%] w-[24%]', 
-                    labelCls: 'top-[47%] right-[10%]', 
+                    imgCls: 'top-[44%] left-[39%] w-[22%]', 
+                    labelCls: 'top-[38%] left-[32%]', 
                     num: '04', icon: '🥇', 
-                    title: 'Golden\nCustard Bun', code: 'B02' 
+                    title: 'Golden\nCustard Bun', code: 'B02',
+                    shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[10px] bg-[#22160a]/20 blur-[4px] rounded-full scale-y-[0.4]'
                   },
                   { 
                     img: img05, 
-                    imgCls: 'top-[56%] left-[-3%] w-[44%]', 
-                    labelCls: 'top-[52%] left-[2%]', 
+                    imgCls: 'top-[46%] left-[4%] w-[33%]', 
+                    labelCls: 'top-[40%] left-[12%]', 
                     num: '05', icon: '🔥', 
-                    title: 'Stir Fried\nRadish Cake', code: 'L03' 
+                    title: 'Stir Fried\nRadish Cake', code: 'L03',
+                    shadowCls: 'bottom-[3%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
                   },
                   { 
                     img: img06, 
-                    imgCls: 'top-[52%] right-[-2%] w-[42%]', 
-                    labelCls: 'top-[52%] right-[6%]', 
+                    imgCls: 'top-[45%] right-[4%] w-[32%]', 
+                    labelCls: 'top-[39%] right-[12%]', 
                     num: '06', icon: '🔥', 
-                    title: 'Prawn\nSpring Roll', code: 'F06' 
+                    title: 'Prawn\nSpring Roll', code: 'F06',
+                    shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
                   },
                   { 
                     img: img07, 
-                    imgCls: 'top-[63%] left-[42%] w-[24%]', 
-                    labelCls: 'top-[66%] left-[42%]', 
+                    imgCls: 'top-[56%] left-[49%] w-[20%]', 
+                    labelCls: 'top-[50%] left-[58%]', 
                     num: '07', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
-                    title: 'Spicy Sauce\nDumpling', code: 'D12' 
+                    title: 'Spicy Sauce\nDumpling', code: 'D12',
+                    shadowCls: 'bottom-[1%] left-[15%] right-[15%] h-[10px] bg-[#22160a]/25 blur-[4px] rounded-full scale-y-[0.45]'
                   },
                   { 
                     img: img08, 
-                    imgCls: 'top-[75%] left-[27%] w-[36%]', 
-                    labelCls: 'top-[56%] left-[6%]', 
+                    imgCls: 'top-[68%] left-[8%] w-[36%]', 
+                    labelCls: 'top-[62%] left-[14%]', 
                     num: '08', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
-                    title: 'Signature\nFried Noodle', code: 'M02' 
+                    title: 'Signature\nFried Noodle', code: 'M02',
+                    shadowCls: 'bottom-[2%] left-[12%] right-[12%] h-[16px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.35]'
                   },
                   { 
                     img: img09, 
-                    imgCls: 'top-[71%] right-[4%] w-[35%]', 
-                    labelCls: 'top-[63%] right-[8%]', 
+                    imgCls: 'top-[67%] right-[8%] w-[36%]', 
+                    labelCls: 'top-[61%] right-[14%]', 
                     num: '09', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
-                    title: 'Butter Milk\nChicken Rice', code: 'R04' 
+                    title: 'Butter Milk\nChicken Rice', code: 'R04',
+                    shadowCls: 'bottom-[3%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
                   },
                 ].map((item, idx) => {
                   const isHovered = hoveredFoodIdx === idx;
@@ -476,18 +488,28 @@ export default function MenuFlipbook() {
                       className="absolute inset-0 pointer-events-none transition-all duration-300"
                       style={{ zIndex: isHovered ? 100 : 10 }}
                     >
-                      {/* Food Image */}
+                      {/* Food Image and Contact Shadow Container */}
                       <div 
                         className={`absolute ${item.imgCls} pointer-events-auto`}
                         onMouseEnter={() => setHoveredFoodIdx(idx)}
                         onMouseLeave={() => setHoveredFoodIdx(null)}
                       >
+                        {/* Custom soft contact shadow */}
+                        <div 
+                          className={`absolute ${item.shadowCls} pointer-events-none z-0 transition-all duration-300 ease-out ${
+                            isHovered ? 'scale-[1.08] opacity-60 blur-[7px]' : 'scale-100 opacity-100'
+                          }`} 
+                        />
+                        
                         <img 
                           src={item.img} 
                           alt={`Top 10 Dish ${idx + 1}`} 
-                          className={`w-full h-auto object-contain transition-transform duration-300 ease-out cursor-pointer origin-center drop-shadow-xl ${
-                            isHovered ? 'scale-[1.08]' : 'scale-100'
+                          className={`w-full h-auto object-contain transition-all duration-300 ease-out cursor-pointer origin-center relative z-10 ${
+                            isHovered ? 'scale-[1.06] -translate-y-1.5' : 'scale-100 translate-y-0'
                           }`}
+                          style={{
+                            filter: 'drop-shadow(0 4px 8px rgba(42, 30, 18, 0.06))'
+                          }}
                         />
                       </div>
                       
@@ -523,7 +545,7 @@ export default function MenuFlipbook() {
             {MENU_CATEGORIES.map((cat, index) => {
               const isKopitiam = cat.id === 'cat-8';
               const isHomeEdition = cat.id === 'cat-12';
-              const bgClass = isHomeEdition ? 'bg-[#f0f4f8]' : 'bg-[#f8f5eb]';
+              const bgClass = 'bg-[#f8f5eb]';
               
               return (
               <Page key={cat.id} title={cat.name} subtitle={cat.subtitle} description={cat.description} number={index + 2} bgClass={bgClass}>
@@ -693,6 +715,19 @@ export default function MenuFlipbook() {
                 📖 Cover Page
               </button>
               
+              {/* Must Try Tab */}
+              <button
+                type="button"
+                onClick={() => setSelectedMobileTab('must-try')}
+                className={`snap-center shrink-0 px-4 py-2.5 rounded-lg text-xs font-serif font-black uppercase tracking-wider transition-all duration-300 border ${
+                  selectedMobileTab === 'must-try'
+                    ? 'bg-[#1a362a] text-[#f8f5eb] border-[#1a362a] shadow-md scale-105'
+                    : 'bg-white text-[#1a362a] border-[#e2d5c3] shadow-sm hover:bg-[#1a362a]/5'
+                }`}
+              >
+                ✨ Must Try
+              </button>
+              
               {/* Category Tabs */}
               {MENU_CATEGORIES.map((cat) => {
                 const getMobileTabName = (id: string, name: string) => {
@@ -749,13 +784,243 @@ export default function MenuFlipbook() {
                 />
                 <CoverPageContent />
               </motion.div>
+            ) : selectedMobileTab === 'must-try' ? (
+              <motion.div 
+                key="must-try"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="bg-[#f8f5eb] p-4 sm:p-6 rounded-2xl shadow-xl border border-[#e2d5c3] relative overflow-hidden min-h-[550px] flex flex-col"
+              >
+                {/* Subtle building line-art background */}
+                <div 
+                  className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-multiply"
+                  style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }}
+                />
+                
+                {/* Standard Borders to match the rest of the book */}
+                <div className="absolute top-3 left-3 right-3 bottom-3 border border-[#1a362a]/10 pointer-events-none z-0" />
+                <div className="absolute top-2 left-2 right-2 bottom-2 border border-[#1a362a]/5 pointer-events-none z-0" />
+                
+                {/* Corner decorations */}
+                <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-[#8a2a2b]/60 z-0" />
+                <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-[#8a2a2b]/60 z-0" />
+                <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-[#8a2a2b]/60 z-0" />
+                <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-[#8a2a2b]/60 z-0" />
+                
+                {/* Header Title */}
+                <div className="text-center z-10 py-4 flex flex-col items-center">
+                  <span className="text-[9px] font-sans uppercase tracking-[0.25em] text-[#8a2a2b] font-extrabold block mb-1">
+                    Waki Curated Selection
+                  </span>
+                  <h2 className="font-serif text-[#1a362a] text-3xl sm:text-4xl font-black uppercase tracking-widest drop-shadow-sm leading-tight">Must Try</h2>
+                  <h3 className="font-serif text-[#8a2a2b] text-xl sm:text-2xl font-black uppercase tracking-[0.15em] drop-shadow-sm mt-0.5 mb-2.5 italic">In Waki DimSum</h3>
+                  <div className="w-12 h-0.5 bg-[#1a362a]/20 rounded-full"></div>
+                </div>
+
+                {/* Collage Wrapper */}
+                <div className="relative w-full aspect-[4/5] bg-white/45 rounded-xl border border-[#e2d5c3]/50 overflow-hidden shadow-inner my-3 z-10">
+                  {/* Subtle warm tabletop grounding layer */}
+                  <div className="absolute bottom-0 left-0 right-0 h-[70%] bg-gradient-to-t from-[#2a1a08]/[0.035] via-transparent to-transparent pointer-events-none z-0" />
+                  
+                  {/* Overlaid Food Images */}
+                  {[
+                    { 
+                      img: img01, 
+                      imgCls: 'top-[22%] left-[36%] w-[28%]', 
+                      labelCls: 'top-[18%] left-[28%]', 
+                      num: '01', icon: '🥇', 
+                      title: 'Chicken & Shrimp\nDumplings', code: 'D01',
+                      shadowCls: 'bottom-[1%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/25 blur-[6px] rounded-full scale-y-[0.45]'
+                    },
+                    { 
+                      img: img02, 
+                      imgCls: 'top-[21%] right-[5%] w-[35%]', 
+                      labelCls: 'top-[18%] right-[22%]', 
+                      num: '02', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                      title: 'Chee Cheong Fun\nWith Prawn Spring Roll', code: 'C01',
+                      shadowCls: 'bottom-[2%] left-[15%] right-[25%] h-[12px] bg-[#22160a]/20 blur-[5px] rounded-full scale-y-[0.35]'
+                    },
+                    { 
+                      img: img03, 
+                      imgCls: 'top-[25%] left-[5%] w-[33%]', 
+                      labelCls: 'top-[20%] left-[12%]', 
+                      num: '03', icon: '🔥', 
+                      title: 'Cheesy\nPrawn Roll', code: 'F17',
+                      shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[12px] bg-[#22160a]/20 blur-[5px] rounded-full scale-y-[0.35]'
+                    },
+                    { 
+                      img: img04, 
+                      imgCls: 'top-[44%] left-[39%] w-[22%]', 
+                      labelCls: 'top-[38%] left-[32%]', 
+                      num: '04', icon: '🥇', 
+                      title: 'Golden\nCustard Bun', code: 'B02',
+                      shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[10px] bg-[#22160a]/20 blur-[4px] rounded-full scale-y-[0.4]'
+                    },
+                    { 
+                      img: img05, 
+                      imgCls: 'top-[46%] left-[4%] w-[33%]', 
+                      labelCls: 'top-[40%] left-[12%]', 
+                      num: '05', icon: '🔥', 
+                      title: 'Stir Fried\nRadish Cake', code: 'L03',
+                      shadowCls: 'bottom-[3%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
+                    },
+                    { 
+                      img: img06, 
+                      imgCls: 'top-[45%] right-[4%] w-[32%]', 
+                      labelCls: 'top-[39%] right-[12%]', 
+                      num: '06', icon: '🔥', 
+                      title: 'Prawn\nSpring Roll', code: 'F06',
+                      shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
+                    },
+                    { 
+                      img: img07, 
+                      imgCls: 'top-[56%] left-[49%] w-[20%]', 
+                      labelCls: 'top-[50%] left-[58%]', 
+                      num: '07', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                      title: 'Spicy Sauce\nDumpling', code: 'D12',
+                      shadowCls: 'bottom-[1%] left-[15%] right-[15%] h-[10px] bg-[#22160a]/25 blur-[4px] rounded-full scale-y-[0.45]'
+                    },
+                    { 
+                      img: img08, 
+                      imgCls: 'top-[68%] left-[8%] w-[36%]', 
+                      labelCls: 'top-[62%] left-[14%]', 
+                      num: '08', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                      title: 'Signature\nFried Noodle', code: 'M02',
+                      shadowCls: 'bottom-[2%] left-[12%] right-[12%] h-[16px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.35]'
+                    },
+                    { 
+                      img: img09, 
+                      imgCls: 'top-[67%] right-[8%] w-[36%]', 
+                      labelCls: 'top-[61%] right-[14%]', 
+                      num: '09', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                      title: 'Butter Milk\nChicken Rice', code: 'R04',
+                      shadowCls: 'bottom-[3%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
+                    },
+                  ].map((item, idx) => {
+                    const isHighlighted = hoveredFoodIdx === idx;
+                    return (
+                      <div 
+                        key={idx} 
+                        className="absolute inset-0 pointer-events-none"
+                        style={{ zIndex: isHighlighted ? 100 : 10 }}
+                      >
+                        {/* Dish Image Container */}
+                        <div 
+                          className={`absolute ${item.imgCls} pointer-events-auto cursor-pointer`}
+                          onClick={() => {
+                            setHoveredFoodIdx(hoveredFoodIdx === idx ? null : idx);
+                          }}
+                        >
+                          {/* Shadow */}
+                          <div className={`absolute ${item.shadowCls} pointer-events-none z-0 transition-all duration-300 ease-out ${isHighlighted ? 'scale-[1.08] opacity-65 blur-[6px]' : 'scale-100 opacity-100'}`} />
+                          
+                          <img 
+                            src={item.img} 
+                            alt={item.title} 
+                            className={`w-full h-auto object-contain transition-all duration-300 ease-out relative z-10 ${isHighlighted ? 'scale-[1.06] -translate-y-1' : 'scale-100 translate-y-0'}`}
+                            style={{ filter: 'drop-shadow(0 2px 5px rgba(0,0,0,0.05))' }}
+                          />
+                        </div>
+
+                        {/* Popover Detail Modal */}
+                        <AnimatePresence>
+                          {isHighlighted && (
+                            <motion.div 
+                              initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                              animate={{ opacity: 1, scale: 1, y: 0 }}
+                              exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                              className="absolute bottom-4 left-4 right-4 z-50 pointer-events-auto bg-white/95 backdrop-blur-md p-4 rounded-xl border border-[#e2d5c3] shadow-xl flex items-center gap-3.5"
+                            >
+                              <div className="w-12 h-12 shrink-0 rounded-lg overflow-hidden border border-[#1a362a]/10 bg-white">
+                                <img src={item.img} className="w-full h-full object-cover" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1.5 mb-0.5">
+                                  <span className="font-serif text-lg font-black text-[#1a362a]">{item.num}</span>
+                                  <span className="text-xs">{item.icon}</span>
+                                  <span className="ml-auto bg-[#1a362a] px-2 py-0.5 text-[8px] font-bold text-white tracking-widest rounded">{item.code}</span>
+                                </div>
+                                <p className="font-sans text-[#1a362a] text-[12px] font-bold leading-tight whitespace-pre-line">
+                                  {item.title.replace('\n', ' ')}
+                                </p>
+                              </div>
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setHoveredFoodIdx(null);
+                                }}
+                                className="p-1 rounded-full text-zinc-400 hover:text-zinc-600 self-start"
+                              >
+                                ✕
+                              </button>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Elegant helper text */}
+                <p className="text-[10px] font-sans text-center text-[#1a362a]/60 italic mb-4 z-10">
+                  💡 Tap on any dish above to view its details, or browse below
+                </p>
+
+                {/* Clean, detailed list of Must Try items */}
+                <div className="bg-white/50 backdrop-blur-sm p-4 rounded-xl border border-[#1a362a]/10 z-10 flex flex-col space-y-3.5">
+                  {[
+                    { code: 'D01', name: 'Chicken & Shrimp Dumplings (Siew Mai)', desc: 'Premium chicken & shrimp siew mai, hand-crafted daily.' },
+                    { code: 'C01', name: 'CCF with Prawn Spring Roll', desc: 'Silky smooth handmade rice rolls paired with crispy prawn beancurd skin roll.' },
+                    { code: 'F17', name: 'Cheesy Prawn Roll', desc: 'Delicious fried rolls loaded with succulent prawns and melted premium cheese.' },
+                    { code: 'B02', name: 'Golden Custard Bun (Liu Sha Bao)', desc: 'Fluffy steamed buns with warm, flowing sweet-savory salted egg yolk lava.' },
+                    { code: 'L03', name: 'Stir Fried Radish Cake', desc: 'Wok-charred turnip cake wok-fried with fresh beansprouts, eggs, and chives.' },
+                    { code: 'F06', name: 'Prawn Spring Roll', desc: 'Crispy fried spring rolls stuffed with seasoned fresh prawns.' },
+                    { code: 'D12', name: 'Spicy Sauce Dumpling', desc: 'Plump chicken dumplings tossed in our signature hot & sour Szechuan chili oil sauce.' },
+                    { code: 'M02', name: 'Signature Fried Noodle', desc: 'Classic Malaysian style wok-fried yellow noodles packed with seafood flavor.' },
+                    { code: 'R04', name: 'Butter Milk Chicken Rice', desc: 'Aromatic, rich buttermilk chicken served over steaming hot jasmine rice.' },
+                  ].map((dish, index) => {
+                    const isHighlighted = hoveredFoodIdx === index;
+                    return (
+                      <div 
+                        key={dish.code} 
+                        onClick={() => setHoveredFoodIdx(isHighlighted ? null : index)}
+                        className={`flex gap-3 items-start py-2.5 px-2 rounded-lg transition-all duration-300 cursor-pointer border ${
+                          isHighlighted 
+                            ? 'bg-[#1a362a]/5 border-[#1a362a]/20 pl-3 shadow-sm' 
+                            : 'border-transparent hover:bg-black/[0.01]'
+                        }`}
+                      >
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center font-serif text-xs font-black shrink-0 ${
+                          isHighlighted ? 'bg-[#1a362a] text-white' : 'bg-[#1a362a]/10 text-[#1a362a]'
+                        }`}>
+                          {index + 1}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-serif font-black text-[#1a362a] text-sm leading-tight uppercase">
+                              {dish.name}
+                            </h4>
+                            <span className="font-sans text-[#8a2a2b] font-bold text-[10px] tracking-widest border border-[#8a2a2b]/30 px-1.5 py-0.5 rounded shadow-sm bg-white/50 shrink-0 ml-2">
+                              {dish.code}
+                            </span>
+                          </div>
+                          <p className="font-sans text-[#2c3e38]/85 text-xs mt-1 italic leading-relaxed">
+                            {dish.desc}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </motion.div>
             ) : (
               MENU_CATEGORIES.map((cat) => {
                 if (cat.id !== selectedMobileTab) return null;
                 
                 const isKopitiam = cat.id === 'cat-8';
                 const isHomeEdition = cat.id === 'cat-12';
-                const bgClass = isHomeEdition ? 'bg-[#f0f4f8]' : 'bg-[#f8f5eb]';
+                const bgClass = 'bg-[#f8f5eb]';
 
                 return (
                   <motion.div

@@ -24,13 +24,25 @@ export default function App() {
     const el = document.getElementById(sectionId);
     if (el) {
       const yOffset = -70; 
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+      const topOfElement = el.getBoundingClientRect().top;
+      const currentScrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+      const targetY = topOfElement + currentScrollPosition + yOffset;
+      
+      try {
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      } catch (err) {
+        // Safe cross-platform fallback for sandboxed embeds and older mobile browsers
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    try {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      document.documentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (

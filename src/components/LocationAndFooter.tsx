@@ -43,7 +43,7 @@ export default function LocationAndFooter() {
                 <div className="absolute inset-0 bg-[#F9F6F0] pointer-events-none z-0" />
                 <iframe
                   title="WAKi Subang Jaya Location Map"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.1118698114674!2d101.5833054!3d3.0378054000000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc4d7df6395b05%3A0xe5a3637fa9d0121d!2sRegalia%20Business%20Centre!5e0!3m2!1sen!2smy!4v1783567600000!5m2!1sen!2smy"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.1434406908716!2d101.60240037543437!3d3.056264153715647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc4d94c9e397bb%3A0x4a0258a172c5386!2sWaki%20Dim%20Sum!5e0!3m2!1sen!2smy!4v1786863992678!5m2!1sen!2smy"
                   width="100%"
                   height="100%"
                   style={{ border: 0, filter: 'grayscale(0.4) contrast(1.1) opacity(0.9)' }}
