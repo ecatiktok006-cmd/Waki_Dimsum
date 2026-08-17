@@ -16,8 +16,8 @@ export default function LocationAndFooter() {
   };
 
   return (
-    <footer id="contact" className="bg-white border-t border-[#ECE6D9] text-[#061F1A]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <footer id="info" className="bg-white border-t border-[#ECE6D9] text-[#061F1A] scroll-mt-6">
+      <div id="contact" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         
         {/* Restaurant Info & Map */}
         <div className="mb-24">

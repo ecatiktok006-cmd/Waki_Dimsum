@@ -89,22 +89,22 @@ export default function StoryHero({ onLearnMore, onExploreMenu, onOrderNow }: St
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1 }}
-          className="mt-20 sm:mt-24 md:mt-32 z-20 flex items-center justify-center space-x-3 sm:space-x-6 w-full px-4"
+          className="mt-20 sm:mt-24 md:mt-32 z-20 flex items-center justify-center space-x-2 sm:space-x-4 md:space-x-6 w-full max-w-full px-2 sm:px-4"
         >
           {/* Left Line */}
-          <div className="h-[1.5px] bg-jade-900/20 w-10 sm:w-16 md:w-24" />
+          <div className="hidden sm:block h-[1.5px] bg-jade-900/20 w-8 sm:w-16 md:w-24 shrink" />
           
           {/* Slogan Text */}
-          <p className="font-sans text-[#2A3C35] text-xs sm:text-sm md:text-base font-extrabold tracking-[0.25em] sm:tracking-[0.35em] uppercase flex items-center whitespace-nowrap">
+          <p className="font-sans text-[#2A3C35] text-[10px] min-[360px]:text-[11.5px] sm:text-sm md:text-base font-extrabold tracking-[0.1em] min-[360px]:tracking-[0.18em] sm:tracking-[0.35em] uppercase flex items-center justify-center whitespace-nowrap text-center">
             <span>HANDMADE</span>
-            <span className="w-2 h-2 rounded-full bg-[#D4AF37] mx-3 sm:mx-4 inline-block" />
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#D4AF37] mx-1.5 min-[360px]:mx-2.5 sm:mx-4 inline-block shrink-0" />
             <span>HALAL</span>
-            <span className="w-2 h-2 rounded-full bg-[#D4AF37] mx-3 sm:mx-4 inline-block" />
+            <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#D4AF37] mx-1.5 min-[360px]:mx-2.5 sm:mx-4 inline-block shrink-0" />
             <span>FRESHLY STEAMED</span>
           </p>
           
           {/* Right Line */}
-          <div className="h-[1.5px] bg-jade-900/20 w-10 sm:w-16 md:w-24" />
+          <div className="hidden sm:block h-[1.5px] bg-jade-900/20 w-8 sm:w-16 md:w-24 shrink" />
         </motion.div>
         
         {/* Call to Actions (Not strictly in the text area in original sketch, but we keep them accessible) */}

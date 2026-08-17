@@ -23,8 +23,16 @@ export default function Navbar({ onScrollToSection }: NavbarProps) {
     { name: 'HOME', id: 'home' },
     { name: 'OUR STORY', id: 'about' },
     { name: 'MENU', id: 'menu' },
-    { name: 'INFO', id: 'contact' },
+    { name: 'INFO', id: 'info' },
   ];
+
+  const handleLinkClick = (id: string) => {
+    setMobileMenuOpen(false);
+    // Slight timeout ensures mobile menu close animation doesn't cancel browser smooth scroll
+    setTimeout(() => {
+      onScrollToSection(id);
+    }, 60);
+  };
 
   return (
     <nav
@@ -50,15 +58,17 @@ export default function Navbar({ onScrollToSection }: NavbarProps) {
             {navLinks.map((link) => (
               <button
                 key={link.name}
+                type="button"
                 onClick={() => onScrollToSection(link.id)}
-                className="font-display text-xs font-bold tracking-widest text-jade-900/70 hover:text-jade-950 transition-colors relative group"
+                className="font-display text-xs font-bold tracking-widest text-jade-900/70 hover:text-jade-950 transition-colors relative group cursor-pointer"
               >
                 {link.name}
                 <span className="absolute -bottom-1.5 left-0 w-0 h-px bg-gold-400 transition-all duration-300 group-hover:w-full" />
               </button>
             ))}
             <button
-              onClick={() => onScrollToSection('contact')}
+              type="button"
+              onClick={() => onScrollToSection('reservation')}
               className="px-5 py-2 rounded bg-gold-500 text-jade-950 font-display font-bold text-xs tracking-widest hover:bg-gold-400 transition-colors shadow-sm cursor-pointer"
             >
               RESERVE
@@ -67,8 +77,10 @@ export default function Navbar({ onScrollToSection }: NavbarProps) {
 
           <div className="md:hidden">
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-md text-jade-950 hover:bg-jade-900/5 transition-colors cursor-pointer"
+              aria-label="Toggle mobile menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -88,21 +100,17 @@ export default function Navbar({ onScrollToSection }: NavbarProps) {
               {navLinks.map((link) => (
                 <button
                   key={link.name}
-                  onClick={() => {
-                    onScrollToSection(link.id);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="block w-full text-left font-display text-sm font-bold tracking-widest text-jade-900/80 hover:text-jade-950 py-2 border-b border-jade-900/5"
+                  type="button"
+                  onClick={() => handleLinkClick(link.id)}
+                  className="block w-full text-left font-display text-sm font-bold tracking-widest text-jade-900/80 hover:text-jade-950 active:text-gold-600 py-2 border-b border-jade-900/5 cursor-pointer transition-colors"
                 >
                   {link.name}
                 </button>
               ))}
               <button
-                onClick={() => {
-                  onScrollToSection('contact');
-                  setMobileMenuOpen(false);
-                }}
-                className="block w-full text-center mt-6 px-4 py-3 rounded bg-gold-500 text-jade-950 font-display font-bold text-sm tracking-widest shadow-sm"
+                type="button"
+                onClick={() => handleLinkClick('reservation')}
+                className="block w-full text-center mt-6 px-4 py-3 rounded bg-gold-500 text-jade-950 font-display font-bold text-sm tracking-widest shadow-sm active:bg-gold-600 transition-colors cursor-pointer"
               >
                 RESERVE A TABLE
               </button>

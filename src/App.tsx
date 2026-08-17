@@ -21,12 +21,21 @@ export default function App() {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
+    if (sectionId === 'home') {
+      try {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        document.documentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return;
+    }
+
     const el = document.getElementById(sectionId);
     if (el) {
       const yOffset = -70; 
-      const topOfElement = el.getBoundingClientRect().top;
-      const currentScrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
-      const targetY = topOfElement + currentScrollPosition + yOffset;
+      const rect = el.getBoundingClientRect();
+      const currentScrollPosition = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      const targetY = Math.max(0, rect.top + currentScrollPosition + yOffset);
       
       try {
         window.scrollTo({ top: targetY, behavior: 'smooth' });
@@ -34,6 +43,20 @@ export default function App() {
         // Safe cross-platform fallback for sandboxed embeds and older mobile browsers
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
+
+      // Reinforce scroll in case mobile browser or menu close animation caused a layout reflow
+      setTimeout(() => {
+        const updatedRect = el.getBoundingClientRect();
+        if (Math.abs(updatedRect.top - (-yOffset)) > 50) {
+          const currentPos = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+          const finalY = Math.max(0, updatedRect.top + currentPos + yOffset);
+          try {
+            window.scrollTo({ top: finalY, behavior: 'smooth' });
+          } catch {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      }, 150);
     }
   };
 
@@ -54,14 +77,14 @@ export default function App() {
         <StoryHero 
           onLearnMore={() => scrollToSection('about')} 
           onExploreMenu={() => scrollToSection('menu')} 
-          onOrderNow={() => scrollToSection('contact')} 
+          onOrderNow={() => scrollToSection('reservation')} 
         />
         <AboutTimeline />
         <div id="whats-cooking">
           <MenuFlipbook />
         </div>
         <CustomerReviews />
-        <ReservationCTA onReserveClick={() => scrollToSection('contact')} />
+        <ReservationCTA onReserveClick={() => scrollToSection('reservation')} />
         <LocationAndFooter />
       </main>
 
@@ -102,8 +125,9 @@ export default function App() {
       {/* Mobile Sticky Reserve Button */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-cream-50/95 backdrop-blur border-t border-jade-900/10 z-50 shadow-[0_-4px_15px_rgba(0,0,0,0.05)]">
         <button
-          onClick={() => scrollToSection('contact')}
-          className="w-full py-3 bg-gold-500 text-jade-950 font-bold tracking-widest rounded shadow-lg"
+          type="button"
+          onClick={() => scrollToSection('reservation')}
+          className="w-full py-3 bg-gold-500 text-jade-950 font-bold tracking-widest rounded shadow-lg cursor-pointer active:bg-gold-600 transition-colors"
         >
           RESERVE A TABLE
         </button>

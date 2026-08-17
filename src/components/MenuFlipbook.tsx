@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import HTMLFlipBook from 'react-pageflip';
 import { MENU_CATEGORIES } from '../data';
@@ -329,10 +329,117 @@ const CoverPageContent = () => (
   </div>
 );
 
+const MOBILE_PAGES = ['cover', 'must-try', ...MENU_CATEGORIES.map((c) => c.id)];
+
 export default function MenuFlipbook() {
   const flipBookRef = useRef(null);
-  const [selectedMobileTab, setSelectedMobileTab] = React.useState<string>('cover');
-  const [hoveredFoodIdx, setHoveredFoodIdx] = React.useState<number | null>(null);
+  const [selectedMobileTab, setSelectedMobileTab] = useState<string>('cover');
+  const [pageDirection, setPageDirection] = useState<'next' | 'prev' | null>(null);
+  const [hoveredFoodIdx, setHoveredFoodIdx] = useState<number | null>(null);
+  const [showMobileHint, setShowMobileHint] = useState<boolean>(true);
+  
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
+  const tabContainerRef = useRef<HTMLDivElement | null>(null);
+  const tabButtonsRef = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowMobileHint(false);
+    }, 2800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const navigateMobilePage = (newTabId: string, direction: 'next' | 'prev') => {
+    setPageDirection(direction);
+    setSelectedMobileTab(newTabId);
+    setShowMobileHint(false);
+
+    // Smoothly scroll the target tab button into view in the horizontal tab bar
+    setTimeout(() => {
+      const btn = tabButtonsRef.current[newTabId];
+      if (btn) {
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    }, 50);
+  };
+
+  const handlePrevPage = () => {
+    const currentIndex = MOBILE_PAGES.indexOf(selectedMobileTab);
+    if (currentIndex > 0) {
+      navigateMobilePage(MOBILE_PAGES[currentIndex - 1], 'prev');
+    }
+  };
+
+  const handleNextPage = () => {
+    const currentIndex = MOBILE_PAGES.indexOf(selectedMobileTab);
+    if (currentIndex >= 0 && currentIndex < MOBILE_PAGES.length - 1) {
+      navigateMobilePage(MOBILE_PAGES[currentIndex + 1], 'next');
+    }
+  };
+
+  const handleTabClick = (tabId: string) => {
+    const currentIndex = MOBILE_PAGES.indexOf(selectedMobileTab);
+    const newIndex = MOBILE_PAGES.indexOf(tabId);
+    navigateMobilePage(tabId, newIndex >= currentIndex ? 'next' : 'prev');
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement | null;
+    if (target && target.closest('button, a, input, select, textarea, [role="button"], [data-interactive="true"], [data-no-page-tap]')) {
+      touchStartRef.current = null;
+      return;
+    }
+    if (e.touches && e.touches.length > 0) {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+        time: Date.now()
+      };
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!touchStartRef.current) return;
+
+    const target = e.target as HTMLElement | null;
+    if (target && target.closest('button, a, input, select, textarea, [role="button"], [data-interactive="true"], [data-no-page-tap]')) {
+      touchStartRef.current = null;
+      return;
+    }
+
+    const touch = e.changedTouches[0];
+    if (!touch) {
+      touchStartRef.current = null;
+      return;
+    }
+
+    const deltaX = Math.abs(touch.clientX - touchStartRef.current.x);
+    const deltaY = Math.abs(touch.clientY - touchStartRef.current.y);
+    const elapsed = Date.now() - touchStartRef.current.time;
+
+    touchStartRef.current = null;
+
+    // Strict tap validation: if moved more than 12px or held longer than 350ms, it is a scroll/drag -> DO NOT NAVIGATE
+    if (deltaX > 12 || deltaY > 12 || elapsed > 350) {
+      return;
+    }
+
+    // Clean tap detected!
+    const container = e.currentTarget;
+    const rect = container.getBoundingClientRect();
+    if (rect.width <= 0) return;
+
+    const relX = (touch.clientX - rect.left) / rect.width;
+
+    if (relX < 0.35) {
+      // Left 35% -> Previous page (No-op on first page)
+      handlePrevPage();
+    } else if (relX > 0.65) {
+      // Right 35% -> Next page (No-op on last page)
+      handleNextPage();
+    }
+    // Middle 30% (0.35 to 0.65) -> No page navigation
+  };
   
   return (
     <section id="menu" className="py-24 bg-cream-50 relative overflow-hidden">
@@ -406,79 +513,79 @@ export default function MenuFlipbook() {
                   <div className="w-16 h-1 bg-[#1a362a]/20 rounded-full"></div>
                 </div>
 
-                {/* Overlaid Food Images */}
+                {/* Overlaid Food Images - Cohesive banquet table spread with natural organic positioning & slight overlaps */}
                 {[
                   { 
                     img: img01, 
-                    imgCls: 'top-[22%] left-[36%] w-[28%]', 
-                    labelCls: 'top-[18%] left-[28%]', 
+                    imgCls: 'top-[18%] left-[33%] w-[34%]', 
+                    labelCls: 'top-[16%] left-[26%]', 
+                    zIndex: 10,
                     num: '01', icon: '🥇', 
                     title: 'Chicken & Shrimp\nDumplings', code: 'D01',
-                    shadowCls: 'bottom-[1%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/25 blur-[6px] rounded-full scale-y-[0.45]'
                   },
                   { 
                     img: img02, 
-                    imgCls: 'top-[21%] right-[5%] w-[35%]', 
-                    labelCls: 'top-[18%] right-[22%]', 
+                    imgCls: 'top-[19%] right-[1%] w-[39%]', 
+                    labelCls: 'top-[17%] right-[18%]', 
+                    zIndex: 11,
                     num: '02', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
                     title: 'Chee Cheong Fun\nWith Prawn Spring Roll', code: 'C01',
-                    shadowCls: 'bottom-[2%] left-[15%] right-[25%] h-[12px] bg-[#22160a]/20 blur-[5px] rounded-full scale-y-[0.35]'
                   },
                   { 
                     img: img03, 
-                    imgCls: 'top-[25%] left-[5%] w-[33%]', 
-                    labelCls: 'top-[20%] left-[12%]', 
+                    imgCls: 'top-[20%] left-[2%] w-[36%]', 
+                    labelCls: 'top-[18%] left-[10%]', 
+                    zIndex: 12,
                     num: '03', icon: '🔥', 
                     title: 'Cheesy\nPrawn Roll', code: 'F17',
-                    shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[12px] bg-[#22160a]/20 blur-[5px] rounded-full scale-y-[0.35]'
                   },
                   { 
                     img: img04, 
-                    imgCls: 'top-[44%] left-[39%] w-[22%]', 
-                    labelCls: 'top-[38%] left-[32%]', 
+                    imgCls: 'top-[37%] left-[34%] w-[31%]', 
+                    labelCls: 'top-[33%] left-[28%]', 
+                    zIndex: 15,
                     num: '04', icon: '🥇', 
                     title: 'Golden\nCustard Bun', code: 'B02',
-                    shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[10px] bg-[#22160a]/20 blur-[4px] rounded-full scale-y-[0.4]'
                   },
                   { 
                     img: img05, 
-                    imgCls: 'top-[46%] left-[4%] w-[33%]', 
-                    labelCls: 'top-[40%] left-[12%]', 
+                    imgCls: 'top-[41%] left-[2%] w-[37%]', 
+                    labelCls: 'top-[38%] left-[10%]', 
+                    zIndex: 16,
                     num: '05', icon: '🔥', 
                     title: 'Stir Fried\nRadish Cake', code: 'L03',
-                    shadowCls: 'bottom-[3%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
                   },
                   { 
                     img: img06, 
-                    imgCls: 'top-[45%] right-[4%] w-[32%]', 
-                    labelCls: 'top-[39%] right-[12%]', 
+                    imgCls: 'top-[41%] right-[2%] w-[36%]', 
+                    labelCls: 'top-[37%] right-[10%]', 
+                    zIndex: 14,
                     num: '06', icon: '🔥', 
                     title: 'Prawn\nSpring Roll', code: 'F06',
-                    shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
                   },
                   { 
                     img: img07, 
-                    imgCls: 'top-[56%] left-[49%] w-[20%]', 
-                    labelCls: 'top-[50%] left-[58%]', 
+                    imgCls: 'top-[52%] left-[45%] w-[27%]', 
+                    labelCls: 'top-[47%] left-[54%]', 
+                    zIndex: 18,
                     num: '07', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
                     title: 'Spicy Sauce\nDumpling', code: 'D12',
-                    shadowCls: 'bottom-[1%] left-[15%] right-[15%] h-[10px] bg-[#22160a]/25 blur-[4px] rounded-full scale-y-[0.45]'
                   },
                   { 
                     img: img08, 
-                    imgCls: 'top-[68%] left-[8%] w-[36%]', 
-                    labelCls: 'top-[62%] left-[14%]', 
+                    imgCls: 'top-[63%] left-[2%] w-[44%]', 
+                    labelCls: 'top-[59%] left-[10%]', 
+                    zIndex: 20,
                     num: '08', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
                     title: 'Signature\nFried Noodle', code: 'M02',
-                    shadowCls: 'bottom-[2%] left-[12%] right-[12%] h-[16px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.35]'
                   },
                   { 
                     img: img09, 
-                    imgCls: 'top-[67%] right-[8%] w-[36%]', 
-                    labelCls: 'top-[61%] right-[14%]', 
+                    imgCls: 'top-[62%] right-[2%] w-[44%]', 
+                    labelCls: 'top-[58%] right-[10%]', 
+                    zIndex: 21,
                     num: '09', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
                     title: 'Butter Milk\nChicken Rice', code: 'R04',
-                    shadowCls: 'bottom-[3%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
                   },
                 ].map((item, idx) => {
                   const isHovered = hoveredFoodIdx === idx;
@@ -486,39 +593,29 @@ export default function MenuFlipbook() {
                     <div 
                       key={idx} 
                       className="absolute inset-0 pointer-events-none transition-all duration-300"
-                      style={{ zIndex: isHovered ? 100 : 10 }}
+                      style={{ zIndex: isHovered ? 100 : item.zIndex }}
                     >
-                      {/* Food Image and Contact Shadow Container */}
+                      {/* Food Image Container */}
                       <div 
                         className={`absolute ${item.imgCls} pointer-events-auto`}
                         onMouseEnter={() => setHoveredFoodIdx(idx)}
                         onMouseLeave={() => setHoveredFoodIdx(null)}
                       >
-                        {/* Custom soft contact shadow */}
-                        <div 
-                          className={`absolute ${item.shadowCls} pointer-events-none z-0 transition-all duration-300 ease-out ${
-                            isHovered ? 'scale-[1.08] opacity-60 blur-[7px]' : 'scale-100 opacity-100'
-                          }`} 
-                        />
-                        
                         <img 
                           src={item.img} 
                           alt={`Top 10 Dish ${idx + 1}`} 
-                          className={`w-full h-auto object-contain transition-all duration-300 ease-out cursor-pointer origin-center relative z-10 ${
-                            isHovered ? 'scale-[1.06] -translate-y-1.5' : 'scale-100 translate-y-0'
+                          className={`w-full h-auto object-contain transition-all duration-300 ease-out cursor-pointer origin-center relative ${
+                            isHovered ? 'scale-[1.05] -translate-y-1' : 'scale-100 translate-y-0'
                           }`}
-                          style={{
-                            filter: 'drop-shadow(0 4px 8px rgba(42, 30, 18, 0.06))'
-                          }}
                         />
                       </div>
                       
                       {/* Text Label Popup */}
                       <div 
-                        className={`absolute ${item.labelCls} z-40 flex flex-col pointer-events-none bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] border border-white/50 min-w-[150px] transition-all duration-400 ease-out ${
+                        className={`absolute ${item.labelCls} z-40 flex flex-col pointer-events-none bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.2)] border border-white/60 min-w-[150px] transition-all duration-300 ease-out ${
                           isHovered 
                             ? 'opacity-100 translate-y-0 scale-100' 
-                            : 'opacity-0 translate-y-3 scale-95'
+                            : 'opacity-0 translate-y-2 scale-95'
                         }`}
                       >
                         <div className="flex items-center gap-2 mb-2">
@@ -694,18 +791,27 @@ export default function MenuFlipbook() {
           </FlipBook>
         </div>
         
-        {/* Mobile View fallback since Flipbook is tricky on very small screens */}
+        {/* Mobile View fallback with touch tap navigation (Left 35% prev, Right 35% next, Center 30% scroll) */}
         <div className="md:hidden flex flex-col space-y-6 mt-6">
           {/* Horizontal Category Tab Bar */}
           <div className="w-full">
-            <p className="text-[11px] font-sans uppercase tracking-wider text-[#1a362a]/60 font-bold mb-2">
-              Browse Menu Categories
-            </p>
-            <div className="flex overflow-x-auto gap-2 pb-3 pt-1 hide-scrollbar -mx-4 px-4 snap-x">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-[11px] font-sans uppercase tracking-wider text-[#1a362a]/60 font-bold">
+                Browse Menu Categories
+              </p>
+              <span className="text-[10px] font-sans text-[#8a2a2b] font-bold uppercase tracking-wider">
+                {MOBILE_PAGES.indexOf(selectedMobileTab) + 1} / {MOBILE_PAGES.length}
+              </span>
+            </div>
+            <div 
+              ref={tabContainerRef}
+              className="flex overflow-x-auto gap-2 pb-3 pt-1 hide-scrollbar -mx-4 px-4 snap-x"
+            >
               {/* Cover Tab */}
               <button
+                ref={(el) => { tabButtonsRef.current['cover'] = el; }}
                 type="button"
-                onClick={() => setSelectedMobileTab('cover')}
+                onClick={() => handleTabClick('cover')}
                 className={`snap-center shrink-0 px-4 py-2.5 rounded-lg text-xs font-serif font-black uppercase tracking-wider transition-all duration-300 border ${
                   selectedMobileTab === 'cover'
                     ? 'bg-[#1a362a] text-[#f8f5eb] border-[#1a362a] shadow-md scale-105'
@@ -717,8 +823,9 @@ export default function MenuFlipbook() {
               
               {/* Must Try Tab */}
               <button
+                ref={(el) => { tabButtonsRef.current['must-try'] = el; }}
                 type="button"
-                onClick={() => setSelectedMobileTab('must-try')}
+                onClick={() => handleTabClick('must-try')}
                 className={`snap-center shrink-0 px-4 py-2.5 rounded-lg text-xs font-serif font-black uppercase tracking-wider transition-all duration-300 border ${
                   selectedMobileTab === 'must-try'
                     ? 'bg-[#1a362a] text-[#f8f5eb] border-[#1a362a] shadow-md scale-105'
@@ -753,8 +860,9 @@ export default function MenuFlipbook() {
                 return (
                   <button
                     key={cat.id}
+                    ref={(el) => { tabButtonsRef.current[cat.id] = el; }}
                     type="button"
-                    onClick={() => setSelectedMobileTab(cat.id)}
+                    onClick={() => handleTabClick(cat.id)}
                     className={`snap-center shrink-0 px-4 py-2.5 rounded-lg text-xs font-serif font-black uppercase tracking-wider transition-all duration-300 border ${
                       isSelected
                         ? 'bg-[#1a362a] text-[#f8f5eb] border-[#1a362a] shadow-md scale-105'
@@ -768,391 +876,415 @@ export default function MenuFlipbook() {
             </div>
           </div>
 
-          {/* Tab Content Window with smooth fade-in */}
-          <div className="min-h-[450px]">
-            {selectedMobileTab === 'cover' ? (
-              <motion.div 
-                key="cover"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="bg-[#f8f5eb] p-5 sm:p-6 rounded-2xl shadow-xl border border-[#e2d5c3] relative overflow-hidden min-h-[550px] flex flex-col"
-              >
-                <div 
-                  className="absolute inset-0 opacity-[0.08] pointer-events-none"
-                  style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover', mixBlendMode: 'multiply' }}
-                />
-                <CoverPageContent />
-              </motion.div>
-            ) : selectedMobileTab === 'must-try' ? (
-              <motion.div 
-                key="must-try"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="bg-[#f8f5eb] p-4 sm:p-6 rounded-2xl shadow-xl border border-[#e2d5c3] relative overflow-hidden min-h-[550px] flex flex-col"
-              >
-                {/* Subtle building line-art background */}
-                <div 
-                  className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-multiply"
-                  style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }}
-                />
-                
-                {/* Standard Borders to match the rest of the book */}
-                <div className="absolute top-3 left-3 right-3 bottom-3 border border-[#1a362a]/10 pointer-events-none z-0" />
-                <div className="absolute top-2 left-2 right-2 bottom-2 border border-[#1a362a]/5 pointer-events-none z-0" />
-                
-                {/* Corner decorations */}
-                <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-[#8a2a2b]/60 z-0" />
-                <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-[#8a2a2b]/60 z-0" />
-                <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-[#8a2a2b]/60 z-0" />
-                <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-[#8a2a2b]/60 z-0" />
-                
-                {/* Header Title */}
-                <div className="text-center z-10 py-4 flex flex-col items-center">
-                  <span className="text-[9px] font-sans uppercase tracking-[0.25em] text-[#8a2a2b] font-extrabold block mb-1">
-                    Waki Curated Selection
-                  </span>
-                  <h2 className="font-serif text-[#1a362a] text-3xl sm:text-4xl font-black uppercase tracking-widest drop-shadow-sm leading-tight">Must Try</h2>
-                  <h3 className="font-serif text-[#8a2a2b] text-xl sm:text-2xl font-black uppercase tracking-[0.15em] drop-shadow-sm mt-0.5 mb-2.5 italic">In Waki DimSum</h3>
-                  <div className="w-12 h-0.5 bg-[#1a362a]/20 rounded-full"></div>
-                </div>
+          {/* Tab Content Window with Touch Tap Navigation */}
+          <div 
+            className="min-h-[450px] relative select-none"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {/* Subtle First-Time User Mobile Hint on Cover Page */}
+            <AnimatePresence>
+              {showMobileHint && selectedMobileTab === 'cover' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -6, scale: 0.96 }}
+                  transition={{ duration: 0.35 }}
+                  className="absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none px-3.5 py-1.5 rounded-full bg-[#1a362a]/90 text-[#f8f5eb] text-[11px] font-sans font-medium tracking-wide shadow-lg border border-[#C5A059]/40 flex items-center gap-2 backdrop-blur-xs whitespace-nowrap"
+                >
+                  <span className="text-[#C5A059] text-xs font-bold font-serif">‹</span>
+                  <span className="text-[10px] sm:text-[11px] uppercase tracking-wider">Tap left / right to browse</span>
+                  <span className="text-[#C5A059] text-xs font-bold font-serif">›</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-                {/* Collage Wrapper */}
-                <div className="relative w-full aspect-[4/5] bg-white/45 rounded-xl border border-[#e2d5c3]/50 overflow-hidden shadow-inner my-3 z-10">
-                  {/* Subtle warm tabletop grounding layer */}
-                  <div className="absolute bottom-0 left-0 right-0 h-[70%] bg-gradient-to-t from-[#2a1a08]/[0.035] via-transparent to-transparent pointer-events-none z-0" />
+            <AnimatePresence mode="wait" custom={pageDirection}>
+              {selectedMobileTab === 'cover' ? (
+                <motion.div 
+                  key="cover"
+                  custom={pageDirection}
+                  initial={{ opacity: 0, x: pageDirection === 'next' ? 28 : pageDirection === 'prev' ? -28 : 0 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: pageDirection === 'next' ? -28 : pageDirection === 'prev' ? 28 : 0 }}
+                  transition={{ duration: 0.24, ease: [0.25, 1, 0.5, 1] }}
+                  className="bg-[#f8f5eb] p-5 sm:p-6 rounded-2xl shadow-xl border border-[#e2d5c3] relative overflow-hidden min-h-[550px] flex flex-col"
+                >
+                  <div 
+                    className="absolute inset-0 opacity-[0.08] pointer-events-none"
+                    style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover', mixBlendMode: 'multiply' }}
+                  />
+                  <CoverPageContent />
+                </motion.div>
+              ) : selectedMobileTab === 'must-try' ? (
+                <motion.div 
+                  key="must-try"
+                  custom={pageDirection}
+                  initial={{ opacity: 0, x: pageDirection === 'next' ? 28 : pageDirection === 'prev' ? -28 : 0 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: pageDirection === 'next' ? -28 : pageDirection === 'prev' ? 28 : 0 }}
+                  transition={{ duration: 0.24, ease: [0.25, 1, 0.5, 1] }}
+                  className="bg-[#f8f5eb] p-4 sm:p-6 rounded-2xl shadow-xl border border-[#e2d5c3] relative overflow-hidden min-h-[550px] flex flex-col"
+                >
+                  {/* Subtle building line-art background */}
+                  <div 
+                    className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-multiply"
+                    style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }}
+                  />
                   
-                  {/* Overlaid Food Images */}
-                  {[
-                    { 
-                      img: img01, 
-                      imgCls: 'top-[22%] left-[36%] w-[28%]', 
-                      labelCls: 'top-[18%] left-[28%]', 
-                      num: '01', icon: '🥇', 
-                      title: 'Chicken & Shrimp\nDumplings', code: 'D01',
-                      shadowCls: 'bottom-[1%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/25 blur-[6px] rounded-full scale-y-[0.45]'
-                    },
-                    { 
-                      img: img02, 
-                      imgCls: 'top-[21%] right-[5%] w-[35%]', 
-                      labelCls: 'top-[18%] right-[22%]', 
-                      num: '02', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
-                      title: 'Chee Cheong Fun\nWith Prawn Spring Roll', code: 'C01',
-                      shadowCls: 'bottom-[2%] left-[15%] right-[25%] h-[12px] bg-[#22160a]/20 blur-[5px] rounded-full scale-y-[0.35]'
-                    },
-                    { 
-                      img: img03, 
-                      imgCls: 'top-[25%] left-[5%] w-[33%]', 
-                      labelCls: 'top-[20%] left-[12%]', 
-                      num: '03', icon: '🔥', 
-                      title: 'Cheesy\nPrawn Roll', code: 'F17',
-                      shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[12px] bg-[#22160a]/20 blur-[5px] rounded-full scale-y-[0.35]'
-                    },
-                    { 
-                      img: img04, 
-                      imgCls: 'top-[44%] left-[39%] w-[22%]', 
-                      labelCls: 'top-[38%] left-[32%]', 
-                      num: '04', icon: '🥇', 
-                      title: 'Golden\nCustard Bun', code: 'B02',
-                      shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[10px] bg-[#22160a]/20 blur-[4px] rounded-full scale-y-[0.4]'
-                    },
-                    { 
-                      img: img05, 
-                      imgCls: 'top-[46%] left-[4%] w-[33%]', 
-                      labelCls: 'top-[40%] left-[12%]', 
-                      num: '05', icon: '🔥', 
-                      title: 'Stir Fried\nRadish Cake', code: 'L03',
-                      shadowCls: 'bottom-[3%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
-                    },
-                    { 
-                      img: img06, 
-                      imgCls: 'top-[45%] right-[4%] w-[32%]', 
-                      labelCls: 'top-[39%] right-[12%]', 
-                      num: '06', icon: '🔥', 
-                      title: 'Prawn\nSpring Roll', code: 'F06',
-                      shadowCls: 'bottom-[3%] left-[10%] right-[10%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
-                    },
-                    { 
-                      img: img07, 
-                      imgCls: 'top-[56%] left-[49%] w-[20%]', 
-                      labelCls: 'top-[50%] left-[58%]', 
-                      num: '07', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
-                      title: 'Spicy Sauce\nDumpling', code: 'D12',
-                      shadowCls: 'bottom-[1%] left-[15%] right-[15%] h-[10px] bg-[#22160a]/25 blur-[4px] rounded-full scale-y-[0.45]'
-                    },
-                    { 
-                      img: img08, 
-                      imgCls: 'top-[68%] left-[8%] w-[36%]', 
-                      labelCls: 'top-[62%] left-[14%]', 
-                      num: '08', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
-                      title: 'Signature\nFried Noodle', code: 'M02',
-                      shadowCls: 'bottom-[2%] left-[12%] right-[12%] h-[16px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.35]'
-                    },
-                    { 
-                      img: img09, 
-                      imgCls: 'top-[67%] right-[8%] w-[36%]', 
-                      labelCls: 'top-[61%] right-[14%]', 
-                      num: '09', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
-                      title: 'Butter Milk\nChicken Rice', code: 'R04',
-                      shadowCls: 'bottom-[3%] left-[12%] right-[12%] h-[14px] bg-[#22160a]/20 blur-[6px] rounded-full scale-y-[0.3]'
-                    },
-                  ].map((item, idx) => {
-                    const isHighlighted = hoveredFoodIdx === idx;
-                    return (
-                      <div 
-                        key={idx} 
-                        className="absolute inset-0 pointer-events-none"
-                        style={{ zIndex: isHighlighted ? 100 : 10 }}
-                      >
-                        {/* Dish Image Container */}
-                        <div 
-                          className={`absolute ${item.imgCls} pointer-events-auto cursor-pointer`}
-                          onClick={() => {
-                            setHoveredFoodIdx(hoveredFoodIdx === idx ? null : idx);
-                          }}
-                        >
-                          {/* Shadow */}
-                          <div className={`absolute ${item.shadowCls} pointer-events-none z-0 transition-all duration-300 ease-out ${isHighlighted ? 'scale-[1.08] opacity-65 blur-[6px]' : 'scale-100 opacity-100'}`} />
-                          
-                          <img 
-                            src={item.img} 
-                            alt={item.title} 
-                            className={`w-full h-auto object-contain transition-all duration-300 ease-out relative z-10 ${isHighlighted ? 'scale-[1.06] -translate-y-1' : 'scale-100 translate-y-0'}`}
-                            style={{ filter: 'drop-shadow(0 2px 5px rgba(0,0,0,0.05))' }}
-                          />
-                        </div>
+                  {/* Standard Borders to match the rest of the book */}
+                  <div className="absolute top-3 left-3 right-3 bottom-3 border border-[#1a362a]/10 pointer-events-none z-0" />
+                  <div className="absolute top-2 left-2 right-2 bottom-2 border border-[#1a362a]/5 pointer-events-none z-0" />
+                  
+                  {/* Corner decorations */}
+                  <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-[#8a2a2b]/60 z-0" />
+                  <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-[#8a2a2b]/60 z-0" />
+                  <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-[#8a2a2b]/60 z-0" />
+                  <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-[#8a2a2b]/60 z-0" />
+                  
+                  {/* Header Title */}
+                  <div className="text-center z-10 py-4 flex flex-col items-center">
+                    <span className="text-[9px] font-sans uppercase tracking-[0.25em] text-[#8a2a2b] font-extrabold block mb-1">
+                      Waki Curated Selection
+                    </span>
+                    <h2 className="font-serif text-[#1a362a] text-3xl sm:text-4xl font-black uppercase tracking-widest drop-shadow-sm leading-tight">Must Try</h2>
+                    <h3 className="font-serif text-[#8a2a2b] text-xl sm:text-2xl font-black uppercase tracking-[0.15em] drop-shadow-sm mt-0.5 mb-2.5 italic">In Waki DimSum</h3>
+                    <div className="w-12 h-0.5 bg-[#1a362a]/20 rounded-full"></div>
+                  </div>
 
-                        {/* Popover Detail Modal */}
-                        <AnimatePresence>
-                          {isHighlighted && (
-                            <motion.div 
-                              initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                              animate={{ opacity: 1, scale: 1, y: 0 }}
-                              exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                              className="absolute bottom-4 left-4 right-4 z-50 pointer-events-auto bg-white/95 backdrop-blur-md p-4 rounded-xl border border-[#e2d5c3] shadow-xl flex items-center gap-3.5"
-                            >
-                              <div className="w-12 h-12 shrink-0 rounded-lg overflow-hidden border border-[#1a362a]/10 bg-white">
-                                <img src={item.img} className="w-full h-full object-cover" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-1.5 mb-0.5">
-                                  <span className="font-serif text-lg font-black text-[#1a362a]">{item.num}</span>
-                                  <span className="text-xs">{item.icon}</span>
-                                  <span className="ml-auto bg-[#1a362a] px-2 py-0.5 text-[8px] font-bold text-white tracking-widest rounded">{item.code}</span>
-                                </div>
-                                <p className="font-sans text-[#1a362a] text-[12px] font-bold leading-tight whitespace-pre-line">
-                                  {item.title.replace('\n', ' ')}
-                                </p>
-                              </div>
-                              <button 
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setHoveredFoodIdx(null);
-                                }}
-                                className="p-1 rounded-full text-zinc-400 hover:text-zinc-600 self-start"
-                              >
-                                ✕
-                              </button>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Elegant helper text */}
-                <p className="text-[10px] font-sans text-center text-[#1a362a]/60 italic mb-4 z-10">
-                  💡 Tap on any dish above to view its details, or browse below
-                </p>
-
-                {/* Clean, detailed list of Must Try items */}
-                <div className="bg-white/50 backdrop-blur-sm p-4 rounded-xl border border-[#1a362a]/10 z-10 flex flex-col space-y-3.5">
-                  {[
-                    { code: 'D01', name: 'Chicken & Shrimp Dumplings (Siew Mai)', desc: 'Premium chicken & shrimp siew mai, hand-crafted daily.' },
-                    { code: 'C01', name: 'CCF with Prawn Spring Roll', desc: 'Silky smooth handmade rice rolls paired with crispy prawn beancurd skin roll.' },
-                    { code: 'F17', name: 'Cheesy Prawn Roll', desc: 'Delicious fried rolls loaded with succulent prawns and melted premium cheese.' },
-                    { code: 'B02', name: 'Golden Custard Bun (Liu Sha Bao)', desc: 'Fluffy steamed buns with warm, flowing sweet-savory salted egg yolk lava.' },
-                    { code: 'L03', name: 'Stir Fried Radish Cake', desc: 'Wok-charred turnip cake wok-fried with fresh beansprouts, eggs, and chives.' },
-                    { code: 'F06', name: 'Prawn Spring Roll', desc: 'Crispy fried spring rolls stuffed with seasoned fresh prawns.' },
-                    { code: 'D12', name: 'Spicy Sauce Dumpling', desc: 'Plump chicken dumplings tossed in our signature hot & sour Szechuan chili oil sauce.' },
-                    { code: 'M02', name: 'Signature Fried Noodle', desc: 'Classic Malaysian style wok-fried yellow noodles packed with seafood flavor.' },
-                    { code: 'R04', name: 'Butter Milk Chicken Rice', desc: 'Aromatic, rich buttermilk chicken served over steaming hot jasmine rice.' },
-                  ].map((dish, index) => {
-                    const isHighlighted = hoveredFoodIdx === index;
-                    return (
-                      <div 
-                        key={dish.code} 
-                        onClick={() => setHoveredFoodIdx(isHighlighted ? null : index)}
-                        className={`flex gap-3 items-start py-2.5 px-2 rounded-lg transition-all duration-300 cursor-pointer border ${
-                          isHighlighted 
-                            ? 'bg-[#1a362a]/5 border-[#1a362a]/20 pl-3 shadow-sm' 
-                            : 'border-transparent hover:bg-black/[0.01]'
-                        }`}
-                      >
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center font-serif text-xs font-black shrink-0 ${
-                          isHighlighted ? 'bg-[#1a362a] text-white' : 'bg-[#1a362a]/10 text-[#1a362a]'
-                        }`}>
-                          {index + 1}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between">
-                            <h4 className="font-serif font-black text-[#1a362a] text-sm leading-tight uppercase">
-                              {dish.name}
-                            </h4>
-                            <span className="font-sans text-[#8a2a2b] font-bold text-[10px] tracking-widest border border-[#8a2a2b]/30 px-1.5 py-0.5 rounded shadow-sm bg-white/50 shrink-0 ml-2">
-                              {dish.code}
-                            </span>
-                          </div>
-                          <p className="font-sans text-[#2c3e38]/85 text-xs mt-1 italic leading-relaxed">
-                            {dish.desc}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            ) : (
-              MENU_CATEGORIES.map((cat) => {
-                if (cat.id !== selectedMobileTab) return null;
-                
-                const isKopitiam = cat.id === 'cat-8';
-                const isHomeEdition = cat.id === 'cat-12';
-                const bgClass = 'bg-[#f8f5eb]';
-
-                return (
-                  <motion.div
-                    key={cat.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className={`${bgClass} p-5 sm:p-6 rounded-2xl border border-[#e2d5c3] shadow-lg relative overflow-hidden`}
-                  >
-                    <div className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-multiply" style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }} />
+                  {/* Collage Wrapper */}
+                  <div className="relative w-full aspect-[4/5] bg-white/45 rounded-xl border border-[#e2d5c3]/50 overflow-hidden shadow-inner my-3 z-10">
+                    {/* Subtle warm tabletop grounding layer */}
+                    <div className="absolute bottom-0 left-0 right-0 h-[70%] bg-gradient-to-t from-[#2a1a08]/[0.035] via-transparent to-transparent pointer-events-none z-0" />
                     
-                    <div className="relative z-10">
-                      {catHeroImages[cat.id] && (
-                        <div className="w-full h-40 sm:h-48 mb-6 border border-[#1a362a]/20 p-1 bg-[#f8f5eb] rounded-lg overflow-hidden relative">
-                          <div className="w-full h-full relative overflow-hidden rounded">
-                            <img src={catHeroImages[cat.id]} className="w-full h-full object-cover" alt={cat.name} />
-                            {(cat.id === 'cat-2' || cat.id === 'cat-3') && <SteamAnimation />}
+                    {/* Overlaid Food Images - Cohesive banquet table spread */}
+                    {[
+                      { 
+                        img: img01, 
+                        imgCls: 'top-[17%] left-[33%] w-[34%]', 
+                        zIndex: 10,
+                        num: '01', icon: '🥇', 
+                        title: 'Chicken & Shrimp\nDumplings', code: 'D01',
+                      },
+                      { 
+                        img: img02, 
+                        imgCls: 'top-[18%] right-[1%] w-[39%]', 
+                        zIndex: 11,
+                        num: '02', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                        title: 'Chee Cheong Fun\nWith Prawn Spring Roll', code: 'C01',
+                      },
+                      { 
+                        img: img03, 
+                        imgCls: 'top-[19%] left-[2%] w-[36%]', 
+                        zIndex: 12,
+                        num: '03', icon: '🔥', 
+                        title: 'Cheesy\nPrawn Roll', code: 'F17',
+                      },
+                      { 
+                        img: img04, 
+                        imgCls: 'top-[36%] left-[34%] w-[31%]', 
+                        zIndex: 15,
+                        num: '04', icon: '🥇', 
+                        title: 'Golden\nCustard Bun', code: 'B02',
+                      },
+                      { 
+                        img: img05, 
+                        imgCls: 'top-[40%] left-[2%] w-[37%]', 
+                        zIndex: 16,
+                        num: '05', icon: '🔥', 
+                        title: 'Stir Fried\nRadish Cake', code: 'L03',
+                      },
+                      { 
+                        img: img06, 
+                        imgCls: 'top-[40%] right-[2%] w-[36%]', 
+                        zIndex: 14,
+                        num: '06', icon: '🔥', 
+                        title: 'Prawn\nSpring Roll', code: 'F06',
+                      },
+                      { 
+                        img: img07, 
+                        imgCls: 'top-[51%] left-[45%] w-[27%]', 
+                        zIndex: 18,
+                        num: '07', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                        title: 'Spicy Sauce\nDumpling', code: 'D12',
+                      },
+                      { 
+                        img: img08, 
+                        imgCls: 'top-[62%] left-[2%] w-[44%]', 
+                        zIndex: 20,
+                        num: '08', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                        title: 'Signature\nFried Noodle', code: 'M02',
+                      },
+                      { 
+                        img: img09, 
+                        imgCls: 'top-[61%] right-[2%] w-[44%]', 
+                        zIndex: 21,
+                        num: '09', icon: '//', iconCls: 'text-[#8a2a2b] font-serif font-black italic text-lg',
+                        title: 'Butter Milk\nChicken Rice', code: 'R04',
+                      },
+                    ].map((item, idx) => {
+                      const isHighlighted = hoveredFoodIdx === idx;
+                      return (
+                        <div 
+                          key={idx} 
+                          className="absolute inset-0 pointer-events-none"
+                          style={{ zIndex: isHighlighted ? 100 : item.zIndex }}
+                        >
+                          {/* Dish Image Container */}
+                          <div 
+                            data-interactive="true"
+                            className={`absolute ${item.imgCls} pointer-events-auto cursor-pointer`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setHoveredFoodIdx(hoveredFoodIdx === idx ? null : idx);
+                            }}
+                          >
+                            <img 
+                              src={item.img} 
+                              alt={item.title} 
+                              className={`w-full h-auto object-contain transition-all duration-300 ease-out relative ${isHighlighted ? 'scale-[1.05] -translate-y-1' : 'scale-100 translate-y-0'}`}
+                            />
                           </div>
-                        </div>
-                      )}
-                      
-                      <div className="mb-6 text-center">
-                        <span className="text-[9px] font-sans uppercase tracking-[0.25em] text-[#8a2a2b] font-extrabold block mb-1">
-                          Category {MENU_CATEGORIES.findIndex(c => c.id === cat.id) + 1} of {MENU_CATEGORIES.length}
-                        </span>
-                        <h3 className="font-serif text-2xl sm:text-3xl font-black text-[#1a362a] border-b border-[#8a2a2b]/30 inline-block pb-2 uppercase tracking-wide leading-tight">
-                          {cat.name}
-                        </h3>
-                        {cat.subtitle && <p className="font-serif italic text-[#8a2a2b] text-xs sm:text-sm mt-3">{cat.subtitle}</p>}
-                        {cat.description && <p className="font-sans text-[#2c3e38]/80 text-[11px] sm:text-xs mt-3 max-w-xl mx-auto leading-relaxed">{cat.description}</p>}
-                      </div>
-                      
-                      {isHomeEdition && (
-                        <div className="flex items-center justify-center mb-6">
-                          <span className="text-[#1a362a] text-sm">❄️</span>
-                          <span className="font-sans uppercase tracking-[0.2em] text-[#1a362a] text-[10px] font-bold mx-3 border-b border-[#1a362a]">Frozen Fresh</span>
-                          <span className="text-[#1a362a] text-sm">❄️</span>
-                        </div>
-                      )}
-                      
-                      {isKopitiam ? (
-                        <div className="flex flex-col space-y-3 bg-white/50 backdrop-blur-sm p-4 rounded-xl border border-[#1a362a]/5">
-                          <div className="flex justify-between border-b border-[#1a362a]/30 pb-2 font-sans text-[10px] font-bold uppercase tracking-widest text-[#1a362a]">
-                            <div className="w-1/2">Drink</div>
-                            <div className="w-1/2 text-right">Option / Code</div>
-                          </div>
-                          {cat.dishes.map((dish) => {
-                            const hotVariant = dish.variants?.find(v => v.type === 'Hot');
-                            const coldVariant = dish.variants?.find(v => v.type === 'Cold');
-                            const drinkDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
-                            return (
-                              <div key={dish.id} className="flex flex-col py-2 border-b border-[#1a362a]/5 last:border-0">
-                                <div className="flex justify-between items-center">
-                                  <div className="w-1/2 font-sans font-bold text-[#1a362a] text-[12px] sm:text-[13px] uppercase leading-tight">{dish.name}</div>
-                                  <div className="w-1/2 text-right flex flex-wrap justify-end gap-1.5 text-[9px] sm:text-[10px]">
-                                    {hotVariant && (
-                                      <span className="bg-[#1a362a]/10 px-2 py-0.5 rounded text-[#1a362a] font-sans font-medium">
-                                        ☕ Hot ({hotVariant.code})
-                                      </span>
-                                    )}
-                                    {coldVariant && (
-                                      <span className="bg-[#1a362a]/10 px-2 py-0.5 rounded text-[#1a362a] font-sans font-medium">
-                                        🧊 Cold ({coldVariant.code})
-                                      </span>
-                                    )}
-                                  </div>
+
+                          {/* Popover Detail Modal */}
+                          <AnimatePresence>
+                            {isHighlighted && (
+                              <motion.div 
+                                data-interactive="true"
+                                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                                className="absolute bottom-4 left-4 right-4 z-50 pointer-events-auto bg-white/95 backdrop-blur-md p-4 rounded-xl border border-[#e2d5c3] shadow-xl flex items-center gap-3.5"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <div className="w-12 h-12 shrink-0 rounded-lg overflow-hidden border border-[#1a362a]/10 bg-white">
+                                  <img src={item.img} className="w-full h-full object-cover" />
                                 </div>
-                                {drinkDesc && (
-                                  <p className="font-sans text-[#2c3e38]/75 text-[10px] leading-tight italic mt-1">
-                                    {drinkDesc}
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-1.5 mb-0.5">
+                                    <span className="font-serif text-lg font-black text-[#1a362a]">{item.num}</span>
+                                    <span className="text-xs">{item.icon}</span>
+                                    <span className="ml-auto bg-[#1a362a] px-2 py-0.5 text-[8px] font-bold text-white tracking-widest rounded">{item.code}</span>
+                                  </div>
+                                  <p className="font-sans text-[#1a362a] text-[12px] font-bold leading-tight whitespace-pre-line">
+                                    {item.title.replace('\n', ' ')}
                                   </p>
-                                )}
-                              </div>
-                            );
-                          })}
+                                </div>
+                                <button 
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setHoveredFoodIdx(null);
+                                  }}
+                                  className="p-1 rounded-full text-zinc-400 hover:text-zinc-600 self-start"
+                                >
+                                  ✕
+                                </button>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
                         </div>
-                      ) : (
-                        <div className="flex flex-col space-y-3 bg-white/40 backdrop-blur-sm p-4 rounded-xl border border-[#1a362a]/5">
-                          {cat.dishes.map((dish) => {
-                            const dishDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
-                            return (
-                              <div key={dish.id} className="flex gap-3 border-b border-dashed border-[#1a362a]/15 pb-3 last:border-0 last:pb-0">
-                                {dish.image && (
-                                  <div className="w-16 h-16 shrink-0 mt-0.5 rounded shadow border border-[#1a362a]/10 overflow-hidden">
-                                    <img src={dish.image} alt={dish.name} className="w-full h-full object-cover" />
-                                  </div>
-                                )}
-                                {dish.code && (
-                                  <div className="shrink-0 mt-0.5">
-                                    <span className="font-sans text-[#8a2a2b] font-bold text-[10px] sm:text-[11px] tracking-widest border border-[#8a2a2b]/30 px-1.5 py-0.5 rounded shadow-sm bg-white/50">{dish.code}</span>
-                                  </div>
-                                )}
-                                <div className="flex-1">
-                                  <h4 className="font-serif font-black text-[#1a362a] text-[14px] sm:text-[15px] leading-tight uppercase">{dish.name}</h4>
-                                  
-                                  {dishDesc && (
-                                    <p className="font-sans text-[#2c3e38]/85 text-[12px] sm:text-[13px] leading-relaxed mt-1 italic">{dishDesc}</p>
-                                  )}
-                                  
-                                  {dish.variants && (
-                                    <div className="flex flex-wrap gap-2 mt-2">
-                                      {dish.variants.map((v, i) => (
-                                        <span key={i} className="inline-flex items-center gap-1 bg-[#1a362a]/5 px-2 py-0.5 rounded border border-[#1a362a]/10 text-[10px] text-[#2c3e38] font-sans uppercase tracking-wider font-bold">
-                                          {v.type} <span className="text-[#8a2a2b]">{v.code}</span>
+                      );
+                    })}
+                  </div>
+
+                  {/* Elegant helper text */}
+                  <p className="text-[10px] font-sans text-center text-[#1a362a]/60 italic mb-4 z-10">
+                    💡 Tap on any dish above to view its details, or browse below
+                  </p>
+
+                  {/* Clean, detailed list of Must Try items */}
+                  <div className="bg-white/50 backdrop-blur-sm p-4 rounded-xl border border-[#1a362a]/10 z-10 flex flex-col space-y-3.5">
+                    {[
+                      { code: 'D01', name: 'Chicken & Shrimp Dumplings (Siew Mai)', desc: 'Premium chicken & shrimp siew mai, hand-crafted daily.' },
+                      { code: 'C01', name: 'CCF with Prawn Spring Roll', desc: 'Silky smooth handmade rice rolls paired with crispy prawn beancurd skin roll.' },
+                      { code: 'F17', name: 'Cheesy Prawn Roll', desc: 'Delicious fried rolls loaded with succulent prawns and melted premium cheese.' },
+                      { code: 'B02', name: 'Golden Custard Bun (Liu Sha Bao)', desc: 'Fluffy steamed buns with warm, flowing sweet-savory salted egg yolk lava.' },
+                      { code: 'L03', name: 'Stir Fried Radish Cake', desc: 'Wok-charred turnip cake wok-fried with fresh beansprouts, eggs, and chives.' },
+                      { code: 'F06', name: 'Prawn Spring Roll', desc: 'Crispy fried spring rolls stuffed with seasoned fresh prawns.' },
+                      { code: 'D12', name: 'Spicy Sauce Dumpling', desc: 'Plump chicken dumplings tossed in our signature hot & sour Szechuan chili oil sauce.' },
+                      { code: 'M02', name: 'Signature Fried Noodle', desc: 'Classic Malaysian style wok-fried yellow noodles packed with seafood flavor.' },
+                      { code: 'R04', name: 'Butter Milk Chicken Rice', desc: 'Aromatic, rich buttermilk chicken served over steaming hot jasmine rice.' },
+                    ].map((dish, index) => {
+                      const isHighlighted = hoveredFoodIdx === index;
+                      return (
+                        <div 
+                          key={dish.code} 
+                          data-interactive="true"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setHoveredFoodIdx(isHighlighted ? null : index);
+                          }}
+                          className={`flex gap-3 items-start py-2.5 px-2 rounded-lg transition-all duration-300 cursor-pointer border ${
+                            isHighlighted 
+                              ? 'bg-[#1a362a]/5 border-[#1a362a]/20 pl-3 shadow-sm' 
+                              : 'border-transparent hover:bg-black/[0.01]'
+                          }`}
+                        >
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center font-serif text-xs font-black shrink-0 ${
+                            isHighlighted ? 'bg-[#1a362a] text-white' : 'bg-[#1a362a]/10 text-[#1a362a]'
+                          }`}>
+                            {index + 1}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <h4 className="font-serif font-black text-[#1a362a] text-sm leading-tight uppercase">
+                                {dish.name}
+                              </h4>
+                              <span className="font-sans text-[#8a2a2b] font-bold text-[10px] tracking-widest border border-[#8a2a2b]/30 px-1.5 py-0.5 rounded shadow-sm bg-white/50 shrink-0 ml-2">
+                                {dish.code}
+                              </span>
+                            </div>
+                            <p className="font-sans text-[#2c3e38]/85 text-xs mt-1 italic leading-relaxed">
+                              {dish.desc}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              ) : (
+                MENU_CATEGORIES.map((cat) => {
+                  if (cat.id !== selectedMobileTab) return null;
+                  
+                  const isKopitiam = cat.id === 'cat-8';
+                  const isHomeEdition = cat.id === 'cat-12';
+                  const bgClass = 'bg-[#f8f5eb]';
+
+                  return (
+                    <motion.div
+                      key={cat.id}
+                      custom={pageDirection}
+                      initial={{ opacity: 0, x: pageDirection === 'next' ? 28 : pageDirection === 'prev' ? -28 : 0 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: pageDirection === 'next' ? -28 : pageDirection === 'prev' ? 28 : 0 }}
+                      transition={{ duration: 0.24, ease: [0.25, 1, 0.5, 1] }}
+                      className={`${bgClass} p-5 sm:p-6 rounded-2xl border border-[#e2d5c3] shadow-lg relative overflow-hidden`}
+                    >
+                      <div className="absolute inset-0 opacity-[0.08] pointer-events-none mix-blend-multiply" style={{ backgroundImage: `url(${bgImg})`, backgroundSize: 'cover' }} />
+                      
+                      <div className="relative z-10">
+                        {catHeroImages[cat.id] && (
+                          <div className="w-full h-40 sm:h-48 mb-6 border border-[#1a362a]/20 p-1 bg-[#f8f5eb] rounded-lg overflow-hidden relative">
+                            <div className="w-full h-full relative overflow-hidden rounded">
+                              <img src={catHeroImages[cat.id]} className="w-full h-full object-cover" alt={cat.name} />
+                              {(cat.id === 'cat-2' || cat.id === 'cat-3') && <SteamAnimation />}
+                            </div>
+                          </div>
+                        )}
+                        
+                        <div className="mb-6 text-center">
+                          <span className="text-[9px] font-sans uppercase tracking-[0.25em] text-[#8a2a2b] font-extrabold block mb-1">
+                            Category {MENU_CATEGORIES.findIndex(c => c.id === cat.id) + 1} of {MENU_CATEGORIES.length}
+                          </span>
+                          <h3 className="font-serif text-2xl sm:text-3xl font-black text-[#1a362a] border-b border-[#8a2a2b]/30 inline-block pb-2 uppercase tracking-wide leading-tight">
+                            {cat.name}
+                          </h3>
+                          {cat.subtitle && <p className="font-serif italic text-[#8a2a2b] text-xs sm:text-sm mt-3">{cat.subtitle}</p>}
+                          {cat.description && <p className="font-sans text-[#2c3e38]/80 text-[11px] sm:text-xs mt-3 max-w-xl mx-auto leading-relaxed">{cat.description}</p>}
+                        </div>
+                        
+                        {isHomeEdition && (
+                          <div className="flex items-center justify-center mb-6">
+                            <span className="text-[#1a362a] text-sm">❄️</span>
+                            <span className="font-sans uppercase tracking-[0.2em] text-[#1a362a] text-[10px] font-bold mx-3 border-b border-[#1a362a]">Frozen Fresh</span>
+                            <span className="text-[#1a362a] text-sm">❄️</span>
+                          </div>
+                        )}
+                        
+                        {isKopitiam ? (
+                          <div className="flex flex-col space-y-3 bg-white/50 backdrop-blur-sm p-4 rounded-xl border border-[#1a362a]/5">
+                            <div className="flex justify-between border-b border-[#1a362a]/30 pb-2 font-sans text-[10px] font-bold uppercase tracking-widest text-[#1a362a]">
+                              <div className="w-1/2">Drink</div>
+                              <div className="w-1/2 text-right">Option / Code</div>
+                            </div>
+                            {cat.dishes.map((dish) => {
+                              const hotVariant = dish.variants?.find(v => v.type === 'Hot');
+                              const coldVariant = dish.variants?.find(v => v.type === 'Cold');
+                              const drinkDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
+                              return (
+                                <div key={dish.id} className="flex flex-col py-2 border-b border-[#1a362a]/5 last:border-0">
+                                  <div className="flex justify-between items-center">
+                                    <div className="w-1/2 font-sans font-bold text-[#1a362a] text-[12px] sm:text-[13px] uppercase leading-tight">{dish.name}</div>
+                                    <div className="w-1/2 text-right flex flex-wrap justify-end gap-1.5 text-[9px] sm:text-[10px]">
+                                      {hotVariant && (
+                                        <span className="bg-[#1a362a]/10 px-2 py-0.5 rounded text-[#1a362a] font-sans font-medium">
+                                          ☕ Hot ({hotVariant.code})
                                         </span>
-                                      ))}
+                                      )}
+                                      {coldVariant && (
+                                        <span className="bg-[#1a362a]/10 px-2 py-0.5 rounded text-[#1a362a] font-sans font-medium">
+                                          🧊 Cold ({coldVariant.code})
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                  {drinkDesc && (
+                                    <p className="font-sans text-[#2c3e38]/75 text-[10px] leading-tight italic mt-1">
+                                      {drinkDesc}
+                                    </p>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col space-y-3 bg-white/40 backdrop-blur-sm p-4 rounded-xl border border-[#1a362a]/5">
+                            {cat.dishes.map((dish) => {
+                              const dishDesc = dish.description || DEFAULT_EXPLANATIONS[dish.name];
+                              return (
+                                <div key={dish.id} className="flex gap-3 border-b border-dashed border-[#1a362a]/15 pb-3 last:border-0 last:pb-0">
+                                  {dish.image && (
+                                    <div className="w-16 h-16 shrink-0 mt-0.5 rounded shadow border border-[#1a362a]/10 overflow-hidden">
+                                      <img src={dish.image} alt={dish.name} className="w-full h-full object-cover" />
                                     </div>
                                   )}
+                                  {dish.code && (
+                                    <div className="shrink-0 mt-0.5">
+                                      <span className="font-sans text-[#8a2a2b] font-bold text-[10px] sm:text-[11px] tracking-widest border border-[#8a2a2b]/30 px-1.5 py-0.5 rounded shadow-sm bg-white/50">{dish.code}</span>
+                                    </div>
+                                  )}
+                                  <div className="flex-1">
+                                    <h4 className="font-serif font-black text-[#1a362a] text-[14px] sm:text-[15px] leading-tight uppercase">{dish.name}</h4>
+                                    
+                                    {dishDesc && (
+                                      <p className="font-sans text-[#2c3e38]/85 text-[12px] sm:text-[13px] leading-relaxed mt-1 italic">{dishDesc}</p>
+                                    )}
+                                    
+                                    {dish.variants && (
+                                      <div className="flex flex-wrap gap-2 mt-2">
+                                        {dish.variants.map((v, i) => (
+                                          <span key={i} className="inline-flex items-center gap-1 bg-[#1a362a]/5 px-2 py-0.5 rounded border border-[#1a362a]/10 text-[10px] text-[#2c3e38] font-sans uppercase tracking-wider font-bold">
+                                            {v.type} <span className="text-[#8a2a2b]">{v.code}</span>
+                                          </span>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                      
-                      {cat.addOns && (
-                        <div className="mt-6 pt-5 border-t border-double border-[#8a2a2b]/20">
-                          <h4 className="font-serif font-bold text-[#1a362a] mb-4 text-center text-xs tracking-widest uppercase">Add On</h4>
-                          <div className="flex flex-wrap justify-center gap-2">
-                            {cat.addOns.map((addon, i) => (
-                              <span key={i} className="inline-block bg-[#1a362a]/10 px-3 py-1 rounded-full font-sans uppercase text-[#2c3e38] text-[9px] sm:text-[10px] font-bold tracking-wider">
-                                {addon.name}
-                              </span>
-                            ))}
+                              );
+                            })}
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                );
-              })
-            )}
+                        )}
+                        
+                        {cat.addOns && (
+                          <div className="mt-6 pt-5 border-t border-double border-[#8a2a2b]/20">
+                            <h4 className="font-serif font-bold text-[#1a362a] mb-4 text-center text-xs tracking-widest uppercase">Add On</h4>
+                            <div className="flex flex-wrap justify-center gap-2">
+                              {cat.addOns.map((addon, i) => (
+                                <span key={i} className="inline-block bg-[#1a362a]/10 px-3 py-1 rounded-full font-sans uppercase text-[#2c3e38] text-[9px] sm:text-[10px] font-bold tracking-wider">
+                                  {addon.name}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
